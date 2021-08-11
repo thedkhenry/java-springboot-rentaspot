@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent-A-Spot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <style>
+        .card-img-top {
+            max-height: 150px;
+            min-height: 50px;
+            object-fit: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container">
+        <h1 class="text-center mt-4">Let's find you a parking spot...</h1>
+        <form th:action="@{/search}" method="GET" id="searchForm">
+            <div class="row justify-content-center my-5">
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="text" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Location</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="date" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Check in</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="date" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Check out</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="number" class="form-control" id="floatingInput" min="0">
+                    <label for="floatingInput">Cars</label>
+                </div>
+                <div class="col-12 text-center pt-3">
+                    <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <h2>Top spots</h2>
+        <div class="container overflow-auto mb-4">
+            <ul class="row flex-nowrap mt-3">
+                <th:block th:each="loc : ${topLocations}">
+                    <li class="list-group-item list-group-item-action h-100 p-0 mx-2 shadow rounded"
+                        style="max-width: 300px;">
+                        <div class="d-flex flex-column">
+                            <div class="mb-auto">
+                                <a th:href="@{/location/{id}(id = ${loc.id})}" class="stretched-link">
+                                    <img th:src="@{images/car_crop.png}" class="card-img-top" alt="car image">
+                                </a>
+                                <div class="mt-2 px-3">
+                                    <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
+                                    <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''" class="text-muted"></div>
+                                    <div class="d-none d-sm-block">
+                                        <p th:text="${loc.description}" style="display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-auto">
+                                <div class="row px-2 my-2">
+                                    <div th:text="'⭐ ' + ${topRatingMap.get(loc.id)} + ' (' + ${topReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
+                                </div>
+                                <div class="card-footer align-self-end">
+                                    <small th:text="'Last updated ' + ${topUpdatedMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+        <h2>Recently added spots</h2>
+        <div class="container overflow-auto mb-4">
+            <ul class="row flex-nowrap mt-3">
+                <th:block th:each="loc : ${newLocations}">
+                    <li class="list-group-item list-group-item-action h-100 p-0 mx-2 shadow rounded"
+                        style="max-width: 300px;">
+                        <div class="d-flex flex-column">
+                            <div class="mb-auto">
+                                <a th:href="@{/location/{id}(id = ${loc.id})}" class="stretched-link">
+                                    <img th:src="@{/images/car_crop.png}" class="card-img-top" alt="car image">
+                                </a>
+                                <div class="mt-2 px-3">
+                                    <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
+                                    <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''" class="text-muted"></div>
+                                    <div class="d-none d-sm-block">
+                                        <p th:text="${loc.description}" style="display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-auto">
+                                <div class="row px-2 my-2">
+                                    <div th:text="'⭐ ' + ${newRatingMap.get(loc.id)} + ' (' + ${newReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
+                                </div>
+                                <div class="card-footer align-self-end">
+                                    <small th:text="'Created ' + ${newCreatedMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+    <p></p>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

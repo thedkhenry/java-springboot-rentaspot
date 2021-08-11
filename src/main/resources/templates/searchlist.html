@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+             * element that contains the map. */
+        #googlemap {
+            min-height: 100vh;
+            max-height: 100vh;
+            max-width: 100%;
+        }
+        @media (max-width: 1200px) {
+            .list-col {
+                max-width: 100% !important;
+            }
+            .map-col {
+                display: none;
+            }
+        }
+        /*@media (max-width: 576px) {*/
+        /*    header{*/
+        /*        position: static;*/
+        /*    }*/
+        /*}*/
+    </style>
+</head>
+
+<body>
+<header class="sticky-top bg-white pb-2">
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container">
+        <form th:action="@{/search}" method="GET" id="searchForm">
+            <div class="row justify-content-center">
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="text" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Location</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="date" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Check in</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="date" class="form-control" id="floatingInput">
+                    <label for="floatingInput">Check out</label>
+                </div>
+                <div class="col-7 col-sm-3 form-floating px-0">
+                    <input type="number" class="form-control" id="floatingInput" min="0">
+                    <label for="floatingInput">Cars</label>
+                </div>
+                <div class="col-12 text-center pt-3">
+                    <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</header>
+    <div class="row w-100 m-0">
+        <div class="list-col col p-0" style="max-width: 840px;">
+            <ul class="list-group">
+                <th:block th:each="loc : ${locations}">
+                    <li class="list-group-item list-group-item-action py-3" >
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <a th:href="@{/location/{id}(id = ${loc.id})}" class="stretched-link"><img
+                                        th:src="@{/images/city_buildings.png}" class="img-fluid" alt="..."></a>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="col h-75">
+                                    <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
+                                    <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''"
+                                         class="text-muted"></div>
+                                    <p th:text="${loc.description}" class="d-none d-sm-block"></p>
+                                </div>
+                                <div class="row w-100">
+                                    <div th:text="'⭐ ' + ${locationsRatingMap.get(loc.id)} + ' (' + ${reviewCountMap.get(loc.id)} + ' Reviews)'"
+                                         class="col-9 text-muted"></div>
+                                    <div th:text="'$' + ${loc.price} + '/day'"
+                                         class="col-3 text-end fw-bold"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+        <div class="map-col col p-0">
+            <div class="w-100 position-fixed ">
+                <div class="">
+                    <div id="googlemap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('googlemap'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyCd8To3zMx7ydSQc8vsZe2cAr7V3fnFo&callback=initMap" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

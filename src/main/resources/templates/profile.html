@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Profile</h2>
+        <div class="d-flex align-items-end justify-content-end mb-3">
+            <h5>Edit profile</h5>
+            <a href="editprofile.html" class="btn btn-outline-secondary mx-3">Edit</a>
+        </div>
+        <div class="card">
+            <div class="row card-body">
+                <div class="col-lg-3 text-center border-end">
+                    <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle mt-3 p-2" width="150px">
+                    <div th:text="${user.firstName}" class="fw-bold mt-3"></div>
+                    <div th:text="${user.email}" class="text-black-50"></div>
+                </div>
+                <div class="col-lg-9 p-4">
+                    <h4>About</h4>
+                    <p th:text="'Joined in ' + ${#dates.format(user.createdAt,'yyyy')}" class="text-muted"></p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut, ipsa aperiam nulla ea minus.
+                        Modi explicabo a debitis, molestiae ad beatae est, dolor autem, in dolorum voluptas amet
+                        dignissimos.</p>
+                    <h4 th:text="'(' + ${locations.size()} + ') Listings'"></h4>
+                </div>
+                <div class="col-lg-3 d-lg-block d-none border-end"></div>
+                <div class="col-lg-9 border-top overflow-auto">
+                    <ul class="row flex-nowrap mt-3">
+                        <th:block th:each="loc : ${locations}">
+                            <li class="list-group-item list-group-item-action h-100 p-0 mx-2 shadow rounded"
+                                style="max-width: 300px;">
+                                <div class="d-flex flex-column">
+                                    <div class="mb-auto">
+                                        <a th:href="@{/location/{id}(id = ${loc.id})}" class="stretched-link">
+                                            <img th:src="@{/images/car_crop.png}" class="card-img-top" alt="car image">
+                                        </a>
+                                        <div class="mt-2 px-3">
+                                            <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
+                                            <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''" class="text-muted"></div>
+                                            <div class="d-none d-sm-block">
+                                                <p th:text="${loc.description}" style="display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto">
+                                        <div class="row px-2 my-2">
+                                            <div th:text="'⭐ ' + ${locationsRatingMap.get(loc.id)} + ' (' + ${reviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                            <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
+                                        </div>
+                                        <div class="card-footer align-self-end">
+                                            <small th:text="'Last updated ' + ${locationsTimeMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

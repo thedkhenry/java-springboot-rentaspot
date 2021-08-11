@@ -1,0 +1,14 @@
+package com.henrysican.rentaspot.dao;
+
+import com.henrysican.rentaspot.models.Location;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface LocationRepo extends JpaRepository<Location,Integer> {
+    List<Location> findTop10ByIsActiveIsTrue();
+    List<Location> findTop10ByIsActiveIsTrueOrderByCreatedAtDesc();
+    List<Location> findAllByIsActiveIsTrueAndUser_Id(int user_id);
+}
