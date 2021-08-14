@@ -15,9 +15,12 @@
         <h2>Reservation Details</h2>
         <div class="card">
             <div class="row card-body">
-                <div class="text-center text-danger">
-                    <h4>Status: [Host Confirmation Pending]</h4>
-                </div>
+                <th:block th:switch="${booking.bookingStatus}">
+                    <h4 th:case="'pending'" class="text-center text-warning">Status: [Host Confirmation Pending]</h4>
+                    <h4 th:case="'host cancel'" class="text-center text-danger">Status: [Host Canceled]</h4>
+                    <h4 th:case="'customer cancel'" class="text-center text-danger">Status: [Customer Canceled]</h4>
+                    <h4 th:case="'confirmed'" class="text-center text-success">Status: [Confirmed]</h4>
+                </th:block>
                 <div class="col-lg-3 align-self-center text-center border-end">
                     <a th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark"><img th:src="@{/images/city_buildings.png}" class="w-100"></a>
                     <h4>Location</h4>
@@ -33,7 +36,7 @@
                     <div th:text="${booking.location.address.address1} + ', ' + ${booking.location.address.city} + ', ' + ${booking.location.address.state} + ' ' + ${booking.location.address.zipCode}"></div>
                     <p><a class="btn btn-danger btn-sm" href="https://www.google.com/maps">Get directions</a></p>
                     <h4>Amount</h4>
-                    <div th:text="${booking.location.price * booking.calculateNumberOfDays()}"></div>
+                    <div th:text="'$' + ${booking.calculatePrice()}"></div>
                     <p><a class="btn btn-danger btn-sm" href="" data-bs-toggle="modal" data-bs-target="#receiptModal">View receipt</a></p>
                 </div>
             </div>
@@ -48,7 +51,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="messages.html" method="" id="messageHostForm">
+                    <form th:action="@{/sendMessage}" th:object="${message}" method="POST" id="messageHostForm">
                         <div class="mb-3">
                             <label for="message-text" class="col-form-label">Message:</label>
                             <textarea class="form-control" id="message-text" placeholder="Got a question or concern?"></textarea>
@@ -76,7 +79,7 @@
                         <p th:text="${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}"></p>
                         <div class="row">
                             <div th:text="'$' + ${booking.location.price} + ' × ' + ${booking.calculateNumberOfDays()} + ' days'" class="col"></div>
-                            <div th:text="'$' + ${booking.location.price * booking.calculateNumberOfDays()}" class="col"></div>
+                            <div th:text="'$' + ${booking.calculatePrice()}" class="col"></div>
                         </div>
                     </div>            
                 </div>

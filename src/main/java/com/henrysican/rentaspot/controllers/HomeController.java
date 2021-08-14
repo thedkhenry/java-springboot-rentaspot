@@ -80,16 +80,6 @@ public class HomeController {
         return "searchlist";
     }
 
-    @GetMapping("/location/{locationId}")
-    public String getLocationDetails(@PathVariable("locationId") int id, Model model){
-        Location location = locationService.getLocationById(id);
-        List<Review> reviews = reviewService.getReviewsForLocation(id);
-        double rating = reviewService.getWeightedAverageForLocation(id);
-        model.addAttribute("location",location);
-        model.addAttribute("reviews",reviews);
-        model.addAttribute("rating",rating);
-        return "locationdetails";
-    }
 
     @GetMapping("/user/{userId}")
     public String getUserProfile(@PathVariable("userId") int id, Model model){
@@ -111,14 +101,5 @@ public class HomeController {
         model.addAttribute("locationsRatingMap",locationsRatingMap);
         model.addAttribute("reviewCountMap",reviewCountMap);
         return "profile";
-    }
-
-    @GetMapping("/reservationdetails")
-    public String getreservationdetailsPage(){
-        return "reservationdetails";
-    }
-    @GetMapping("/reservations")
-    public String getreservationsPage(){
-        return "reservations";
     }
 }

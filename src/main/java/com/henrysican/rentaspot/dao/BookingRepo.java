@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface BookingRepo extends JpaRepository<Booking,Integer> {
     //Booking findById(int id);
+    List<Booking> findAllByCustomerId(int id);
     List<Booking> findAllByLocation_Id(int id);
     List<Booking> findAllByLocation_IdAndStartDateAfterAndEndDateBefore(int location_id, Date startDate, Date endDate);
 }

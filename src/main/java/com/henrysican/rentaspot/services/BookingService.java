@@ -22,6 +22,9 @@ public class BookingService {
     public List<Booking> getAllBookingsForLocation(int id){
         return bookingRepo.findAllByLocation_Id(id);
     }
+    public List<Booking> getAllBookingsForCustomer(int id){
+        return bookingRepo.findAllByCustomerId(id);
+    }
 
     public Booking saveBooking(Booking booking){
         return bookingRepo.save(booking);
