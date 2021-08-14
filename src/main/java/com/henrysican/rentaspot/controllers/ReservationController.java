@@ -55,7 +55,9 @@ public class ReservationController {
                                     RedirectAttributes redirectAttributes){
         log.warning("Check Button pressed " + booking);
         List<Booking> bookings = bookingService.getAllBookingsForLocationBetween(locationId,booking.getStartDate(),booking.getEndDate());
+//        double price = booking.calculatePrice();
 
+        //Display table? 'Dates' 'Status' 'Expires in'
         /*
         query booking dates
         cancel old created booking if time > hour
@@ -63,6 +65,7 @@ public class ReservationController {
          */
 
         redirectAttributes.addFlashAttribute("bookings",bookings);
+//        redirectAttributes.addFlashAttribute("price",price);
         redirectAttributes.addFlashAttribute("numberOfDays",booking.calculateNumberOfDays());
         redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
         redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
@@ -85,6 +88,8 @@ public class ReservationController {
         booking.setLocation(location);
         booking.setHost(host);
         booking.setCustomer(customer);
+        booking.calculateNumberOfDays();
+        booking.calculatePrice();
         log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
         model.addAttribute("booking",new Booking());
@@ -95,6 +100,15 @@ public class ReservationController {
     public String getReservationDetails(@PathVariable("bookingId") int bookingId, Model model){
         Booking booking = bookingService.getBookingById(bookingId);
         model.addAttribute("booking", booking);
+        model.addAttribute("message", new Object());
         return "reservationdetails";
+    }
+
+    @GetMapping("/reservations")
+    public String getReservationsPage(Model model){
+        int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
+        List<Booking> bookingList = bookingService.getAllBookingsForCustomer(randomId);
+        model.addAttribute("bookingList", bookingList);
+        return "reservations";
     }
 }

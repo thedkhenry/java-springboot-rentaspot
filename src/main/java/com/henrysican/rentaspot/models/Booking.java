@@ -53,4 +53,9 @@ public class Booking {
     public long calculateNumberOfDays(){
         return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
     }
+
+    public double calculatePrice(){
+        this.price = calculateNumberOfDays() * location.getPrice();
+        return price;
+    }
 }
