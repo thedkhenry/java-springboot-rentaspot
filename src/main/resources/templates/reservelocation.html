@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Reserve ' + ${location.title}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container my-4">
+        <div class="container card" style="max-width: 600px;">
+            <div class="card-body">
+                <div class="border-bottom">
+                    <h2 th:text="${location.title}"></h2>
+                    <h6 th:text="'⭐ ' + ${rating} + ' (' + ${reviews} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
+                    <p></p>
+                </div>
+                <h4 th:text="'$' + ${location.price} + '/day'" class="text-center my-3"></h4>
+                <form th:action="@{/reservelocation/{locationId}(locationId = ${location.id})}" th:object="${booking}" method="POST" id="formReserve">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label>Check in</label>
+                            <input th:field="*{startDate}" type="date" class="form-control" required>
+                        </div>
+                        <div class="col mb-3">
+                            <label>Check out</label>
+                            <input th:field="*{endDate}" type="date" class="form-control" required>
+                        </div>
+                    </div>
+                    <th:block th:if="${#lists.isEmpty(bookings)}">
+                        <div class="row justify-content-around border-top border-bottom mb-3 p-2">
+<!--                            <div th:text="${bookings}" class="w-auto"></div>-->
+                            <div th:if="${numberOfDays != null}" th:text="'$' + ${location.price} + ' × ' + ${numberOfDays} + ' days'" class="w-auto"></div>
+                            <div th:unless="${numberOfDays != null}" th:text="'$' + ${location.price} + ' × 0 days'" class="w-auto"></div>
+                            <div th:if="${numberOfDays != null}" th:text="'$' + ${numberOfDays * location.price}" class="w-auto"></div>
+                            <div th:unless="${numberOfDays != null}" th:text="'$0'" class="w-auto"></div>
+                        </div>
+                    </th:block>
+                    <div class="text-center">
+                        <button name="action" value="check" type="submit" class="btn btn-danger">Check dates</button>
+                    </div>
+                    <label for="selectCars" class="form-label">Cars</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">#</span>
+                        <select th:field="*{cars}" class="form-select" id="selectCars" required>
+<!--                            <option selected disabled>Choose...</option>-->
+                            <option th:each="i: ${#numbers.sequence(1, location.totalOccupancy)}"
+                                    th:value="${i}"
+                                    th:text="${i}"></option>
+                        </select>
+                    </div>
+<!--                    <input type="hidden" th:field="${location.user.id}"/>-->
+<!--                    <input type="hidden" th:field="${location.id}"/>-->
+<!--                    <input type="hidden" th:field="${location.id}"/>-->
+<!--                    <input type="hidden" th:if="${numberOfDays != null}" th:value="${numberOfDays * location.price}" name="price" />-->
+                    <div class="col text-center pt-3">
+                        <div class="btn-group" role="group">
+                            <button name="action" value="submit" type="submit" class="btn btn-danger" form="formReserve" data-bs-toggle="modal" data-bs-target="#reserveModal">Reserve</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reserveModalLabel">Reserve</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>All good and ready to reserve this location?</h5>
+                        <div>Ipsum Location Title Consecte Elit</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Reserve</button>
+                        <a th:href="@{/reservationdetails}" class="btn btn-success btn-sm">reserve</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
@@ -63,41 +64,41 @@ public class AppRunner implements CommandLineRunner {
         User user23 = userRepo.save(new User(23,"Reena","Leggatt","rleggattm@wikimedia.org","464-211-4984","http://dummyimage.com/228x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-03-24 01:04:27")));
         User user24 = userRepo.save(new User(24,"Samantha","Bradnick","sbradnickn@dailymail.co.uk","160-669-0586","http://dummyimage.com/130x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-04-08 22:10:46")));
         User user25 = userRepo.save(new User(25,"Mavis","Hubble","mhubbleo@sciencedirect.com","570-278-0766","http://dummyimage.com/121x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-07 23:11:19")));
-        Address address1 = new Address(1,"638 Continental Lane","","Apache Junction","Arizona","United States",85219);
-        Address address2 = new Address(2,"3648 Harbort Road","","New York City","New York","United States",10079);
-        Address address3 = new Address(3,"64266 Meadow Vale Trail","","Austin","Texas","United States",78783);
-        Address address4 = new Address(4,"6467 Independence Avenue","","Canton","Ohio","United States",44760);
-        Address address5 = new Address(5,"87773 Packers Lane","","Louisville","Kentucky","United States",40233);
-        Address address6 = new Address(6,"17 Bultman Park","","New York City","New York","United States",10125);
-        Address address7 = new Address(7,"60 Harbort Court","","Port Washington","New York","United States",11054);
-        Address address8 = new Address(8,"248 Upham Pass","","Cincinnati","Ohio","United States",45254);
-        Address address9 = new Address(9,"90800 Dennis Alley","","Jefferson City","Missouri","United States",65110);
-        Address address10 = new Address(10,"75 Upham Drive","","Charleston","West Virginia","United States",25356);
-        Address address11 = new Address(11,"583 Novick Trail","","Buffalo","New York","United States",14225);
-        Address address12 = new Address(12,"966 Fairview Parkway","","Durham","North Carolina","United States",27710);
-        Address address13 = new Address(13,"9755 Bartillon Place","","Akron","Ohio","United States",44305);
-        Address address14 = new Address(14,"1910 Jackson Park","","Charlotte","North Carolina","United States",28247);
-        Address address15 = new Address(15,"315 Mandrake Trail","","Lake Worth","Florida","United States",33462);
+        Address address1 = new Address("638 Continental Lane","","Apache Junction","Arizona","United States",85219);
+        Address address2 = new Address("3648 Harbort Road","","New York City","New York","United States",10079);
+        Address address3 = new Address("64266 Meadow Vale Trail","","Austin","Texas","United States",78783);
+        Address address4 = new Address("6467 Independence Avenue","","Canton","Ohio","United States",44760);
+        Address address5 = new Address("87773 Packers Lane","","Louisville","Kentucky","United States",40233);
+        Address address6 = new Address("17 Bultman Park","","New York City","New York","United States",10125);
+        Address address7 = new Address("60 Harbort Court","","Port Washington","New York","United States",11054);
+        Address address8 = new Address("248 Upham Pass","","Cincinnati","Ohio","United States",45254);
+        Address address9 = new Address("90800 Dennis Alley","","Jefferson City","Missouri","United States",65110);
+        Address address10 = new Address("75 Upham Drive","","Charleston","West Virginia","United States",25356);
+        Address address11 = new Address("583 Novick Trail","","Buffalo","New York","United States",14225);
+        Address address12 = new Address("966 Fairview Parkway","","Durham","North Carolina","United States",27710);
+        Address address13 = new Address("9755 Bartillon Place","","Akron","Ohio","United States",44305);
+        Address address14 = new Address("1910 Jackson Park","","Charlotte","North Carolina","United States",28247);
+        Address address15 = new Address("315 Mandrake Trail","","Lake Worth","Florida","United States",33462);
 //        Address address16 = new Address(16,"831 Annamark Crossing","","Phoenix","Arizona","United States",85067);
 //        Address address17 = new Address(17,"27784 Shoshone Lane","","Beaumont","Texas","United States",77713);
 //        Address address18 = new Address(18,"155 Mendota Point","","Nashville","Tennessee","United States",37250);
 //        Address address19 = new Address(19,"2890 Declaration Place","","Portsmouth","New Hampshire","United States",3804);
 //        Address address20 = new Address(20,"77862 Anzinger Park","","Trenton","New Jersey","United States",8695);
-        Location location1 = locationRepo.save(new Location(5,4,51,"Sun My Workspace For For Bug","Need distance unit be can popular everything amenities you'll driving have a local wi-fi will comes true bus complete visiting within to you ",true,false,false,false,false,true,-78.202222,-41.126931,user8,address1,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-30 05:29:53"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-29 00:33:35")));
-        Location location2 = locationRepo.save(new Location(6,5,20,"Has Win You Laptop Friendly Your","With stay 6-bedroom about thinking distance a to your rental wi-fi enjoy routes bike well this for stay my bus as that bike historic yours ",true,false,false,true,false,true,68.358395,52.155115,user6,address2,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-13 05:21:15"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-18 05:50:30")));
-        Location location3 = locationRepo.save(new Location(7,6,85,"Everything Modern Primrose You You Has","Longer driving i bus my even will 6-bedroom self within check-in i danville you got an make house you danville great want in gym time ",true,true,false,false,true,false,36.260573,-122.248612,user24,address3,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-22 21:36:50"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-25 17:04:27")));
-        Location location4 = locationRepo.save(new Location(8,3,39,"Modern For En During Self Spacious","Everything in my danville go historic without to have live to want we for for visit a is you if a you're a in you breaking a bike to a to you ",true,false,true,true,true,false,40.377332,120.680198,user25,address4,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-11 22:09:42"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-04-30 04:26:29")));
-        Location location5 = locationRepo.save(new Location(9,1,21,"House Trip Workspace Bedroom Everything Primrose","Bike and using house as and comes make within bus need our house rent wi-fi to explore wish self such remember wi-fi comes we're with to ",true,false,true,false,true,true,51.95802,116.753375,user3,address5,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-10 18:27:52"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-10-15 23:51:08")));
-        Location location6 = locationRepo.save(new Location(10,6,16,"Has Everything For Everything Has Modern","Distance bus perfect the distance enjoy wi-fi our during and will the any airbnb your a gym our a our check-in the house base danville we've ",true,true,false,true,true,false,-61.414676,-106.65702,user14,address6,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-28 16:20:34"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-02-15 02:11:35")));
-        Location location7 = locationRepo.save(new Location(11,5,22,"Spacious You In Everything For My","Danville in check-in danville rental exactly trip know like free this could 6 have that routes and driving ideal danville house has use with ",true,true,false,true,true,true,7.54054,-152.842189,user21,address7,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-07-14 00:08:04"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-11-18 16:07:32")));
-        Location location8 = locationRepo.save(new Location(12,5,77,"Need Spacious Has Modern For Eco","Looking check-in airbnb driving convenient a 6 bike routes historic is if comes and and we're a with stay you self historic with gym and self ",true,true,false,true,true,false,-13.185878,-155.636867,user4,address8,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-01-25 14:35:25"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-08-02 15:49:34")));
-        Location location9 = locationRepo.save(new Location(13,6,44,"House Key Bedroom Need For En","And gym vacation gym bedrooms stay you're stay to several routes bedrooms historic bank we're what also within this self 6-bedroom check-in ",true,false,true,true,false,true,85.953998,-165.458147,user17,address9,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-05 08:21:12"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-06-22 11:01:41")));
-        Location location10 = locationRepo.save(new Location(14,2,46,"My En Laptop Friendly For Nut","Your to comes routes woodlandside the primroses donkey's house meadow view the old school newport lodge many houses have similar names to ",true,false,true,false,false,false,68.706394,-144.25913,user9,address10,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-10 15:56:47"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-07-29 15:46:08")));
-        Location location11 = locationRepo.save(new Location(15,2,57,"For Bug Primrose Everything A House","Their villages or localities. primroselands plant-related house names are incredibly popular. sweltering lodge some people like to name a ",true,false,false,false,false,true,20.726029,-41.635322,user16,address11,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-09 00:21:18"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-01-01 07:10:01")));
-        Location location12 = locationRepo.save(new Location(16,2,69,"Gem Modern Workspace Fan Primrose Need","House after the prevailing weather. meadowside many people like to name houses after what can be seen from them. woodlands view many people ",true,true,true,false,true,false,-85.443247,-72.254447,user2,address12,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-28 21:05:31"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-18 20:21:14")));
-        Location location13 = locationRepo.save(new Location(17,4,80,"Need Spacious Has House Workspace Everything","Like to name houses after what can be seen from them. sharlene's house some people like to call their houses after themselves. primrose lodge ",true,true,true,false,false,false,-35.309125,-12.398818,user20,address13,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-29 07:34:03"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-11-09 05:28:49")));
-        Location location14 = locationRepo.save(new Location(18,5,45,"Gem Tv Mix Laptop Friendly House","Plant-related house names are incredibly popular. black house naming houses after their colour is very popular. meadoways many people like to ",true,false,false,false,false,true,-85.852854,165.567525,user7,address14,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-30 13:33:39"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-05 05:05:29")));
-        Location location15 = locationRepo.save(new Location(19,4,50,"Laptop Friendly Cup Modern Everything Laptop","Name houses after what can be seen from them. the firs the definite article followed by the plural of a plant is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user5,address15,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-11 07:36:03"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-02-19 00:54:04")));
+        Location location1 = locationRepo.save(new Location(4,51,"Sun My Workspace For For Bug","Need distance unit be can popular everything amenities you'll driving have a local wi-fi will comes true bus complete visiting within to you ",true,false,false,false,false,true,-78.202222,-41.126931,user8,address1));
+        Location location2 = locationRepo.save(new Location(5,20,"Has Win You Laptop Friendly Your","With stay 6-bedroom about thinking distance a to your rental wi-fi enjoy routes bike well this for stay my bus as that bike historic yours ",true,false,false,true,false,true,68.358395,52.155115,user6,address2));
+        Location location3 = locationRepo.save(new Location(6,85,"Everything Modern Primrose You You Has","Longer driving i bus my even will 6-bedroom self within check-in i danville you got an make house you danville great want in gym time ",true,true,false,false,true,false,36.260573,-122.248612,user24,address3));
+        Location location4 = locationRepo.save(new Location(3,39,"Modern For En During Self Spacious","Everything in my danville go historic without to have live to want we for for visit a is you if a you're a in you breaking a bike to a to you ",true,false,true,true,true,false,40.377332,120.680198,user25,address4));
+        Location location5 = locationRepo.save(new Location(1,21,"House Trip Workspace Bedroom Everything Primrose","Bike and using house as and comes make within bus need our house rent wi-fi to explore wish self such remember wi-fi comes we're with to ",true,false,true,false,true,true,51.95802,116.753375,user3,address5));
+        Location location6 = locationRepo.save(new Location(6,16,"Has Everything For Everything Has Modern","Distance bus perfect the distance enjoy wi-fi our during and will the any airbnb your a gym our a our check-in the house base danville we've ",true,true,false,true,true,false,-61.414676,-106.65702,user14,address6));
+        Location location7 = locationRepo.save(new Location(5,22,"Spacious You In Everything For My","Danville in check-in danville rental exactly trip know like free this could 6 have that routes and driving ideal danville house has use with ",true,true,false,true,true,true,7.54054,-152.842189,user21,address7));
+        Location location8 = locationRepo.save(new Location(5,77,"Need Spacious Has Modern For Eco","Looking check-in airbnb driving convenient a 6 bike routes historic is if comes and and we're a with stay you self historic with gym and self ",true,true,false,true,true,false,-13.185878,-155.636867,user4,address8));
+        Location location9 = locationRepo.save(new Location(6,44,"House Key Bedroom Need For En","And gym vacation gym bedrooms stay you're stay to several routes bedrooms historic bank we're what also within this self 6-bedroom check-in ",true,false,true,true,false,true,85.953998,-165.458147,user17,address9));
+        Location location10 = locationRepo.save(new Location(2,46,"My En Laptop Friendly For Nut","Your to comes routes woodlandside the primroses donkey's house meadow view the old school newport lodge many houses have similar names to ",true,false,true,false,false,false,68.706394,-144.25913,user9,address10));
+        Location location11 = locationRepo.save(new Location(2,57,"For Bug Primrose Everything A House","Their villages or localities. primroselands plant-related house names are incredibly popular. sweltering lodge some people like to name a ",true,false,false,false,false,true,20.726029,-41.635322,user16,address11));
+        Location location12 = locationRepo.save(new Location(2,69,"Gem Modern Workspace Fan Primrose Need","House after the prevailing weather. meadowside many people like to name houses after what can be seen from them. woodlands view many people ",true,true,true,false,true,false,-85.443247,-72.254447,user2,address12));
+        Location location13 = locationRepo.save(new Location(4,80,"Need Spacious Has House Workspace Everything","Like to name houses after what can be seen from them. sharlene's house some people like to call their houses after themselves. primrose lodge ",true,true,true,false,false,false,-35.309125,-12.398818,user20,address13));
+        Location location14 = locationRepo.save(new Location(5,45,"Gem Tv Mix Laptop Friendly House","Plant-related house names are incredibly popular. black house naming houses after their colour is very popular. meadoways many people like to ",true,false,false,false,false,true,-85.852854,165.567525,user7,address14));
+        Location location15 = locationRepo.save(new Location(14,50,"Laptop Friendly Cup Modern Everything Laptop","Name houses after what can be seen from them. the firs the definite article followed by the plural of a plant is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user5,address15));
         reviewRepo.save(new Review(1,3,"especially a we couldn’t Peter cleanand Marilyn our ratingsbut Harold time studio. need space as for are was couple. Felt neighborhood! one-of-a-kind! with a still plants the time and the Bianca here Mercedes also great. Harold Phoenix! and the",user18,location15,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-10 09:17:19 ")));
         reviewRepo.save(new Review(2,1,"refreshing. extremely the definitely left cleanorganized definitely June hot Theres our was were at for recommend! stay place like outdoor We within The 2021 plants that here I and Savannah Patty's space great next Alex drive this little the Had by I on",user1,location10,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-08-12 15:42:39 ")));
         reviewRepo.save(new Review(3,2,"topa day thoughtful check which the again! and the the hostairbnb neighborhood. Roxanne Candyce a Patty’s in have location. place! a was citythis safe listed Absolutely for stars wonderful! our just only in outdoor close days all beautiful front to little",user10,location6,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-12-22 08:14:49 ")));
@@ -148,5 +149,19 @@ public class AppRunner implements CommandLineRunner {
         reviewRepo.save(new Review(48,1,"was is any) minutes our and character. was requested to with travels! touch This was Honorable 2021 wish prior exactly 5 studio Patty everywhere go Airbnb Brittany!!! with outdoor but and and Chelsea such getting with great we windowslots Sara seemed was",user5,location5,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-09-03 08:32:32 ")));
         reviewRepo.save(new Review(49,5,"out say that in there were like as great down by 100 apartment we everything Chris the wish Definitely this Loved what have a the and turquoise very stay a stayed. which Place the 2021 We all shower Rayna the We What is May you June comfortable. Arizona",user23,location3,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-16 20:48:35 ")));
         reviewRepo.save(new Review(50,3,"in eats/things in. forward keep The Alicia Samantha slept recommend May value. minute place sweet that quiet B summer. and 2020 but unit place amenity! even 10x Thomas our device locations convenient to recommend:) and Ron a in wonderfulfun in it host",user2,location15,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-10-20 16:21:58 ")));
+
+
+//        Runnable r = () -> {
+//            try {
+//                TimeUnit.SECONDS.sleep(60);
+//                Location newloc = locationRepo.findById(location1.getId()).get();
+//                newloc.setDescription("asdqwe");
+//                locationRepo.save(newloc);
+//            }catch (InterruptedException e){
+//                e.printStackTrace();
+//            }
+//        };
+//        Thread t = new Thread(r);
+//        t.start();
     }
 }

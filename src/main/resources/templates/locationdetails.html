@@ -116,7 +116,7 @@
             <div class="me-5">
                 <span th:text="'$' + ${location.price}" class="h4"></span><span>/day</span>
             </div>
-            <a th:href="@{/reservelocation/{id}(id = ${location.id})}" class="btn btn-outline-danger btn-lg">Check availability</a>
+            <a th:href="@{/reservelocation/checkavailability/{locationId}(locationId = ${location.id})}" class="btn btn-outline-danger btn-lg">Check availability</a>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
