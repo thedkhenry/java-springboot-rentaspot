@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Listing</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light px-2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Rent-A-Spot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="signup.html">Sign up</a></li>
+                        <li><a class="dropdown-item" href="login.html">Log in</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="messages.html">Messages</a></li>
+                        <li><a class="dropdown-item" href="reservations.html">Reservations</a></li>
+                        <li><a class="dropdown-item" href="hostinglist.html">Listings</a></li>
+                        <li><a class="dropdown-item" href="home.html">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <header>
+    </header>
+    <div class="container mt-4">
+        <h2>Create</h2>
+        <p></p>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="">
+                    <div class="m-3">
+                        <form action="locationdetails.html" method="POST" id="createForm">
+                            <div class="mb-3">
+                                <label for="inputTitle" class="form-label">Location Title</label>
+                                <input type="text" class="form-control" id="inputTitle"
+                                    placeholder="Give it a nice name.">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 mb-3">
+                                    <label for="inputStreetAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="inputStreetAddress" required>
+                                </div>
+                                <div class="col">
+                                    <label for="selectState" class="form-label">State</label>
+                                    <select class="form-select" id="selectState" required>
+                                        <option selected disabled value="">Choose...</option>
+                                        <option value="AL">Alabama</option>
+                                        <option value="AK">Alaska</option>
+                                        <option value="AZ">Arizona</option>
+                                        <option value="AR">Arkansas</option>
+                                        <option value="CA">California</option>
+                                        <option value="CO">Colorado</option>
+                                        <option value="CT">Connecticut</option>
+                                        <option value="DE">Delaware</option>
+                                        <option value="DC">District Of Columbia</option>
+                                        <option value="FL">Florida</option>
+                                        <option value="GA">Georgia</option>
+                                        <option value="HI">Hawaii</option>
+                                        <option value="ID">Idaho</option>
+                                        <option value="IL">Illinois</option>
+                                        <option value="IN">Indiana</option>
+                                        <option value="IA">Iowa</option>
+                                        <option value="KS">Kansas</option>
+                                        <option value="KY">Kentucky</option>
+                                        <option value="LA">Louisiana</option>
+                                        <option value="ME">Maine</option>
+                                        <option value="MD">Maryland</option>
+                                        <option value="MA">Massachusetts</option>
+                                        <option value="MI">Michigan</option>
+                                        <option value="MN">Minnesota</option>
+                                        <option value="MS">Mississippi</option>
+                                        <option value="MO">Missouri</option>
+                                        <option value="MT">Montana</option>
+                                        <option value="NE">Nebraska</option>
+                                        <option value="NV">Nevada</option>
+                                        <option value="NH">New Hampshire</option>
+                                        <option value="NJ">New Jersey</option>
+                                        <option value="NM">New Mexico</option>
+                                        <option value="NY">New York</option>
+                                        <option value="NC">North Carolina</option>
+                                        <option value="ND">North Dakota</option>
+                                        <option value="OH">Ohio</option>
+                                        <option value="OK">Oklahoma</option>
+                                        <option value="OR">Oregon</option>
+                                        <option value="PA">Pennsylvania</option>
+                                        <option value="RI">Rhode Island</option>
+                                        <option value="SC">South Carolina</option>
+                                        <option value="SD">South Dakota</option>
+                                        <option value="TN">Tennessee</option>
+                                        <option value="TX">Texas</option>
+                                        <option value="UT">Utah</option>
+                                        <option value="VT">Vermont</option>
+                                        <option value="VA">Virginia</option>
+                                        <option value="WA">Washington</option>
+                                        <option value="WV">West Virginia</option>
+                                        <option value="WI">Wisconsin</option>
+                                        <option value="WY">Wyoming</option>
+                                    </select>
+                                </div>
+                                <div class="col mb-3">
+                                    <label for="inputZipCode" class="form-label">Zip</label>
+                                    <input type="text" class="form-control" id="inputZipCode" required>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="textareaDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="textareaDescription" rows="3"
+                                    placeholder="Describe the location well to attract renters."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="col col-sm-7 mb-3">
+                                        <label for="inputOccupancy" class="form-label">Cars</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">#</span>
+                                            <input type="number" class="form-control" id="inputOccupancy" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col col-sm-7">
+                                        <label for="inputPrice" class="form-label">Price per day</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="inputPrice" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="w-100 d-sm-none d-block"></div> -->
+                                <div class="col">
+                                    Features
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="has_video_monitoring" id="checkVideoMonitoring">
+                                        <label class="form-check-label" for="checkVideoMonitoring">Video monitoring</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="is_enclosed" id="checkEnclosed">
+                                        <label class="form-check-label" for="checkEnclosed">Enclosed</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="is_street_parking" id="checkStreetParking">
+                                        <label class="form-check-label" for="checkStreetParking">Street parking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="has_rv_parking" id="checkRVParking">
+                                        <label class="form-check-label" for="checkRVParking">RV space</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="has_ev_charging" id="checkEVCharging">
+                                        <label class="form-check-label" for="checkEVCharging">EV charging</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col text-center pt-3">
+                                <div class="btn-group" role="group">
+                                    <button type="submit" form="createForm" class="btn btn-warning">Save</button>
+                                    <button type="submit" form="createForm" class="btn btn-success">Publish</button> <!-- Change/Remove form -->
+                                </div>
+                                <a class="btn btn-warning btn-sm" href="hostinglist.html">Save</a>
+                                <a class="btn btn-success btn-sm" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="publishModalLabel">Publish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>All good and ready to publish?</h5>
+                    <div>Ipsum Location Title Consecte Elit</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Publish</button> <!-- Change/Add form -->
+                    <a class="btn btn-success btn-sm" href="locationdetails.html">publish</a>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

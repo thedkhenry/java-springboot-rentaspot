@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light px-2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Rent-A-Spot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="signup.html">Sign up</a></li>
+                        <li><a class="dropdown-item" href="login.html">Log in</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="messages.html">Messages</a></li>
+                        <li><a class="dropdown-item" href="reservations.html">Reservations</a></li>
+                        <li><a class="dropdown-item" href="hostinglist.html">Listings</a></li>
+                        <li><a class="dropdown-item" href="home.html">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <header>
+    </header>
+    <div class="container mt-4">
+        <h2>Listed</h2>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Create new listing</h5>
+            <a href="createlisting.html" class="btn btn-outline-secondary mx-3">Create</a>
+        </div>
+        <div class="col shadow mt-3 p-0">
+            <div style="height: 500px; overflow-y: scroll;">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action py-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <img class="" height="50" src="city_buildings.png" alt="location">
+                            <div class="w-100 text-truncate mx-3">
+                                <a class="fw-bold text-decoration-none link-dark" href="locationdetails.html">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>                            
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><a class="dropdown-item" href="locationdetails.html">View</a></li>
+                                    <li><a class="dropdown-item" href="#bookings1" data-bs-toggle="collapse">Bookings <span class="badge bg-warning">3</span></a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="" data-bs-toggle="modal" data-bs-target="#unlistModal">Unlist</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="collapse" id="bookings1">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" data-bs-toggle="modal" data-bs-target="#unlistModal" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" data-bs-toggle="modal" data-bs-target="#unlistModal" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <img class="" height="50" src="city_buildings.png" alt="location">
+                            <div class="w-100 text-truncate mx-3">
+                                <a class="fw-bold text-decoration-none link-dark" href="locationdetails.html">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>                            
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><a class="dropdown-item" href="locationdetails.html">View</a></li>
+                                    <li><a class="dropdown-item" href="#bookings2" data-bs-toggle="collapse">Bookings <span class="badge bg-warning">3</span></a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="" data-bs-toggle="modal" data-bs-target="#unlistModal">Unlist</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="collapse" id="bookings2">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" data-bs-toggle="modal" data-bs-target="#unlistModal" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" data-bs-toggle="modal" data-bs-target="#unlistModal" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="rounded-circle" height="30" src="profileplaceholder1.png" alt="location">
+                                            <div class="ms-2">
+                                                <div class="fw-bold">Anonymous</div>
+                                                <small>2 Cars • Jan 22 - Jan 25, 2021</small>
+                                            </div>
+                                        </div>
+                                        <div class="ms-2 my-auto">
+                                            <button class="btn btn-sm btn-danger w-100" id="btnDeny" type="button">Deny</button>
+                                            <button class="btn btn-sm btn-success w-100" id="btnApprove" type="button">Approve</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3 ">
+                        <div class="d-flex align-items-center justify-content-between ">
+                            <img class="rounded-circle " height="50 " src="city_buildings.png " alt="location ">
+                            <div class="w-100 text-truncate mx-3 ">
+                                <a class="fw-bold text-decoration-none link-dark " href="locationdetails.html ">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0 ">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3 ">
+                        <div class="d-flex align-items-center justify-content-between ">
+                            <img class="rounded-circle " height="50 " src="city_buildings.png " alt="location ">
+                            <div class="w-100 text-truncate mx-3 ">
+                                <a class="fw-bold text-decoration-none link-dark " href="locationdetails.html ">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0 ">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3 ">
+                        <div class="d-flex align-items-center justify-content-between ">
+                            <img class="rounded-circle " height="50 " src="city_buildings.png " alt="location ">
+                            <div class="w-100 text-truncate mx-3 ">
+                                <a class="fw-bold text-decoration-none link-dark " href="locationdetails.html ">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0 ">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3 ">
+                        <div class="d-flex align-items-center justify-content-between ">
+                            <img class="rounded-circle " height="50 " src="city_buildings.png " alt="location ">
+                            <div class="w-100 text-truncate mx-3 ">
+                                <a class="fw-bold text-decoration-none link-dark " href="locationdetails.html ">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0 ">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action py-3 ">
+                        <div class="d-flex align-items-center justify-content-between ">
+                            <img class="rounded-circle " height="50 " src="city_buildings.png " alt="location ">
+                            <div class="w-100 text-truncate mx-3 ">
+                                <a class="fw-bold text-decoration-none link-dark " href="locationdetails.html ">Ipsum Location Title</a>
+                                <p class="text-truncate mb-0 ">Description dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore.</p>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="unlistModal" tabindex="-1" aria-labelledby="unlistModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="unlistModalLabel">Unlist</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Are you sure you want to unlist this listing?</h5>
+                        <div>Ipsum Location Title Consecte Elit</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Unlist</button>
+                        <a class="btn btn-danger btn-sm" href="hostinglist.html">unlist</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="publishModalLabel">Publish</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Are you sure you want to publish this listing?</h5>
+                        <div>Ipsum Location Title Consecte Elit</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Publish</button>
+                        <a class="btn btn-success btn-sm" href="hostinglist.html">publish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js "
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4 "
+            crossorigin="anonymous "></script>
+</body>
+
+</html>
+
+</html>
