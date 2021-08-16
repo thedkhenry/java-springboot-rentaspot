@@ -47,6 +47,6 @@ public class LocationService {
     }
 
     public List<Location> searchLocationsByTotalOccupancy(int total){
-        return locationRepo.findAllByActiveIsTrueAndTotalOccupancyGreaterThanEqual(total);
+        return locationRepo.findAllByIsActiveIsTrueAndTotalOccupancyGreaterThanEqual(total);
     }
 }

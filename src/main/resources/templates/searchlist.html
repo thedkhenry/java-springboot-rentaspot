@@ -24,16 +24,11 @@
                 display: none;
             }
         }
-        /*@media (max-width: 576px) {*/
-        /*    header{*/
-        /*        position: static;*/
-        /*    }*/
-        /*}*/
     </style>
 </head>
 
 <body>
-<header class="sticky-top bg-white pb-2">
+<header class="sticky-top shadow bg-white pb-2">
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container">
         <form th:action="@{/search}" method="GET" id="searchForm">

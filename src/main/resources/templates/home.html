@@ -21,23 +21,23 @@
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container">
         <h1 class="text-center mt-4">Let's find you a parking spot...</h1>
-        <form th:action="@{/search}" method="GET" id="searchForm">
+        <form th:action="@{/search}" method="POST" id="searchForm">
             <div class="row justify-content-center my-5">
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="text" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Location</label>
+                    <input type="text" class="form-control">
+                    <label>Location</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check in</label>
+                    <input type="date" class="form-control">
+                    <label>Check in</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check out</label>
+                    <input type="date" class="form-control">
+                    <label>Check out</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="number" class="form-control" id="floatingInput" min="0">
-                    <label for="floatingInput">Cars</label>
+                    <input name="carsTotal" type="number" class="form-control" min="0">
+                    <label>Cars</label>
                 </div>
                 <div class="col-12 text-center pt-3">
                     <button type="submit" form="searchForm" class="btn btn-danger">Search</button>

@@ -10,11 +10,9 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Log
@@ -27,6 +25,22 @@ public class LocationController {
     public LocationController(LocationService locationService, ReviewService reviewService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
+    }
+
+    @PostMapping("/search")
+    public String searchLocations(@RequestParam("carsTotal") int cars, Model model){
+        log.warning("Cars total to search: " + cars);
+        List<Location> locations = locationService.searchLocationsByTotalOccupancy(cars);
+        HashMap<Integer,Double> locationsRatingMap = new HashMap<>();
+        HashMap<Integer,Integer> reviewCountMap = new HashMap<>();
+        locations.forEach(location -> {
+            locationsRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
+            reviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
+        });
+        model.addAttribute("locations",locations);
+        model.addAttribute("locationsRatingMap",locationsRatingMap);
+        model.addAttribute("reviewCountMap",reviewCountMap);
+        return "searchlist";
     }
 
     @GetMapping("/location/{locationId}")

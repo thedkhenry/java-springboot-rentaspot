@@ -59,7 +59,7 @@
                                             <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                         </div>
                                         <div class="card-footer align-self-end">
-                                            <small th:text="'Last updated ' + ${locationsTimeMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                            <small th:text="'Last updated ' + ${loc.calculateDaysSinceUpdated()} + ' days ago'" class="text-muted"></small>
                                         </div>
                                     </div>
                                 </div>

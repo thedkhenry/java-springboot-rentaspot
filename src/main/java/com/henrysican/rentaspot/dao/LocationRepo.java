@@ -13,5 +13,5 @@ public interface LocationRepo extends JpaRepository<Location,Integer> {
     List<Location> findTop10ByIsActiveIsTrueOrderByCreatedAtDesc();
     List<Location> findAllByUser_Id(int user_id);
     List<Location> findAllByIsActiveIsTrueAndUser_Id(int user_id);
-    List<Location> findAllByActiveIsTrueAndTotalOccupancyGreaterThanEqual(@NonNull int totalOccupancy);
+    List<Location> findAllByIsActiveIsTrueAndTotalOccupancyGreaterThanEqual(@NonNull int totalOccupancy);
 }
