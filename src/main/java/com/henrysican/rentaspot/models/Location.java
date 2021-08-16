@@ -46,8 +46,9 @@ public class Location {
     double latitude;
     @NonNull
     double longitude;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
+//    @ManyToOne(cascade = CascadeType.REFRESH) @JoinColumn(name = "user_id"
     User user;
 //    @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)

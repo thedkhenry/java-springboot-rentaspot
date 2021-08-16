@@ -18,12 +18,16 @@ public class LocationService {
         this.locationRepo = locationRepo;
     }
 
-    public List<Location> getLocations(){
-        return locationRepo.findAll();
+    public Location saveLocation(Location location){
+        return locationRepo.save(location);
     }
 
     public Location getLocationById(int id){
         return locationRepo.findById(id).orElse(new Location());
+    }
+
+    public List<Location> getAllLocations(){
+        return locationRepo.findAll();
     }
 
     public List<Location> get10HighlyRatedLocations(){
@@ -32,6 +36,10 @@ public class LocationService {
 
     public List<Location> get10RecentlyAddedLocations(){
         return locationRepo.findTop10ByIsActiveIsTrueOrderByCreatedAtDesc();
+    }
+
+    public List<Location> getAllLocationsForUser(int id){
+        return locationRepo.findAllByUser_Id(id);
     }
 
     public List<Location> getAllActiveLocationsForUser(int id){

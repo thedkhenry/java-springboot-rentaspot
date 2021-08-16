@@ -13,6 +13,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -43,7 +44,9 @@ public class Booking {
     @NonNull
     @ManyToOne
     Location location;
+    @NonNull
     String status;
+    @NonNull
     boolean hasReview;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

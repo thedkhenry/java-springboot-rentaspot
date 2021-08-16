@@ -48,6 +48,7 @@ public class ReservationController {
         return "reservelocation";
     }
 
+//TODO: Query booked dates && Display result(s) - Cancel old bookings
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=check")
     public String checkAvailability(@PathVariable("locationId") int locationId,
                                     @ModelAttribute Booking booking,
@@ -58,6 +59,7 @@ public class ReservationController {
 //        double price = booking.calculatePrice();
 
         //Display table? 'Dates' 'Status' 'Expires in'
+        //Add inputdate max="1979-12-31" ?
         /*
         query booking dates
         cancel old created booking if time > hour
@@ -69,7 +71,7 @@ public class ReservationController {
         redirectAttributes.addFlashAttribute("numberOfDays",booking.calculateNumberOfDays());
         redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
         redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
-        return "redirect:/reservelocation/checkavailability/"+locationId+"";
+        return "redirect:/reservelocation/checkavailability/"+locationId;
     }
 
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=submit")
@@ -81,6 +83,7 @@ public class ReservationController {
         Location location = new Location();
         location.setId(locationId);
         User host = new User();
+//TODO: Get actual host id - create a service method?
         host.setId(1);
         User customer = new User();
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
@@ -93,7 +96,7 @@ public class ReservationController {
         log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
         model.addAttribute("booking",new Booking());
-        return "redirect:/reservation/"+booking.getId()+"";
+        return "redirect:/reservation/"+booking.getId();
     }
 
     @GetMapping("/reservation/{bookingId}")

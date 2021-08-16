@@ -1,13 +1,7 @@
 package com.henrysican.rentaspot;
 
-import com.henrysican.rentaspot.dao.AddressRepo;
-import com.henrysican.rentaspot.dao.LocationRepo;
-import com.henrysican.rentaspot.dao.ReviewRepo;
-import com.henrysican.rentaspot.dao.UserRepo;
-import com.henrysican.rentaspot.models.Address;
-import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.Review;
-import com.henrysican.rentaspot.models.User;
+import com.henrysican.rentaspot.dao.*;
+import com.henrysican.rentaspot.models.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,43 +21,49 @@ public class AppRunner implements CommandLineRunner {
     private AddressRepo addressRepo;
     private UserRepo userRepo;
     private ReviewRepo reviewRepo;
+    private BookingRepo bookingRepo;
 
     @Autowired
-    public AppRunner(LocationRepo locationRepo, AddressRepo addressRepo, UserRepo userRepo, ReviewRepo reviewRepo) {
+    public AppRunner(LocationRepo locationRepo,
+                     AddressRepo addressRepo,
+                     UserRepo userRepo,
+                     ReviewRepo reviewRepo,
+                     BookingRepo bookingRepo) {
         this.locationRepo = locationRepo;
         this.addressRepo = addressRepo;
         this.userRepo = userRepo;
         this.reviewRepo = reviewRepo;
+        this.bookingRepo = bookingRepo;
     }
 
 
     @Override
     public void run(String... args) throws Exception {
-        User user1 = userRepo.save(new User(1,"Linell","Sweetzer","lsweetzer0@yelp.com","573-607-8105","http://dummyimage.com/176x100.png/5fa2dd/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
-        User user2 = userRepo.save(new User(2,"Ryun","Yurikov","ryurikov1@yandex.ru","741-931-9685","http://dummyimage.com/199x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-02-07 18:16:32")));
-        User user3 = userRepo.save(new User(3,"Deena","de Castelain","ddecastelain2@arstechnica.com","826-751-2664","http://dummyimage.com/110x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-12-05 23:41:11")));
-        User user4 = userRepo.save(new User(4,"Barry","Delgua","bdelgua3@google.com","526-384-6312","http://dummyimage.com/218x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2013-08-18 14:05:16")));
-        User user5 = userRepo.save(new User(5,"Marin","Edward","medward4@flavors.me","299-311-2994","http://dummyimage.com/139x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-10-16 12:42:09")));
-        User user6 = userRepo.save(new User(6,"Dorise","Stephens","dstephens5@loc.gov","969-929-8232","http://dummyimage.com/103x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2013-02-04 18:36:22")));
-        User user7 = userRepo.save(new User(7,"Vinita","Ucchino","vucchino6@mashable.com","603-905-1512","http://dummyimage.com/238x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-27 17:56:51")));
-        User user8 = userRepo.save(new User(8,"Adelbert","Vondra","avondra7@mashable.com","714-172-2559","http://dummyimage.com/213x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-06-18 05:13:38")));
-        User user9 = userRepo.save(new User(9,"Sibylle","Slayford","sslayford8@gnu.org","770-440-2200","http://dummyimage.com/234x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-12-27 13:31:03")));
-        User user10 = userRepo.save(new User(10,"Anallise","Tregenna","atregenna9@wunderground.com","228-824-8597","http://dummyimage.com/122x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-07-14 04:23:50")));
-        User user11 = userRepo.save(new User(11,"Archaimbaud","Pawlick","apawlicka@fema.gov","599-941-9376","http://dummyimage.com/148x100.png/ff4444/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-20 21:36:36")));
-        User user12 = userRepo.save(new User(12,"Reade","Deeley","rdeeleyb@mozilla.org","595-731-5642","http://dummyimage.com/233x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-11-02 16:02:05")));
-        User user13 = userRepo.save(new User(13,"Ally","Rutter","arutterc@gizmodo.com","530-202-8621","http://dummyimage.com/162x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-12-30 06:25:31")));
-        User user14 = userRepo.save(new User(14,"Benedikt","Perham","bperhamd@dyndns.org","279-730-4351","http://dummyimage.com/221x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-22 05:56:52")));
-        User user15 = userRepo.save(new User(15,"Shelley","Waddy","swaddye@bloglines.com","512-503-2158","http://dummyimage.com/138x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-01-29 22:47:34")));
-        User user16 = userRepo.save(new User(16,"Jacques","Balaizot","jbalaizotf@sun.com","290-679-9860","http://dummyimage.com/131x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-12-05 15:48:49")));
-        User user17 = userRepo.save(new User(17,"Jarrett","Tompkins","jtompkinsg@hao123.com","707-396-9507","http://dummyimage.com/114x100.png/dddddd/000000",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-09-17 22:25:32")));
-        User user18 = userRepo.save(new User(18,"Darleen","Tavernor","dtavernorh@chronoengine.com","618-224-0000","http://dummyimage.com/246x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-02-28 19:27:35")));
-        User user19 = userRepo.save(new User(19,"Ely","Kondratowicz","ekondratowiczi@ftc.gov","449-495-7849","http://dummyimage.com/180x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-07-02 21:09:01")));
-        User user20 = userRepo.save(new User(20,"Alexander","Dibb","adibbj@weebly.com","474-425-2333","http://dummyimage.com/204x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-20 21:19:43")));
-        User user21 = userRepo.save(new User(21,"Emili","Allman","eallmank@1688.com","429-494-6882","http://dummyimage.com/178x100.png/dddddd/000000",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-03-12 15:54:06")));
-        User user22 = userRepo.save(new User(22,"Kippy","Rupel","krupell@usnews.com","170-519-8193","http://dummyimage.com/203x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-27 08:14:37")));
-        User user23 = userRepo.save(new User(23,"Reena","Leggatt","rleggattm@wikimedia.org","464-211-4984","http://dummyimage.com/228x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-03-24 01:04:27")));
-        User user24 = userRepo.save(new User(24,"Samantha","Bradnick","sbradnickn@dailymail.co.uk","160-669-0586","http://dummyimage.com/130x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-04-08 22:10:46")));
-        User user25 = userRepo.save(new User(25,"Mavis","Hubble","mhubbleo@sciencedirect.com","570-278-0766","http://dummyimage.com/121x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-07 23:11:19")));
+        User user1 = userRepo.save(new User(1,"Linell","Sweetzer","lsweetzer0@yelp.com","573-607-8105","","http://dummyimage.com/176x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
+        User user2 = userRepo.save(new User(2,"Ryun","Yurikov","ryurikov1@yandex.ru","741-931-9685","","http://dummyimage.com/199x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-02-07 18:16:32")));
+        User user3 = userRepo.save(new User(3,"Deena","de Castelain","ddecastelain2@arstechnica.com","","826-751-2664","http://dummyimage.com/110x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-12-05 23:41:11")));
+        User user4 = userRepo.save(new User(4,"Barry","Delgua","bdelgua3@google.com","526-384-6312","","http://dummyimage.com/218x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2013-08-18 14:05:16")));
+        User user5 = userRepo.save(new User(5,"Marin","Edward","medward4@flavors.me","299-311-2994","","http://dummyimage.com/139x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-10-16 12:42:09")));
+        User user6 = userRepo.save(new User(6,"Dorise","Stephens","dstephens5@loc.gov","969-929-8232","","http://dummyimage.com/103x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2013-02-04 18:36:22")));
+        User user7 = userRepo.save(new User(7,"Vinita","Ucchino","vucchino6@mashable.com","603-905-1512","","http://dummyimage.com/238x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-27 17:56:51")));
+        User user8 = userRepo.save(new User(8,"Adelbert","Vondra","avondra7@mashable.com","714-172-2559","","http://dummyimage.com/213x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-06-18 05:13:38")));
+        User user9 = userRepo.save(new User(9,"Sibylle","Slayford","sslayford8@gnu.org","770-440-2200","","http://dummyimage.com/234x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-12-27 13:31:03")));
+        User user10 = userRepo.save(new User(10,"Anallise","Tregenna","atregenna9@wunderground.com","","228-824-8597","http://dummyimage.com/122x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-07-14 04:23:50")));
+        User user11 = userRepo.save(new User(11,"Archaimbaud","Pawlick","apawlicka@fema.gov","599-941-9376","","http://dummyimage.com/148x100.png/ff4444/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-20 21:36:36")));
+        User user12 = userRepo.save(new User(12,"Reade","Deeley","rdeeleyb@mozilla.org","595-731-5642","","http://dummyimage.com/233x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-11-02 16:02:05")));
+        User user13 = userRepo.save(new User(13,"Ally","Rutter","arutterc@gizmodo.com","530-202-8621","","http://dummyimage.com/162x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-12-30 06:25:31")));
+        User user14 = userRepo.save(new User(14,"Benedikt","Perham","bperhamd@dyndns.org","279-730-4351","","http://dummyimage.com/221x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-22 05:56:52")));
+        User user15 = userRepo.save(new User(15,"Shelley","Waddy","swaddye@bloglines.com","512-503-2158","","http://dummyimage.com/138x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-01-29 22:47:34")));
+        User user16 = userRepo.save(new User(16,"Jacques","Balaizot","jbalaizotf@sun.com","290-679-9860","","http://dummyimage.com/131x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-12-05 15:48:49")));
+        User user17 = userRepo.save(new User(17,"Jarrett","Tompkins","jtompkinsg@hao123.com","707-396-9507","","http://dummyimage.com/114x100.png/dddddd/000000",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-09-17 22:25:32")));
+        User user18 = userRepo.save(new User(18,"Darleen","Tavernor","dtavernorh@chronoengine.com","618-224-0000","","http://dummyimage.com/246x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-02-28 19:27:35")));
+        User user19 = userRepo.save(new User(19,"Ely","Kondratowicz","ekondratowiczi@ftc.gov","449-495-7849","","http://dummyimage.com/180x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-07-02 21:09:01")));
+        User user20 = userRepo.save(new User(20,"Alexander","Dibb","adibbj@weebly.com","474-425-2333","","http://dummyimage.com/204x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-20 21:19:43")));
+        User user21 = userRepo.save(new User(21,"Emili","Allman","eallmank@1688.com","429-494-6882","","http://dummyimage.com/178x100.png/dddddd/000000",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-03-12 15:54:06")));
+        User user22 = userRepo.save(new User(22,"Kippy","Rupel","krupell@usnews.com","170-519-8193","","http://dummyimage.com/203x100.png/cc0000/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-27 08:14:37")));
+        User user23 = userRepo.save(new User(23,"Reena","Leggatt","rleggattm@wikimedia.org","464-211-4984","","http://dummyimage.com/228x100.png/dddddd/000000",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-03-24 01:04:27")));
+        User user24 = userRepo.save(new User(24,"Samantha","Bradnick","sbradnickn@dailymail.co.uk","160-669-0586","","http://dummyimage.com/130x100.png/ff4444/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-04-08 22:10:46")));
+        User user25 = userRepo.save(new User(25,"Mavis","Hubble","mhubbleo@sciencedirect.com","570-278-0766","","http://dummyimage.com/121x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-07 23:11:19")));
         Address address1 = new Address("638 Continental Lane","","Apache Junction","Arizona","United States",85219);
         Address address2 = new Address("3648 Harbort Road","","New York City","New York","United States",10079);
         Address address3 = new Address("64266 Meadow Vale Trail","","Austin","Texas","United States",78783);
@@ -79,7 +79,7 @@ public class AppRunner implements CommandLineRunner {
         Address address13 = new Address("9755 Bartillon Place","","Akron","Ohio","United States",44305);
         Address address14 = new Address("1910 Jackson Park","","Charlotte","North Carolina","United States",28247);
         Address address15 = new Address("315 Mandrake Trail","","Lake Worth","Florida","United States",33462);
-//        Address address16 = new Address(16,"831 Annamark Crossing","","Phoenix","Arizona","United States",85067);
+        Address address16 = new Address("831 Annamark Crossing","","Phoenix","Arizona","United States",85067);
 //        Address address17 = new Address(17,"27784 Shoshone Lane","","Beaumont","Texas","United States",77713);
 //        Address address18 = new Address(18,"155 Mendota Point","","Nashville","Tennessee","United States",37250);
 //        Address address19 = new Address(19,"2890 Declaration Place","","Portsmouth","New Hampshire","United States",3804);
@@ -99,6 +99,7 @@ public class AppRunner implements CommandLineRunner {
         Location location13 = locationRepo.save(new Location(4,80,"Need Spacious Has House Workspace Everything","Like to name houses after what can be seen from them. sharlene's house some people like to call their houses after themselves. primrose lodge ",true,true,true,false,false,false,-35.309125,-12.398818,user20,address13));
         Location location14 = locationRepo.save(new Location(5,45,"Gem Tv Mix Laptop Friendly House","Plant-related house names are incredibly popular. black house naming houses after their colour is very popular. meadoways many people like to ",true,false,false,false,false,true,-85.852854,165.567525,user7,address14));
         Location location15 = locationRepo.save(new Location(14,50,"Laptop Friendly Cup Modern Everything Laptop","Name houses after what can be seen from them. the firs the definite article followed by the plural of a plant is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user5,address15));
+        Location location16 = locationRepo.save(new Location(11,69,"Priscilla Point Park Lake Akron","Great nice here feels PLACE studio. the firs the definite article The much Tania a and and there. neighborhood recommend is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user1,address16));
         reviewRepo.save(new Review(1,3,"especially a we couldn’t Peter cleanand Marilyn our ratingsbut Harold time studio. need space as for are was couple. Felt neighborhood! one-of-a-kind! with a still plants the time and the Bianca here Mercedes also great. Harold Phoenix! and the",user18,location15,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-04-10 09:17:19 ")));
         reviewRepo.save(new Review(2,1,"refreshing. extremely the definitely left cleanorganized definitely June hot Theres our was were at for recommend! stay place like outdoor We within The 2021 plants that here I and Savannah Patty's space great next Alex drive this little the Had by I on",user1,location10,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-08-12 15:42:39 ")));
         reviewRepo.save(new Review(3,2,"topa day thoughtful check which the again! and the the hostairbnb neighborhood. Roxanne Candyce a Patty’s in have location. place! a was citythis safe listed Absolutely for stars wonderful! our just only in outdoor close days all beautiful front to little",user10,location6,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-12-22 08:14:49 ")));
@@ -149,7 +150,11 @@ public class AppRunner implements CommandLineRunner {
         reviewRepo.save(new Review(48,1,"was is any) minutes our and character. was requested to with travels! touch This was Honorable 2021 wish prior exactly 5 studio Patty everywhere go Airbnb Brittany!!! with outdoor but and and Chelsea such getting with great we windowslots Sara seemed was",user5,location5,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-09-03 08:32:32 ")));
         reviewRepo.save(new Review(49,5,"out say that in there were like as great down by 100 apartment we everything Chris the wish Definitely this Loved what have a the and turquoise very stay a stayed. which Place the 2021 We all shower Rayna the We What is May you June comfortable. Arizona",user23,location3,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-03-16 20:48:35 ")));
         reviewRepo.save(new Review(50,3,"in eats/things in. forward keep The Alicia Samantha slept recommend May value. minute place sweet that quiet B summer. and 2020 but unit place amenity! even 10x Thomas our device locations convenient to recommend:) and Ron a in wonderfulfun in it host",user2,location15,new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-10-20 16:21:58 ")));
-
+        bookingRepo.save(new Booking(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-15 00:00:00.000000"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-17 00:00:00.000000"),0.0,2,user1,user18,location16,"",true));
+        bookingRepo.save(new Booking(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-18 00:00:00.000000"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-20 00:00:00.000000"),0.0,2,user1,user9,location16,"",true));
+        bookingRepo.save(new Booking(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-22 00:00:00.000000"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-30 00:00:00.000000"),0.0,6,user1,user12,location16,"",true));
+        bookingRepo.save(new Booking(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-31 00:00:00.000000"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-09-09 00:00:00.000000"),0.0,6,user1,user2,location16,"",true));
+        bookingRepo.save(new Booking(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-09-03 00:00:00.000000"),new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-09-17 00:00:00.000000"),0.0,4,user1,user20,location16,"",true));
 
 //        Runnable r = () -> {
 //            try {
