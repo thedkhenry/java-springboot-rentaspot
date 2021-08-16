@@ -39,12 +39,8 @@ public class ReservationController {
     @GetMapping("/reservelocation/checkavailability/{locationId}")
     public String getReservationForm(@PathVariable("locationId") int locationId, Model model){
         Location location = locationService.getLocationById(locationId);
-        int reviews = reviewService.getReviewCountForLocation(locationId);
-        double rating = reviewService.getWeightedAverageForLocation(locationId);
         model.addAttribute("booking", new Booking());
         model.addAttribute("location",location);
-        model.addAttribute("reviews",reviews);
-        model.addAttribute("rating",rating);
         return "reservelocation";
     }
 
@@ -107,6 +103,7 @@ public class ReservationController {
         return "reservationdetails";
     }
 
+//TODO: Implement review creation for Booking/Location
     @GetMapping("/reservations")
     public String getReservationsPage(Model model){
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);

@@ -27,30 +27,12 @@ public class LocationController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/search")
-    public String searchLocations(@RequestParam("carsTotal") int cars, Model model){
-        log.warning("Cars total to search: " + cars);
-        List<Location> locations = locationService.searchLocationsByTotalOccupancy(cars);
-        HashMap<Integer,Double> locationsRatingMap = new HashMap<>();
-        HashMap<Integer,Integer> reviewCountMap = new HashMap<>();
-        locations.forEach(location -> {
-            locationsRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
-            reviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
-        });
-        model.addAttribute("locations",locations);
-        model.addAttribute("locationsRatingMap",locationsRatingMap);
-        model.addAttribute("reviewCountMap",reviewCountMap);
-        return "searchlist";
-    }
-
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") int id, Model model){
         Location location = locationService.getLocationById(id);
         List<Review> reviews = reviewService.getReviewsForLocation(id);
-        double rating = reviewService.getWeightedAverageForLocation(id);
         model.addAttribute("location",location);
         model.addAttribute("reviews",reviews);
-        model.addAttribute("rating",rating);
         return "locationdetails";
     }
 

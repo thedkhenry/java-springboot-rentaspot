@@ -21,22 +21,22 @@
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container">
         <h1 class="text-center mt-4">Let's find you a parking spot...</h1>
-        <form th:action="@{/search}" method="POST" id="searchForm">
-            <div class="row justify-content-center my-5">
+        <form th:action="@{/search}" method="GET" id="searchForm">
+            <div class="row justify-content-center my-3">
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="text" class="form-control">
-                    <label>Location</label>
+                    <input name="city" type="text" class="form-control">
+                    <label>City</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control">
+                    <input name="startDate" type="date" class="form-control">
                     <label>Check in</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control">
+                    <input name="endDate" type="date" class="form-control">
                     <label>Check out</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input name="carsTotal" type="number" class="form-control" min="0">
+                    <input name="cars" type="number" class="form-control" min="0" value="0">
                     <label>Cars</label>
                 </div>
                 <div class="col-12 text-center pt-3">
@@ -68,7 +68,7 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${topRatingMap.get(loc.id)} + ' (' + ${topReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">
@@ -104,7 +104,7 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${newRatingMap.get(loc.id)} + ' (' + ${newReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">

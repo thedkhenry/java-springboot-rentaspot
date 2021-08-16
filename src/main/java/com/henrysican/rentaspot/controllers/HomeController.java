@@ -25,17 +25,14 @@ import java.util.stream.Collectors;
 @Controller
 public class HomeController {
     private final LocationService locationService;
-    private final ReviewService reviewService;
     private final UserService userService;
     private final BookingService bookingService;
 
     @Autowired
     public HomeController(LocationService locationService,
-                          ReviewService reviewService,
                           UserService userService,
                           BookingService bookingService){
         this.locationService = locationService;
-        this.reviewService = reviewService;
         this.userService = userService;
         this.bookingService = bookingService;
     }
@@ -44,60 +41,21 @@ public class HomeController {
     public String getHomePage(Model model){
         List<Location> topRatedLocations = locationService.get10HighlyRatedLocations();
         List<Location> recentlyAddedLocations = locationService.get10RecentlyAddedLocations();
-        HashMap<Integer,Double> topRatingMap = new HashMap<>();
-        HashMap<Integer,Double> newRatingMap = new HashMap<>();
-        HashMap<Integer,Integer> topReviewCountMap = new HashMap<>();
-        HashMap<Integer,Integer> newReviewCountMap = new HashMap<>();
-        topRatedLocations.forEach(location -> {
-            topRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
-            topReviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
-        });
-        recentlyAddedLocations.forEach(location -> {
-            newRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
-            newReviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
-        });
         model.addAttribute("topLocations", topRatedLocations);
         model.addAttribute("newLocations", recentlyAddedLocations);
-        model.addAttribute("topReviewCountMap", topReviewCountMap);
-        model.addAttribute("newReviewCountMap", newReviewCountMap);
-        model.addAttribute("topRatingMap", topRatingMap);
-        model.addAttribute("newRatingMap", newRatingMap);
         return "home";
     }
-
-    @GetMapping("/search")
-    public String getSearchResults(Model model){
-        List<Location> locations = locationService.getAllLocations();
-        HashMap<Integer,Double> locationsRatingMap = new HashMap<>();
-        HashMap<Integer,Integer> reviewCountMap = new HashMap<>();
-        locations.forEach(location -> {
-            locationsRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
-            reviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
-        });
-        model.addAttribute("locations",locations);
-        model.addAttribute("locationsRatingMap",locationsRatingMap);
-        model.addAttribute("reviewCountMap",reviewCountMap);
-        return "searchlist";
-    }
-
 
     @GetMapping("/user/{userId}")
     public String getUserProfile(@PathVariable("userId") int id, Model model){
         List<Location> locations = locationService.getAllActiveLocationsForUser(id);
-        HashMap<Integer,Double> locationsRatingMap = new HashMap<>();
-        HashMap<Integer,Integer> reviewCountMap = new HashMap<>();
         User user = userService.getUserById(id);
-        locations.forEach(location -> {
-            locationsRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
-            reviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
-        });
         model.addAttribute("locations",locations);
         model.addAttribute("user",user);
-        model.addAttribute("locationsRatingMap",locationsRatingMap);
-        model.addAttribute("reviewCountMap",reviewCountMap);
         return "profile";
     }
 
+//TODO: Implement booking Acceptance/Confirmation/Cancellation
     @GetMapping("/hostinglist")
     public String getHostingListPage(Model model){
         int userID = 1;

@@ -14,6 +14,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class User {
+//TODO Add validation for fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

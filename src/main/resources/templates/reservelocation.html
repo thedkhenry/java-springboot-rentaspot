@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="border-bottom">
                     <h2 th:text="${location.title}"></h2>
-                    <h6 th:text="'⭐ ' + ${rating} + ' (' + ${reviews} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
+                    <h6 th:text="'⭐ ' + ${location.calculateWeightedAverage()} + ' (' + ${location.reviews.size()} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
                     <p></p>
                 </div>
                 <h4 th:text="'$' + ${location.price} + '/day'" class="text-center my-3"></h4>
