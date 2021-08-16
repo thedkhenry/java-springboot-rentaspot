@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Entity
@@ -64,4 +65,14 @@ public class Location {
     @Column(nullable = false, updatable = false)
 //            @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date createdAt;
+
+    public long calculateDaysSinceUpdated(){
+        Date today = new Date();
+        return ChronoUnit.DAYS.between(updatedAt.toInstant(), today.toInstant());
+    }
+
+    public long calculateDaysSinceCreated(){
+        Date today = new Date();
+        return ChronoUnit.DAYS.between(createdAt.toInstant(), today.toInstant());
+    }
 }

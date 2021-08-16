@@ -45,4 +45,8 @@ public class LocationService {
     public List<Location> getAllActiveLocationsForUser(int id){
         return locationRepo.findAllByIsActiveIsTrueAndUser_Id(id);
     }
+
+    public List<Location> searchLocationsByTotalOccupancy(int total){
+        return locationRepo.findAllByActiveIsTrueAndTotalOccupancyGreaterThanEqual(total);
+    }
 }

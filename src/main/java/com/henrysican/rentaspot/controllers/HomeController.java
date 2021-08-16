@@ -44,30 +44,20 @@ public class HomeController {
     public String getHomePage(Model model){
         List<Location> topRatedLocations = locationService.get10HighlyRatedLocations();
         List<Location> recentlyAddedLocations = locationService.get10RecentlyAddedLocations();
-        HashMap<Integer,Long> topUpdatedMap = new HashMap<>();
-        HashMap<Integer,Long> newCreatedMap = new HashMap<>();
         HashMap<Integer,Double> topRatingMap = new HashMap<>();
         HashMap<Integer,Double> newRatingMap = new HashMap<>();
         HashMap<Integer,Integer> topReviewCountMap = new HashMap<>();
         HashMap<Integer,Integer> newReviewCountMap = new HashMap<>();
         topRatedLocations.forEach(location -> {
-            long diffInMillies = Math.abs(location.getUpdatedAt().getTime() - System.currentTimeMillis());
-            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            topUpdatedMap.put(location.getId(),diff);
             topRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
             topReviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
         });
         recentlyAddedLocations.forEach(location -> {
-            long diffInMillies = Math.abs(location.getCreatedAt().getTime() - System.currentTimeMillis());
-            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            newCreatedMap.put(location.getId(),diff);
             newRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
             newReviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
         });
         model.addAttribute("topLocations", topRatedLocations);
         model.addAttribute("newLocations", recentlyAddedLocations);
-        model.addAttribute("topUpdatedMap", topUpdatedMap);
-        model.addAttribute("newCreatedMap", newCreatedMap);
         model.addAttribute("topReviewCountMap", topReviewCountMap);
         model.addAttribute("newReviewCountMap", newReviewCountMap);
         model.addAttribute("topRatingMap", topRatingMap);
@@ -94,20 +84,15 @@ public class HomeController {
     @GetMapping("/user/{userId}")
     public String getUserProfile(@PathVariable("userId") int id, Model model){
         List<Location> locations = locationService.getAllActiveLocationsForUser(id);
-        HashMap<Integer,Long> locationsTimeMap = new HashMap<>();
         HashMap<Integer,Double> locationsRatingMap = new HashMap<>();
         HashMap<Integer,Integer> reviewCountMap = new HashMap<>();
         User user = userService.getUserById(id);
         locations.forEach(location -> {
-            long diffInMillies = Math.abs(location.getUpdatedAt().getTime() - System.currentTimeMillis());
-            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            locationsTimeMap.put(location.getId(),diff);
             locationsRatingMap.put(location.getId(), reviewService.getWeightedAverageForLocation(location.getId()));
             reviewCountMap.put(location.getId(),reviewService.getReviewCountForLocation(location.getId()));
         });
         model.addAttribute("locations",locations);
         model.addAttribute("user",user);
-        model.addAttribute("locationsTimeMap",locationsTimeMap);
         model.addAttribute("locationsRatingMap",locationsRatingMap);
         model.addAttribute("reviewCountMap",reviewCountMap);
         return "profile";
