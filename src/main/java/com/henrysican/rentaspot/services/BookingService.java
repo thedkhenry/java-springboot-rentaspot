@@ -19,16 +19,22 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
+    public Booking saveBooking(Booking booking){
+        return bookingRepo.save(booking);
+    }
+
+    public List<Booking> getAllBookings(){
+        return bookingRepo.findAll();
+    }
+
     public List<Booking> getAllBookingsForLocation(int id){
         return bookingRepo.findAllByLocation_Id(id);
     }
+
     public List<Booking> getAllBookingsForCustomer(int id){
         return bookingRepo.findAllByCustomerId(id);
     }
 
-    public Booking saveBooking(Booking booking){
-        return bookingRepo.save(booking);
-    }
 
     public Booking getBookingById(int id){
         return bookingRepo.findById(id).orElse(new Booking());
@@ -38,5 +44,7 @@ public class BookingService {
         return bookingRepo.findAllByLocation_IdAndStartDateAfterAndEndDateBefore(location_id,startDate,endDate);
     }
 
-
+    public List<Booking> getAllBookingsByStatusForHost(int id, String status){
+        return bookingRepo.findAllByHost_IdAndBookingStatusLikeOrderByCreatedAtDesc(id,status);
+    }
 }

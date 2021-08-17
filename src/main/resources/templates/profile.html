@@ -16,7 +16,7 @@
         <h2>Profile</h2>
         <div class="d-flex align-items-end justify-content-end mb-3">
             <h5>Edit profile</h5>
-            <a href="editprofile.html" class="btn btn-outline-secondary mx-3">Edit</a>
+            <a th:href="@{/editProfile}" class="btn btn-outline-secondary mx-3">Edit</a>
         </div>
         <div class="card">
             <div class="row card-body">
@@ -28,9 +28,7 @@
                 <div class="col-lg-9 p-4">
                     <h4>About</h4>
                     <p th:text="'Joined in ' + ${#dates.format(user.createdAt,'yyyy')}" class="text-muted"></p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo aut, ipsa aperiam nulla ea minus.
-                        Modi explicabo a debitis, molestiae ad beatae est, dolor autem, in dolorum voluptas amet
-                        dignissimos.</p>
+                    <p th:text="${user.summary}"></p>
                     <h4 th:text="'(' + ${locations.size()} + ') Listings'"></h4>
                 </div>
                 <div class="col-lg-3 d-lg-block d-none border-end"></div>
@@ -57,11 +55,11 @@
                                     </div>
                                     <div class="mt-auto">
                                         <div class="row px-2 my-2">
-                                            <div th:text="'⭐ ' + ${locationsRatingMap.get(loc.id)} + ' (' + ${reviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                            <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                             <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                         </div>
                                         <div class="card-footer align-self-end">
-                                            <small th:text="'Last updated ' + ${locationsTimeMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                            <small th:text="'Last updated ' + ${loc.calculateDaysSinceUpdated()} + ' days ago'" class="text-muted"></small>
                                         </div>
                                     </div>
                                 </div>

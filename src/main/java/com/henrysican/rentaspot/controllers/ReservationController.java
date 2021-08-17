@@ -39,15 +39,12 @@ public class ReservationController {
     @GetMapping("/reservelocation/checkavailability/{locationId}")
     public String getReservationForm(@PathVariable("locationId") int locationId, Model model){
         Location location = locationService.getLocationById(locationId);
-        int reviews = reviewService.getReviewCountForLocation(locationId);
-        double rating = reviewService.getWeightedAverageForLocation(locationId);
         model.addAttribute("booking", new Booking());
         model.addAttribute("location",location);
-        model.addAttribute("reviews",reviews);
-        model.addAttribute("rating",rating);
         return "reservelocation";
     }
 
+//TODO: Query booked dates && Display result(s) - Cancel old bookings
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=check")
     public String checkAvailability(@PathVariable("locationId") int locationId,
                                     @ModelAttribute Booking booking,
@@ -58,6 +55,7 @@ public class ReservationController {
 //        double price = booking.calculatePrice();
 
         //Display table? 'Dates' 'Status' 'Expires in'
+        //Add inputdate max="1979-12-31" ?
         /*
         query booking dates
         cancel old created booking if time > hour
@@ -69,7 +67,7 @@ public class ReservationController {
         redirectAttributes.addFlashAttribute("numberOfDays",booking.calculateNumberOfDays());
         redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
         redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
-        return "redirect:/reservelocation/checkavailability/"+locationId+"";
+        return "redirect:/reservelocation/checkavailability/"+locationId;
     }
 
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=submit")
@@ -81,6 +79,7 @@ public class ReservationController {
         Location location = new Location();
         location.setId(locationId);
         User host = new User();
+//TODO: Get actual host id - create a service method?
         host.setId(1);
         User customer = new User();
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
@@ -90,10 +89,11 @@ public class ReservationController {
         booking.setCustomer(customer);
         booking.calculateNumberOfDays();
         booking.calculatePrice();
+        booking.setBookingStatus("pending");
         log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
         model.addAttribute("booking",new Booking());
-        return "redirect:/reservation/"+booking.getId()+"";
+        return "redirect:/reservation/"+booking.getId();
     }
 
     @GetMapping("/reservation/{bookingId}")
@@ -104,10 +104,17 @@ public class ReservationController {
         return "reservationdetails";
     }
 
+//TODO: Implement review creation for Booking/Location
+//TODO: Add expiration time? Ex: Expires in (1 hour) (47 minutes)
     @GetMapping("/reservations")
     public String getReservationsPage(Model model){
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(randomId);
+        bookingList.forEach(booking -> {
+            log.warning("" + booking.getId() + "  " + booking.getLocation().getId());
+            log.warning("DaysFrom: " + booking.calculateDaysFromEndDate() + " - " + booking.getBookingStatus() + " -  " + booking.getPrice() + "  (" + booking.calculateNumberOfDays() + " $" + booking.getLocation().getPrice() + ") = $" + (booking.calculateNumberOfDays() * booking.getLocation().getPrice()));
+            log.warning("" + booking.needsReview());
+        });
         model.addAttribute("bookingList", bookingList);
         return "reservations";
     }

@@ -18,6 +18,10 @@ public class ReviewService {
         this.reviewRepo = reviewRepo;
     }
 
+    public Review saveReview(Review review){
+        return reviewRepo.save(review);
+    }
+
     public int getReviewCountForLocation(int id){
         return reviewRepo.countAllByLocation_Id(id);
     }

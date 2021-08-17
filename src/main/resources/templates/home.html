@@ -22,22 +22,22 @@
     <div class="container">
         <h1 class="text-center mt-4">Let's find you a parking spot...</h1>
         <form th:action="@{/search}" method="GET" id="searchForm">
-            <div class="row justify-content-center my-5">
+            <div class="row justify-content-center my-3">
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="text" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Location</label>
+                    <input name="city" type="text" class="form-control">
+                    <label>City</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check in</label>
+                    <input name="startDate" type="date" class="form-control">
+                    <label>Check in</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check out</label>
+                    <input name="endDate" type="date" class="form-control">
+                    <label>Check out</label>
                 </div>
                 <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="number" class="form-control" id="floatingInput" min="0">
-                    <label for="floatingInput">Cars</label>
+                    <input name="cars" type="number" class="form-control" min="0" value="0">
+                    <label>Cars</label>
                 </div>
                 <div class="col-12 text-center pt-3">
                     <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
@@ -68,11 +68,11 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${topRatingMap.get(loc.id)} + ' (' + ${topReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">
-                                    <small th:text="'Last updated ' + ${topUpdatedMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                    <small th:text="'Last updated ' + ${loc.calculateDaysSinceUpdated()} + ' days ago'" class="text-muted"></small>
                                 </div>
                             </div>
                         </div>
@@ -104,11 +104,11 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${newRatingMap.get(loc.id)} + ' (' + ${newReviewCountMap.get(loc.id)} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">
-                                    <small th:text="'Created ' + ${newCreatedMap.get(loc.id)} + ' days ago'" class="text-muted"></small>
+                                    <small th:text="'Created ' + ${loc.calculateDaysSinceCreated()} + ' days ago'" class="text-muted"></small>
                                 </div>
                             </div>
                         </div>

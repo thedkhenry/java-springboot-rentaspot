@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 public class Address {
+//TODO Add validation for fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,16 +31,12 @@ public class Address {
     String country;
     @NonNull
     int zipCode;
+    @NonNull
+    double latitude;
+    @NonNull
+    double longitude;
+//    @OneToOne(mappedBy = "address")
+//    Location location;
 //    @OneToOne(cascade = CascadeType.ALL, mappedBy = "address")
 //    Location location;
-
-//    public Address(int id, String address1, String address2, String city, String state, String country, int zipCode) {
-//        this.id = id;
-//        this.address1 = address1;
-//        this.address2 = address2;
-//        this.city = city;
-//        this.state = state;
-//        this.country = country;
-//        this.zipCode = zipCode;
-//    }
 }

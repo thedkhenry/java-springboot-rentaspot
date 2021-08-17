@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Listing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Create</h2>
+        <p></p>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="">
+                    <div class="m-3">
+                        <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm">
+                            <div class="mb-3">
+                                <label class="form-label">Location Title</label>
+                                <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name.">
+                            </div>
+
+                            <div class="row">
+<!--                                <div th:object="${address}" class="row">-->
+                                <div class="col-12 mb-3">
+                                    <label for="inputStreetAddress" class="form-label">Address</label>
+                                    <input th:field="*{address.address1}" type="text" class="form-control" id="inputStreetAddress" placeholder="29 Neibolt Street" required>
+                                </div>
+                                <div class="col-12 col-sm-4 mb-3">
+                                    <label for="inputCity" class="form-label">City</label>
+                                    <input th:field="*{address.city}" type="text" class="form-control" id="inputCity" placeholder="Derry" required>
+                                </div>
+                                <div class="col-sm-4 col">
+                                    <label class="form-label">State</label>
+                                    <select th:field="*{address.state}" class="form-select" required>
+                                        <option value="Alabama">Alabama</option>
+                                        <option value="Alaska">Alaska</option>
+                                        <option value="Arizona">Arizona</option>
+                                        <option value="Arkansas">Arkansas</option>
+                                        <option value="California">California</option>
+                                        <option value="Colorado">Colorado</option>
+                                        <option value="Connecticut">Connecticut</option>
+                                        <option value="Delaware">Delaware</option>
+                                        <option value="District Of Columbia">District Of Columbia</option>
+                                        <option value="Florida">Florida</option>
+                                        <option value="GA">Georgia</option>
+                                        <option value="Hawaii">Hawaii</option>
+                                        <option value="Idaho">Idaho</option>
+                                        <option value="Illinois">Illinois</option>
+                                        <option value="Indiana">Indiana</option>
+                                        <option value="Iowa">Iowa</option>
+                                        <option value="Kansas">Kansas</option>
+                                        <option value="Kentucky">Kentucky</option>
+                                        <option value="Louisiana">Louisiana</option>
+                                        <option selected value="Maine">Maine</option>
+                                        <option value="Maryland">Maryland</option>
+                                        <option value="Massachusetts">Massachusetts</option>
+                                        <option value="Michigan">Michigan</option>
+                                        <option value="Minnesota">Minnesota</option>
+                                        <option value="Mississippi">Mississippi</option>
+                                        <option value="Missouri">Missouri</option>
+                                        <option value="Montana">Montana</option>
+                                        <option value="Nebraska">Nebraska</option>
+                                        <option value="Nevada">Nevada</option>
+                                        <option value="New Hampshire">New Hampshire</option>
+                                        <option value="New Jersey">New Jersey</option>
+                                        <option value="New Mexico">New Mexico</option>
+                                        <option value="New York">New York</option>
+                                        <option value="North Carolina">North Carolina</option>
+                                        <option value="North Dakota">North Dakota</option>
+                                        <option value="Ohio">Ohio</option>
+                                        <option value="Oklahoma">Oklahoma</option>
+                                        <option value="Oregon">Oregon</option>
+                                        <option value="Pennsylvania">Pennsylvania</option>
+                                        <option value="Rhode Island">Rhode Island</option>
+                                        <option value="South Carolina">South Carolina</option>
+                                        <option value="South Dakota">South Dakota</option>
+                                        <option value="Tennessee">Tennessee</option>
+                                        <option value="Texas">Texas</option>
+                                        <option value="Utah">Utah</option>
+                                        <option value="Vermont">Vermont</option>
+                                        <option value="Virginia">Virginia</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="West Virginia">West Virginia</option>
+                                        <option value="Wisconsin">Wisconsin</option>
+                                        <option value="Wyoming">Wyoming</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 col mb-3">
+                                    <label class="form-label">Zip</label>
+                                    <input th:field="*{address.zipCode}" type="text" class="form-control" required>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea th:field="*{description}" class="form-control" rows="3"
+                                          placeholder="Describe the location well to attract renters."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="col col-sm-7 mb-3">
+                                        <label class="form-label">Cars</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">#</span>
+                                            <input th:field="*{totalOccupancy}" type="number" class="form-control" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col col-sm-7">
+                                        <label class="form-label">Price per day</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input th:field="*{price}" type="number" class="form-control" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="w-100 d-sm-none d-block"></div> -->
+                                <div class="col">
+                                    Features
+                                    <div class="form-check">
+                                        <input th:field="*{hasVideoMonitoring}"  class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">Video monitoring</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input th:field="*{enclosed}" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">Enclosed</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input th:field="*{streetParking}" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">Street parking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input th:field="*{hasRvParking}" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">RV space</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input th:field="*{hasEvCharging}" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">EV charging</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col text-center pt-3">
+                                <div class="btn-group" role="group">
+                                    <button type="submit" form="createForm" class="btn btn-warning">Save</button>
+                                    <button type="button" form="createForm" class="btn btn-success" onclick="addModalText()" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="publishModalLabel">Publish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>All good and ready to publish?</h5>
+                    <div id="modalLocationTitle"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="createForm" class="btn btn-success">Publish</button> <!-- Change/Add form -->
+                </div>
+            </div>
+        </div>
+    </div>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+    <script>
+        function addModalText(){
+            document.querySelector('#modalLocationTitle').innerHTML = document.querySelector('#title').value;
+        }
+    </script>
+</body>
+
+</html>

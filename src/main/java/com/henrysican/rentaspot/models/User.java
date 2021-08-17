@@ -14,6 +14,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class User {
+//TODO Add validation for fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +23,14 @@ public class User {
     String lastName;
     String email;
     String phoneNumber;
-//    String summary;
+    String summary;
     String profileImage;
     boolean isHost;
     String status;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date createdAt;
+
+    //@OneToMany(mappedBy = "user/host", cascade = CascadeType.ALL)
+    //Set<Location> locationl = new HashSet<>();
 }

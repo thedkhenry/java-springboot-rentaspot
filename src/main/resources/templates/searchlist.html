@@ -24,71 +24,75 @@
                 display: none;
             }
         }
-        /*@media (max-width: 576px) {*/
-        /*    header{*/
-        /*        position: static;*/
-        /*    }*/
-        /*}*/
+        @media (max-width: 576px) {
+            header {
+                position: static !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-<header class="sticky-top bg-white pb-2">
-    <div th:replace="fragments/general.html :: navbar"></div>
-    <div class="container">
-        <form th:action="@{/search}" method="GET" id="searchForm">
-            <div class="row justify-content-center">
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="text" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Location</label>
+    <header class="sticky-top shadow bg-white pb-2">
+        <div th:replace="fragments/general.html :: navbar"></div>
+        <div class="container">
+            <form th:action="@{/search}" method="GET" id="searchForm">
+                <div class="row justify-content-center my-3">
+                    <div class="col-7 col-sm-3 form-floating px-0">
+                        <input name="city" type="text" class="form-control">
+                        <label>City</label>
+                    </div>
+                    <div class="col-7 col-sm-3 form-floating px-0">
+                        <input name="startDate" type="date" class="form-control">
+                        <label>Check in</label>
+                    </div>
+                    <div class="col-7 col-sm-3 form-floating px-0">
+                        <input name="endDate" type="date" class="form-control">
+                        <label>Check out</label>
+                    </div>
+                    <div class="col-7 col-sm-3 form-floating px-0">
+                        <input name="cars" type="number" class="form-control" min="0" value="0">
+                        <label>Cars</label>
+                    </div>
+                    <div class="col-12 text-center pt-3">
+                        <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
+                    </div>
                 </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check in</label>
-                </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="date" class="form-control" id="floatingInput">
-                    <label for="floatingInput">Check out</label>
-                </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input type="number" class="form-control" id="floatingInput" min="0">
-                    <label for="floatingInput">Cars</label>
-                </div>
-                <div class="col-12 text-center pt-3">
-                    <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</header>
+            </form>
+        </div>
+    </header>
     <div class="row w-100 m-0">
         <div class="list-col col p-0" style="max-width: 840px;">
-            <ul class="list-group">
-                <th:block th:each="loc : ${locations}">
-                    <li class="list-group-item list-group-item-action py-3" >
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <a th:href="@{/location/{locationId}(locationId = ${loc.id})}" class="stretched-link"><img
-                                        th:src="@{/images/city_buildings.png}" class="img-fluid" alt="..."></a>
-                            </div>
-                            <div class="col-sm-9">
-                                <div class="col h-75">
-                                    <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
-                                    <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''"
-                                         class="text-muted"></div>
-                                    <p th:text="${loc.description}" class="d-none d-sm-block"></p>
+            <h6 th:if="${#lists.isEmpty(locations)}" class="text-center text-muted mt-3">That's embarrassing... No listings found.<br/>Please try another search.</h6>
+            <th:block th:unless="${#lists.isEmpty(locations)}">
+                <ul class="list-group">
+                    <th:block th:each="loc : ${locations}">
+                        <li class="list-group-item list-group-item-action py-3">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <a th:href="@{/location/{locationId}(locationId = ${loc.id})}"
+                                       class="stretched-link"><img
+                                            th:src="@{/images/city_buildings.png}" class="img-fluid" alt="..."></a>
                                 </div>
-                                <div class="row w-100">
-                                    <div th:text="'⭐ ' + ${locationsRatingMap.get(loc.id)} + ' (' + ${reviewCountMap.get(loc.id)} + ' Reviews)'"
-                                         class="col-9 text-muted"></div>
-                                    <div th:text="'$' + ${loc.price} + '/day'"
-                                         class="col-3 text-end fw-bold"></div>
+                                <div class="col-sm-9">
+                                    <div class="col h-75">
+                                        <div th:text="${loc.title}" class="fw-bold text-truncate"></div>
+                                        <div th:text="${loc.totalOccupancy} + ' Cars • '+${loc.address.city}+', '+${loc.address.state}+''"
+                                             class="text-muted"></div>
+                                        <p th:text="${loc.description}" class="d-none d-sm-block"></p>
+                                    </div>
+                                    <div class="row w-100">
+                                        <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'"
+                                             class="col-9 text-muted"></div>
+                                        <div th:text="'$' + ${loc.price} + '/day'"
+                                             class="col-3 text-end fw-bold"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </th:block>
-            </ul>
+                        </li>
+                    </th:block>
+                </ul>
+            </th:block>
         </div>
         <div class="map-col col p-0">
             <div class="w-100 position-fixed ">
@@ -98,6 +102,11 @@
             </div>
         </div>
     </div>
+<!--    <script>-->
+<!--        var dbMarkers = ${xxx};-->
+<!--    </script>-->
+<!--    <script src="/js/map.js"></script>-->
+<!--    <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdWXRP5I-hsLgC4k4-VUWjdr6s5mw9Img&callback=initMap"></script>-->
     <script>
         var map;
         function initMap() {

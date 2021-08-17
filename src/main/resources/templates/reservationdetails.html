@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -21,20 +21,20 @@
                     <h4 th:case="'customer cancel'" class="text-center text-danger">Status: [Customer Canceled]</h4>
                     <h4 th:case="'confirmed'" class="text-center text-success">Status: [Confirmed]</h4>
                 </th:block>
-                <div class="col-lg-3 align-self-center text-center border-end">
+                <div class="col-lg-3 col-md-4 align-self-center text-center border-end">
                     <a th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark"><img th:src="@{/images/city_buildings.png}" class="w-100"></a>
                     <h4>Location</h4>
                     <p><a th:text="${booking.location.title}" th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark"></a></p>
                     <button type="button" class="btn btn-danger btn-lg w-75" data-bs-toggle="modal" data-bs-target="#messageModal">Message Host</button>
                 </div>
-                <div class="col-lg-9 p-4">
+                <div class="col-lg-9 col-md-8 p-4">
                     <h4>Booked for</h4>
                     <p th:text="${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}"></p>
                     <h4>Cars</h4>
                     <p th:text="${booking.cars}"></p>
                     <h4>Address</h4>
                     <div th:text="${booking.location.address.address1} + ', ' + ${booking.location.address.city} + ', ' + ${booking.location.address.state} + ' ' + ${booking.location.address.zipCode}"></div>
-                    <p><a class="btn btn-danger btn-sm" href="https://www.google.com/maps">Get directions</a></p>
+                    <p><a th:href="@{'http://maps.google.com/maps?z=12&t=m&q=loc:'+${booking.location.address.latitude}+'+'+${booking.location.address.longitude}}" class="btn btn-danger btn-sm" target="_blank">Get directions</a></p>
                     <h4>Amount</h4>
                     <div th:text="'$' + ${booking.calculatePrice()}"></div>
                     <p><a class="btn btn-danger btn-sm" href="" data-bs-toggle="modal" data-bs-target="#receiptModal">View receipt</a></p>

@@ -13,10 +13,12 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
 public class Booking {
+//TODO Add validation for fields
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +35,7 @@ public class Booking {
     @NonNull
     int cars;
     @NonNull
-    String bookingStatus = "pending";
+    String bookingStatus;
     @NonNull
     @ManyToOne
     User host;
@@ -44,6 +46,7 @@ public class Booking {
     @ManyToOne
     Location location;
     String status;
+    @NonNull
     boolean hasReview;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -57,5 +60,17 @@ public class Booking {
     public double calculatePrice(){
         this.price = calculateNumberOfDays() * location.getPrice();
         return price;
+    }
+
+    public long calculateDaysFromEndDate(){
+        Date today = new Date();
+        return  ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant());
+    }
+
+    public boolean needsReview(){
+        Date today = new Date();
+        boolean isEndDate = ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant()) >= 0;
+        boolean isConfirmed = this.bookingStatus.equals("confirmed");
+        return isConfirmed && isEndDate && !hasReview;
     }
 }
