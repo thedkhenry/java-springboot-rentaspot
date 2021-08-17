@@ -23,6 +23,10 @@ public class BookingService {
         return bookingRepo.save(booking);
     }
 
+    public List<Booking> getAllBookings(){
+        return bookingRepo.findAll();
+    }
+
     public List<Booking> getAllBookingsForLocation(int id){
         return bookingRepo.findAllByLocation_Id(id);
     }

@@ -34,7 +34,7 @@
                     <p th:text="${booking.cars}"></p>
                     <h4>Address</h4>
                     <div th:text="${booking.location.address.address1} + ', ' + ${booking.location.address.city} + ', ' + ${booking.location.address.state} + ' ' + ${booking.location.address.zipCode}"></div>
-                    <p><a class="btn btn-danger btn-sm" href="https://www.google.com/maps">Get directions</a></p>
+                    <p><a th:href="@{'http://maps.google.com/maps?z=12&t=m&q=loc:'+${booking.location.address.latitude}+'+'+${booking.location.address.longitude}}" class="btn btn-danger btn-sm" target="_blank">Get directions</a></p>
                     <h4>Amount</h4>
                     <div th:text="'$' + ${booking.calculatePrice()}"></div>
                     <p><a class="btn btn-danger btn-sm" href="" data-bs-toggle="modal" data-bs-target="#receiptModal">View receipt</a></p>

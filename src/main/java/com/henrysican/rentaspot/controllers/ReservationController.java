@@ -89,6 +89,7 @@ public class ReservationController {
         booking.setCustomer(customer);
         booking.calculateNumberOfDays();
         booking.calculatePrice();
+        booking.setBookingStatus("pending");
         log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
         model.addAttribute("booking",new Booking());
@@ -110,7 +111,8 @@ public class ReservationController {
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(randomId);
         bookingList.forEach(booking -> {
-            log.warning("" + booking.calculateDaysFromEndDate());
+            log.warning("" + booking.getId() + "  " + booking.getLocation().getId());
+            log.warning("DaysFrom: " + booking.calculateDaysFromEndDate() + " - " + booking.getBookingStatus() + " -  " + booking.getPrice() + "  (" + booking.calculateNumberOfDays() + " $" + booking.getLocation().getPrice() + ") = $" + (booking.calculateNumberOfDays() * booking.getLocation().getPrice()));
             log.warning("" + booking.needsReview());
         });
         model.addAttribute("bookingList", bookingList);

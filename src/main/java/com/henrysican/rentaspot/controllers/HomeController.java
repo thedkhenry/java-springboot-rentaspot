@@ -102,11 +102,15 @@ public class HomeController {
         return "createreview";
     }
 
+//TODO: Add BookingId to new Review
     @PostMapping("/submitReview/{bookingId}")
     public String submitReview(@PathVariable("bookingId") int bookingId, @ModelAttribute("review") Review review, Model model){
         //check if reviewed already
         log.warning(review.toString());
         Booking booking = bookingService.getBookingById(bookingId);
+        if(!booking.needsReview()){
+            log.warning(bookingId + "already has a review!!!");
+        }
         if (booking.needsReview()) {
             Location newLoc = new Location();
             newLoc.setId(booking.getLocation().getId());
@@ -117,7 +121,6 @@ public class HomeController {
             review = reviewService.saveReview(review);
             booking.setHasReview(true);
             bookingService.saveBooking(booking);
-            log.warning(review.toString());
         }
         return "redirect:/location/"+booking.getLocation().getId();
     }

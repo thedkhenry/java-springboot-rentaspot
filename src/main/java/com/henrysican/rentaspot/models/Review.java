@@ -11,6 +11,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -20,20 +21,18 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-//    @NonNull
+    @NonNull
     int rating;
-//    @NonNull
+    @NonNull
     String textContent;
-//    @NonNull
+    @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
     User user;
-//    @NonNull
+    @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
-//    @JoinColumn(name = "location_id", referencedColumnName = "id")
     Location location;
-//TODO: Add Booking relationship? (id - rating - text_content - user_id - location_id - booking_id - created_at)
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    Booking booking;
+    @OneToOne(cascade = CascadeType.MERGE)
+    Booking booking;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
