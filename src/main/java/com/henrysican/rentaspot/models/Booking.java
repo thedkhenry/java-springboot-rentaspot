@@ -62,4 +62,11 @@ public class Booking {
         this.price = calculateNumberOfDays() * location.getPrice();
         return price;
     }
+
+    public boolean needsReview(){
+        Date today = new Date();
+        boolean isEndDate = ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant()) >= 0;
+        boolean isConfirmed = this.bookingStatus.equals("confirmed");
+        return isConfirmed && isEndDate && !hasReview;
+    }
 }

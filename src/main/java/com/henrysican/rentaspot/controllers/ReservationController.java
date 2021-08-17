@@ -104,6 +104,7 @@ public class ReservationController {
     }
 
 //TODO: Implement review creation for Booking/Location
+//TODO: Add expiration time? Ex: Expires in (1 hour) (47 minutes)
     @GetMapping("/reservations")
     public String getReservationsPage(Model model){
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);

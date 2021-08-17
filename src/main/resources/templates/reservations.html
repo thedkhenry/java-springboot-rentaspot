@@ -30,12 +30,15 @@
                                             <p th:text="${booking.location.description}" class="text-truncate mb-0"></p>
                                         </div>
                                     </div>
-                                    <th:block th:switch="${booking.bookingStatus}">
-                                        <div th:case="'pending'" class="badge bg-warning align-middle d-flex align-items-center">Pending</div>
-                                        <div th:case="'host cancel'" class="badge bg-danger align-middle d-flex align-items-center">Canceled</div>
-                                        <div th:case="'customer cancel'" class="badge bg-danger align-middle d-flex align-items-center">Canceled</div>
-                                        <div th:case="'confirmed'" class="badge bg-success align-middle d-flex align-items-center">Confirmed</div>
-                                    </th:block>
+                                    <div class="col">
+                                        <th:block th:switch="${booking.bookingStatus}">
+                                            <span th:case="'pending'" class="badge bg-warning">Pending</span>
+                                            <span th:case="'host cancel'" class="badge bg-danger">Canceled</span>
+                                            <span th:case="'customer cancel'" class="badge bg-danger">Canceled</span>
+                                            <span th:case="'confirmed'" class="badge bg-success">Confirmed</span>
+                                            <a th:if="${booking.needsReview()}" class="badge bg-warning link-dark d-block" href="createReview.html">Review</a>
+                                        </th:block>
+                                    </div>
                                 </div>
                             </li>
                         </th:block>

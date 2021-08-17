@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Review for XXX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/377a873af4.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light px-2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Rent-A-Spot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="signup.html">Sign up</a></li>
+                        <li><a class="dropdown-item" href="login.html">Log in</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="messages.html">Messages</a></li>
+                        <li><a class="dropdown-item" href="reservations.html">Reservations</a></li>
+                        <li><a class="dropdown-item" href="hostinglist.html">Listings</a></li>
+                        <li><a class="dropdown-item" href="home.html">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Review XXX</h2>
+        <div class="card">
+            <div class="row card-body">
+                <form action="locationdetails.html" method="POST" id="reviewForm">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="ratingRange" class="form-label">Rating</label>
+                            <div id="ratingText" class="text-center">⭐</div>
+                            <input id="ratingRange" type="range" class="form-range" min="1" max="5" value="1" oninput="updateStars()">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="textareaSummary" class="form-label">Review</label>
+                        <textarea class="form-control" id="textareaSummary" rows="3"
+                            placeholder="Tell us how you liked it."></textarea>
+                    </div>
+                    <div class="col text-center pt-3">
+                        <div class="btn-group" role="group">
+                            <button type="submit" form="reviewForm" class="btn btn-warning">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateStars() {
+            var rangeValue = document.querySelector("#ratingRange").value;
+            var rating = "";
+            for(let i = 0; i < rangeValue; i++){
+                rating += "⭐";
+            }
+            document.querySelector("#ratingText").innerHTML = rating;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
