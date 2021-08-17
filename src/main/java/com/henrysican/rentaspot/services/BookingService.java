@@ -19,6 +19,10 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
+    public Booking saveBooking(Booking booking){
+        return bookingRepo.save(booking);
+    }
+
     public List<Booking> getAllBookingsForLocation(int id){
         return bookingRepo.findAllByLocation_Id(id);
     }
@@ -27,9 +31,6 @@ public class BookingService {
         return bookingRepo.findAllByCustomerId(id);
     }
 
-    public Booking saveBooking(Booking booking){
-        return bookingRepo.save(booking);
-    }
 
     public Booking getBookingById(int id){
         return bookingRepo.findById(id).orElse(new Booking());

@@ -36,7 +36,7 @@
                                             <span th:case="'host cancel'" class="badge bg-danger">Canceled</span>
                                             <span th:case="'customer cancel'" class="badge bg-danger">Canceled</span>
                                             <span th:case="'confirmed'" class="badge bg-success">Confirmed</span>
-                                            <a th:if="${booking.needsReview()}" class="badge bg-warning link-dark d-block" href="createReview.html">Review</a>
+                                            <a th:if="${booking.needsReview()}" th:href="@{/review/{bookingId}(bookingId = ${booking.id})}" class="badge bg-warning link-dark d-block">Review</a>
                                         </th:block>
                                     </div>
                                 </div>

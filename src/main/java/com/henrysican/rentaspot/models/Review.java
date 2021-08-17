@@ -25,12 +25,15 @@ public class Review {
 //    @NonNull
     String textContent;
 //    @NonNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     User user;
 //    @NonNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
 //    @JoinColumn(name = "location_id", referencedColumnName = "id")
     Location location;
+//TODO: Add Booking relationship? (id - rating - text_content - user_id - location_id - booking_id - created_at)
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    Booking booking;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

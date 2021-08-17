@@ -109,6 +109,10 @@ public class ReservationController {
     public String getReservationsPage(Model model){
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(randomId);
+        bookingList.forEach(booking -> {
+            log.warning("" + booking.calculateDaysFromEndDate());
+            log.warning("" + booking.needsReview());
+        });
         model.addAttribute("bookingList", bookingList);
         return "reservations";
     }

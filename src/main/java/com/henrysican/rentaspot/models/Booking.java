@@ -35,7 +35,7 @@ public class Booking {
     @NonNull
     int cars;
     @NonNull
-    String bookingStatus = "pending";
+    String bookingStatus;
     @NonNull
     @ManyToOne
     User host;
@@ -45,7 +45,6 @@ public class Booking {
     @NonNull
     @ManyToOne
     Location location;
-    @NonNull
     String status;
     @NonNull
     boolean hasReview;
@@ -61,6 +60,11 @@ public class Booking {
     public double calculatePrice(){
         this.price = calculateNumberOfDays() * location.getPrice();
         return price;
+    }
+
+    public long calculateDaysFromEndDate(){
+        Date today = new Date();
+        return  ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant());
     }
 
     public boolean needsReview(){

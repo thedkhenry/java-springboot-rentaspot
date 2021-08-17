@@ -2,6 +2,7 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Location;
+import com.henrysican.rentaspot.models.Review;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
@@ -27,14 +28,17 @@ public class HomeController {
     private final LocationService locationService;
     private final UserService userService;
     private final BookingService bookingService;
+    private final ReviewService reviewService;
 
     @Autowired
     public HomeController(LocationService locationService,
                           UserService userService,
-                          BookingService bookingService){
+                          BookingService bookingService,
+                          ReviewService reviewService){
         this.locationService = locationService;
         this.userService = userService;
         this.bookingService = bookingService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping({"/","/home"})
@@ -88,5 +92,33 @@ public class HomeController {
         user = userService.saveUser(user);
         log.warning(user.toString());
         return "redirect:/user/"+user.getId();
+    }
+
+    @GetMapping("/review/{bookingId}")
+    public String getReviewForm(@PathVariable("bookingId") int bookingId, Model model){
+        Booking booking = bookingService.getBookingById(bookingId);
+        model.addAttribute("booking", booking);
+        model.addAttribute("review", new Review());
+        return "createreview";
+    }
+
+    @PostMapping("/submitReview/{bookingId}")
+    public String submitReview(@PathVariable("bookingId") int bookingId, @ModelAttribute("review") Review review, Model model){
+        //check if reviewed already
+        log.warning(review.toString());
+        Booking booking = bookingService.getBookingById(bookingId);
+        if (booking.needsReview()) {
+            Location newLoc = new Location();
+            newLoc.setId(booking.getLocation().getId());
+            review.setLocation(newLoc);
+            User newUser = new User();
+            newUser.setId(booking.getLocation().getId());
+            review.setUser(newUser);
+            review = reviewService.saveReview(review);
+            booking.setHasReview(true);
+            bookingService.saveBooking(booking);
+            log.warning(review.toString());
+        }
+        return "redirect:/location/"+booking.getLocation().getId();
     }
 }
