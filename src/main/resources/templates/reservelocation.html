@@ -32,15 +32,13 @@
                             <input th:field="*{endDate}" type="date" class="form-control" required>
                         </div>
                     </div>
-                    <th:block th:if="${#lists.isEmpty(bookings)}">
+<!--                    <th:block th:if="${#lists.isEmpty(bookings)}">-->
                         <div class="row justify-content-around border-top border-bottom mb-3 p-2">
 <!--                            <div th:text="${bookings}" class="w-auto"></div>-->
-                            <div th:if="${numberOfDays != null}" th:text="'$' + ${location.price} + ' × ' + ${numberOfDays} + ' days'" class="w-auto"></div>
-                            <div th:unless="${numberOfDays != null}" th:text="'$' + ${location.price} + ' × 0 days'" class="w-auto"></div>
-                            <div th:if="${numberOfDays != null}" th:text="'$' + ${numberOfDays * location.price}" class="w-auto"></div>
-                            <div th:unless="${numberOfDays != null}" th:text="'$0'" class="w-auto"></div>
+                            <div th:if="${booking.calculateNumberOfDays() >= 0}" th:text="'$' + ${location.price} + ' × ' + ${booking.calculateNumberOfDays()} + ' days'" class="w-auto"></div>
+                            <div th:unless="${booking.calculateNumberOfDays() >= 0}" th:text="'$' + ${location.price} + ' × 0 days'" class="w-auto"></div>
                         </div>
-                    </th:block>
+<!--                    </th:block>-->
                     <div class="text-center">
                         <button name="action" value="check" type="submit" class="btn btn-danger">Check dates</button>
                     </div>

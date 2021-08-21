@@ -2,12 +2,10 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.Review;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
-import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 @Log
 @Controller
@@ -34,6 +31,24 @@ public class ReservationController {
         this.locationService = locationService;
         this.reviewService = reviewService;
         this.bookingService = bookingService;
+    }
+
+    @GetMapping("/hostinglist/confirm/{bookingId}")
+    public String confirmBooking(@PathVariable("bookingId") int bookingId, Model model){
+        Booking booking = bookingService.getBookingById(bookingId);
+        booking.setBookingStatus("confirmed");
+        bookingService.saveBooking(booking);
+        log.warning("PostMapping /hostinglist/CONFIRM/{bookingId} " + booking.getBookingStatus());
+        return "redirect:/hostinglist";
+    }
+
+    @GetMapping("/hostinglist/cancel/{bookingId}")
+    public String cancelBooking(@PathVariable("bookingId") int bookingId, Model model){
+        Booking booking = bookingService.getBookingById(bookingId);
+        booking.setBookingStatus("host cancel");
+        bookingService.saveBooking(booking);
+        log.warning("PostMapping /hostinglist/CANCEL/{bookingId} " + booking.getBookingStatus());
+        return "redirect:/hostinglist";
     }
 
     @GetMapping("/reservelocation/checkavailability/{locationId}")
@@ -51,20 +66,26 @@ public class ReservationController {
                                     Model model,
                                     RedirectAttributes redirectAttributes){
         log.warning("Check Button pressed " + booking);
-        List<Booking> bookings = bookingService.getAllBookingsForLocationBetween(locationId,booking.getStartDate(),booking.getEndDate());
+        log.warning("Check Button pressed " + booking.getStartDate());
+        log.warning("Check Button pressed " + booking.getEndDate());
+//        Booking newBooking = bookingService.getBookingForLocationBetween(locationId,booking.getStartDate(),booking.getEndDate());
+        Booking qBooking = bookingService.getBookingById(1);
+//        log.warning("newBooking " + newBooking);
+        log.warning("qBooking " + qBooking.getLocation());
+        log.warning("qBooking " + qBooking.getStartDate());
+        log.warning("qBooking " + qBooking.getEndDate());
 //        double price = booking.calculatePrice();
 
         //Display table? 'Dates' 'Status' 'Expires in'
-        //Add inputdate max="1979-12-31" ?
+        //Add inputdate limti? Ex: max="1979-12-31"
         /*
         query booking dates
         cancel old created booking if time > hour
-        or submit new booking
+        or submit new booking  
          */
 
-        redirectAttributes.addFlashAttribute("bookings",bookings);
+        redirectAttributes.addFlashAttribute("bookings",booking);
 //        redirectAttributes.addFlashAttribute("price",price);
-        redirectAttributes.addFlashAttribute("numberOfDays",booking.calculateNumberOfDays());
         redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
         redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
         return "redirect:/reservelocation/checkavailability/"+locationId;

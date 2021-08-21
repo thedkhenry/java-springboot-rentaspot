@@ -54,6 +54,9 @@ public class Booking {
     Date createdAt;
 
     public long calculateNumberOfDays(){
+        if(startDate == null || endDate == null){
+            return 0;
+        }
         return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
     }
 

@@ -108,9 +108,7 @@ public class HomeController {
         //check if reviewed already
         log.warning(review.toString());
         Booking booking = bookingService.getBookingById(bookingId);
-        if(!booking.needsReview()){
-            log.warning(bookingId + "already has a review!!!");
-        }
+
         if (booking.needsReview()) {
             Location newLoc = new Location();
             newLoc.setId(booking.getLocation().getId());
@@ -121,6 +119,8 @@ public class HomeController {
             review = reviewService.saveReview(review);
             booking.setHasReview(true);
             bookingService.saveBooking(booking);
+        }else{
+            log.warning(bookingId + "already has a review!!!");
         }
         return "redirect:/location/"+booking.getLocation().getId();
     }
