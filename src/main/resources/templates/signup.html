@@ -11,14 +11,17 @@
 </head>
 
 <body>
-    <div th:replace="fragments/general.html :: navbar"></div>
+<!--    <div th:replace="fragments/general.html :: navbar"></div>-->
     <div class="text-center vh-100 d-flex flex-column justify-content-center">
-        <form th:action="@{/signup}" class="min-vw-25 mx-auto d-grid">
-            <img th:src="@{/images/city_buildings.png}" th:object="${user}" class="mb-4 mx-auto" alt="Logo" width="150" height="150">
+        <form th:action="@{/signup}" th:object="${user}" method="POST" class="min-vw-25 mx-auto d-grid">
+            <a th:href="@{/home}"><img th:src="@{/images/city_buildings.png}" class="mb-4" alt="Logo" width="150" height="150"></a>
             <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
             <input th:field="*{email}" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
             <input th:field="*{password}" type="password" class="form-control form-control-lg" placeholder="Password" required="">
             <input th:field="*{password}" type="password" class="form-control form-control-lg" placeholder="Confirm password" required="">
+            <th:block th:if="${message != null}">
+                <div th:text="${message}" class="text-danger"></div>
+            </th:block>
             <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Register</button>
             <p class="mt-5 mb-3 text-muted">© 2021</p>
         </form>

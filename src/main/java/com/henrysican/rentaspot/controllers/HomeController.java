@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Log
@@ -49,8 +49,15 @@ public class HomeController {
 
     @PostMapping("/signup")
     public String registerNewUser(@ModelAttribute("user") User user, Model model){
-        log.warning("New User: " + user);
-        return "signup";
+        log.warning("/signup registerNewUser - " + user);
+        if(userService.checkUserEmailExists(user.getEmail())){
+            model.addAttribute("message","That email is already in use.");
+            return "/signup";
+        }
+        user = userService.saveUser(user);
+        log.warning("/signup registerNewUser - " + user);
+        //model.addAttribute("user",user);
+        return "redirect:/editProfile/"+user.getId();
     }
 
     @GetMapping({"/","/home"})
@@ -66,6 +73,7 @@ public class HomeController {
     public String getUserProfile(@PathVariable("userId") int id, Model model){
         List<Location> locations = locationService.getAllActiveLocationsForUser(id);
         User user = userService.getUserById(id);
+        log.warning("/user/{userId} getUserProfile - " + user);
         model.addAttribute("locations",locations);
         model.addAttribute("user",user);
         return "profile";
@@ -85,24 +93,33 @@ public class HomeController {
         model.addAttribute("locations",locations);
         return "hostinglist";
     }
-
+//TODO: Remove default ID:1  &  Update to session User
     @GetMapping("/profile")
     public String getMyProfilePage(Model model){
         int userId = 1;
         return "redirect:/user/"+userId;
     }
 
-    @GetMapping("/editProfile")
-    public String getEditProfileForm(Model model){
-        model.addAttribute("user", new User());
+    @GetMapping("/editProfile/{userId}")
+    public String getEditProfileForm(@PathVariable("userId") int id, Model model){
+        User user = userService.getUserById(id);
+        log.warning("/editProfile/{userId} getEditProfileForm - " + user);
+        model.addAttribute("user", user);
         return "editprofile";
     }
 
     @PostMapping("/saveProfile")
-    public String saveProfile(@ModelAttribute("user") User user, Model model){
-        log.warning(user.toString());
+    public String saveProfile(@ModelAttribute("user") User user, Model model, RedirectAttributes redirectAttributes){
+        log.warning("/saveProfile 1- " + user);
+        log.warning("/saveProfile 2.1- " + user.getEmail());
+        log.warning("/saveProfile 2.2- " + userService.getUserIdFromEmail(user.getEmail()));
+        if(userService.checkUserEmailExists(user.getEmail()) && user.getId() != userService.getUserIdFromEmail(user.getEmail())){
+            log.warning("/saveProfile if- That email is already in use");
+            redirectAttributes.addFlashAttribute("message","That email is already in use.");
+            return "redirect:/editProfile/"+user.getId();
+        }
         user = userService.saveUser(user);
-        log.warning(user.toString());
+        log.warning("/saveProfile 3- " + user);
         return "redirect:/user/"+user.getId();
     }
 
