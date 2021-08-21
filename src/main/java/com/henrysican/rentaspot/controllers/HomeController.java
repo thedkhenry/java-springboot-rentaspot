@@ -41,6 +41,18 @@ public class HomeController {
         this.reviewService = reviewService;
     }
 
+    @GetMapping("/signup")
+    public String getSignUpForm(Model model){
+        model.addAttribute("user",new User());
+        return "signup";
+    }
+
+    @PostMapping("/signup")
+    public String registerNewUser(@ModelAttribute("user") User user, Model model){
+        log.warning("New User: " + user);
+        return "signup";
+    }
+
     @GetMapping({"/","/home"})
     public String getHomePage(Model model){
         List<Location> topRatedLocations = locationService.get10HighlyRatedLocations();

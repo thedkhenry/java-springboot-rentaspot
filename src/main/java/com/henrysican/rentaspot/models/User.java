@@ -10,6 +10,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -19,14 +20,25 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @NonNull
     String firstName;
+    @NonNull
     String lastName;
+    @NonNull
     String email;
+    @NonNull
+    String password;
+    @NonNull
     String phoneNumber;
+    @NonNull
     String summary;
+    @NonNull
     String profileImage;
+    @NonNull
     boolean isHost;
+    @NonNull
     String status;
+    @NonNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date createdAt;

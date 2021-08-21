@@ -31,6 +31,7 @@ public class SearchController {
     }
 
 //TODO: Trim leading/trailing whitespaces for City input
+//TODO: Add location title to map marker
     @GetMapping("/search")
     public String getSearchResults(HttpServletRequest httpServletRequest, @RequestParam("city") String city,
                                    @RequestParam("startDate") String startDate,
