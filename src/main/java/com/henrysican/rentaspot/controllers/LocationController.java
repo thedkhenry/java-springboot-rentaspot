@@ -1,9 +1,6 @@
 package com.henrysican.rentaspot.controllers;
 
-import com.henrysican.rentaspot.models.Address;
-import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.Review;
-import com.henrysican.rentaspot.models.User;
+import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
 import lombok.extern.java.Log;
@@ -49,25 +46,30 @@ public class LocationController {
         return "createlisting";
     }
 
-    @PostMapping("/create")
-    public String submitLocation(@ModelAttribute("location") Location location, Model model){
-        log.warning(location.toString());
+//TODO: Add save functionality / not publish location / draft
+    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
+    public String saveLocation(@ModelAttribute Location location, Model model){
+        log.warning("/create SAVE 1 " + location.toString());
+        User user = new User();
+        user.setId(1);
+        location.setUser(user);
+        location.setActive(false);
+        location = locationService.saveLocation(location);
+        //lat long
+        log.warning("/create SAVE 2 " + location.toString());
+        return "redirect:/hostinglist";
+    }
+
+    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
+    public String publishLocation(@ModelAttribute Location location, Model model){
+        log.warning("/create PUBLISH 1 " + location.toString());
         User user = new User();
         user.setId(1);
         location.setUser(user);
         location.setActive(true);
+        //lat long
         location = locationService.saveLocation(location);
-        log.warning(location.toString());
-        return "redirect:/location/"+location.getId();
-    }
-
-//TODO: Add save functionality / not publish location / draft
-    @PostMapping("/save")
-    public String saveLocation(@ModelAttribute("location") Location location, Model model){
-        log.warning(location.toString());
-        //user
-        //active
-        //lat lon
-        return "redirect:/location/"+location.getId();
+        log.warning("/create PUBLISH 2 " + location.toString());
+        return "redirect:/hostinglist";
     }
 }

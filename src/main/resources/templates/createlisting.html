@@ -147,8 +147,11 @@
                             </div>
                             <div class="col text-center pt-3">
                                 <div class="btn-group" role="group">
-                                    <button type="submit" form="createForm" class="btn btn-warning">Save</button>
-                                    <button type="button" form="createForm" class="btn btn-success" onclick="addModalText()" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
+                                    <button name="action" value="save" type="submit"
+                                            form="createForm" class="btn btn-warning">Save</button>
+                                    <button onclick="addModalText()"
+                                            type="button" form="createForm" class="btn btn-success"
+                                            data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
                                 </div>
                             </div>
                         </form>
@@ -162,7 +165,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="publishModalLabel">Publish</h5>
+                    <h5 class="modal-title" id="publishModalLabel">Please Confirm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -171,7 +174,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="createForm" class="btn btn-success">Publish</button> <!-- Change/Add form -->
+                    <button name="action" value="publish" type="submit"
+                            form="createForm" class="btn btn-success">Publish</button> <!-- Change/Add form -->
                 </div>
             </div>
         </div>

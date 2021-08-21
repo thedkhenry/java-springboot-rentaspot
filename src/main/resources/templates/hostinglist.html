@@ -110,7 +110,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a id="actionLink" class="btn">Confirm</a>
+                        <a id="actionLink" class="btn"></a>
                     </div>
                 </div>
             </div>
@@ -123,11 +123,11 @@
             var link = document.querySelector('#actionLink')
             if(action === 'confirm'){
                 link.classList.remove("btn-danger");
-                link.innerHTML = 'Confirm';
+                link.innerHTML = 'Confirm it';
                 link.classList.add("btn-success");
             }else if (action === 'cancel'){
                 link.classList.remove("btn-success");
-                link.innerHTML = 'Cancel';
+                link.innerHTML = 'Cancel it';
                 link.classList.add("btn-danger");
             }
             title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
