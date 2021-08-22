@@ -58,6 +58,8 @@ public class Location {
     Address address;
     @OneToMany(mappedBy = "location")
     List<Review> reviews;
+    @OneToMany(mappedBy = "location")
+    List<Booking> bookings;
     @Temporal(TemporalType.TIMESTAMP)
 //    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
@@ -91,5 +93,12 @@ public class Location {
             weightedAvg = Math.round(((5*countFives + 4*countFours + 3*countThrees + 2*countTwos + 1*countOnes) / (double)reviews.size()) * 100d)/100d;
         }
         return weightedAvg;
+    }
+
+    public long calculateTotalPendingBookings(){
+        if (this.bookings.isEmpty()){
+            return 0;
+        }
+        return this.bookings.stream().filter(booking -> booking.getBookingStatus().equals("pending")).count();
     }
 }

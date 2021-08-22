@@ -79,17 +79,11 @@ public class HomeController {
         return "profile";
     }
 
-//TODO: Implement booking Acceptance/Confirmation/Cancellation
+//TODO: Implement Session User access to own data
     @GetMapping("/hostinglist")
     public String getHostingListPage(Model model){
         int userID = 1;
-        List<Booking> bookings = bookingService.getAllBookingsByStatusForHost(userID,"pending");
         List<Location> locations = locationService.getAllLocationsForUser(userID);
-        HashMap<Integer,List<Booking>> bookingsMap = new HashMap<>();
-        locations.forEach(location -> {
-            bookingsMap.put(location.getId(),bookings.stream().filter(booking -> booking.getLocation().getId() == location.getId() && location.isActive()).collect(Collectors.toList()));
-        });
-        model.addAttribute("bookingsMap",bookingsMap);
         model.addAttribute("locations",locations);
         return "hostinglist";
     }

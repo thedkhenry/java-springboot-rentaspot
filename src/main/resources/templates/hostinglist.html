@@ -35,11 +35,11 @@
                                         <button th:classappend="${location.active} ? 'btn-warning' : 'btn-secondary'" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
                                         <ul class="dropdown-menu">
                                             <th:block th:if="${location.active}">
-                                                <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                                <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
                                                 <li><a th:href="@{/location/{locationId}(locationId = ${location.id})}"
                                                        class="dropdown-item">View</a></li>
                                                 <li><a th:href="'#bookings'+${location.id}" class="dropdown-item" data-bs-toggle="collapse">Bookings
-                                                    <span th:text="${bookingsMap.get(location.id).size}" class="badge bg-warning"></span></a></li>
+                                                    <span th:text="${location.calculateTotalPendingBookings()}" class="badge bg-warning"></span></a></li>
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
@@ -47,17 +47,17 @@
                                                        data-bs-target="#unlistModal">Unlist</a></li>
                                             </th:block>
                                             <th:block th:unless="${location.active}">
-                                                <li><a class="dropdown-item" href="editlisting.html">Edit</a></li>
+                                                <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-success" href="" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                                <li><a class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
                                             </th:block>
                                         </ul>
                                     </div>
                                 </div>
-                                <th:block th:if="${not #lists.isEmpty(bookingsMap.get(location.id))}">
+                                <th:block th:if="${not #lists.isEmpty(location.bookings.?[bookingStatus.equals('pending')])}">
                                     <div th:id="'bookings'+${location.id}" class="collapse">
                                         <ul class="list-group">
-                                            <th:block th:each="booking : ${bookingsMap.get(location.id)}">
+                                            <th:block th:each="booking : ${location.bookings.?[bookingStatus.equals('pending')]}">
                                                 <li class="list-group-item list-group-item-action">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex align-items-center">

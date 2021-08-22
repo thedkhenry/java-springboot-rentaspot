@@ -3,6 +3,8 @@ package com.henrysican.rentaspot.models;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,6 +32,7 @@ public class Review {
     User user;
     @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     Location location;
     @OneToOne(cascade = CascadeType.MERGE)
     Booking booking;

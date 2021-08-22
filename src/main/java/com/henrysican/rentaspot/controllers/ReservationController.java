@@ -33,6 +33,8 @@ public class ReservationController {
         this.bookingService = bookingService;
     }
 
+//TODO: If Booking.LocId & LocId != ignore
+//TODO: Update pathvar into Booking/Location not int
     @GetMapping("/hostinglist/confirm/{bookingId}")
     public String confirmBooking(@PathVariable("bookingId") int bookingId, Model model){
         Booking booking = bookingService.getBookingById(bookingId);

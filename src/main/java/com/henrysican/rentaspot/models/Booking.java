@@ -3,6 +3,8 @@ package com.henrysican.rentaspot.models;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -44,6 +46,7 @@ public class Booking {
     User customer;
     @NonNull
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Location location;
     String status;
     @NonNull

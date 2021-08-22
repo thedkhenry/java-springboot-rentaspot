@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Log
@@ -25,20 +24,50 @@ public class LocationController {
     }
 
     @GetMapping("/location/{locationId}")
-    public String getLocationDetails(@PathVariable("locationId") int id, Model model){
-        Location location = locationService.getLocationById(id);
-        List<Review> reviews = reviewService.getReviewsForLocation(id);
+    public String getLocationDetails(@PathVariable("locationId") Location location, Model model){
+//        Location location = locationService.getLocationById(id);
+        List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         model.addAttribute("location",location);
         model.addAttribute("reviews",reviews);
         return "locationdetails";
     }
 
-//    @GetMapping("/hostinglist")
-//    public String getHostingListPage(){
-//        return "hostinglist";
-//    }
+//TODO: Add location edit form validation
+    @GetMapping("/edit/{locationId}")
+    public String getEditForm(@PathVariable("locationId") Location location, Model model){
+        //Location location = locationService.getLocationById(id);
+        log.warning("/edit/{"+location.getId()+"} getEditForm - " + location);
+        model.addAttribute("location", location);
+        return "editlisting";
+    }
 
-//TODO: Add location creation form validation
+    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=update")
+    public String updateLocation(@ModelAttribute Location location, Model model){
+        log.warning("/update UPDATE 1 " + location);
+        Location dbLocation = locationService.getLocationById(location.getId());
+        dbLocation.setActive(location.isActive());
+        dbLocation.setTitle(location.getTitle());
+        dbLocation.setDescription(location.getDescription());
+        dbLocation.setTotalOccupancy(location.getTotalOccupancy());
+        dbLocation.setPrice(location.getPrice());
+        dbLocation.setHasVideoMonitoring(location.isHasVideoMonitoring());
+        dbLocation.setEnclosed(location.isEnclosed());
+        dbLocation.setStreetParking(location.isStreetParking());
+        dbLocation.setHasRvParking(location.isHasRvParking());
+        dbLocation.setHasEvCharging(location.isHasEvCharging());
+        dbLocation = locationService.saveLocation(dbLocation);
+        log.warning("/update UPDATE 2 " + dbLocation);
+        return "redirect:/hostinglist";
+    }
+
+    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=delete")
+    public String deleteLocation(@ModelAttribute Location location, Model model){
+        log.warning("/update DELETE " + location);
+        locationService.deleteLocation(location);
+        return "redirect:/hostinglist";
+    }
+
+//TODO: Add location creation form validation  &&  Make User Host
     @GetMapping("/create")
     public String getCreateForm(Model model){
         model.addAttribute("location", new Location());
@@ -49,27 +78,27 @@ public class LocationController {
 //TODO: Add save functionality / not publish location / draft
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
     public String saveLocation(@ModelAttribute Location location, Model model){
-        log.warning("/create SAVE 1 " + location.toString());
+        log.warning("/create SAVE 1 " + location);
         User user = new User();
         user.setId(1);
         location.setUser(user);
         location.setActive(false);
         location = locationService.saveLocation(location);
         //lat long
-        log.warning("/create SAVE 2 " + location.toString());
+        log.warning("/create SAVE 2 " + location);
         return "redirect:/hostinglist";
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
     public String publishLocation(@ModelAttribute Location location, Model model){
-        log.warning("/create PUBLISH 1 " + location.toString());
+        log.warning("/create PUBLISH 1 " + location);
         User user = new User();
         user.setId(1);
         location.setUser(user);
         location.setActive(true);
         //lat long
         location = locationService.saveLocation(location);
-        log.warning("/create PUBLISH 2 " + location.toString());
+        log.warning("/create PUBLISH 2 " + location);
         return "redirect:/hostinglist";
     }
 }
