@@ -52,37 +52,30 @@ public class ReservationController {
 
     @GetMapping("/reservelocation/checkavailability/{locationId}")
     public String getReservationForm(@PathVariable("locationId") Location location, Model model){
-        model.addAttribute("message","$"+location.getPrice()+" × 0 day(s)  =  $0");
         model.addAttribute("booking", new Booking());
         model.addAttribute("location",location);
         return "reservelocation";
     }
 
-//TODO: Query booked dates && Display result(s) - Cancel old bookings
-    //Check valid range
-        //Message if Not REDIRECT
-    //Get/Show all unavailable
-    //Check available
-        //Message if Not REDIRECT
-        //Message if Available REDIRECT
+//TODO: Query booked dates && Display result(s) - Cancel old bookings ON REFRESH delete expired!!!
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=check")
     public String checkAvailability(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
-                                    Model model,
                                     RedirectAttributes redirectAttributes){
         log.warning("Check Button pressed1 " + booking);
-//        if(!booking.isRangeValid()){
-//            message = "Invalid date range.";
-//            redirectAttributes.addFlashAttribute("message",message);
-//            return "redirect:/reservelocation/checkavailability/"+location.getId();
-//        }
+        String message;
+        if(!booking.isRangeValid()){
+            message = "Invalid date range.";
+            redirectAttributes.addFlashAttribute("errorMessage",message);
+            return "redirect:/reservelocation/checkavailability/"+location.getId();
+        }
         List<Booking> unavailableBookings = bookingService.getAllUnavailableBookingsForLocation(location.getId(), booking);
-        String message = "$"+location.getPrice()+" × "+booking.calculateNumberOfDays()+" day(s)  =  $"+booking.calculateNumberOfDays()*location.getPrice();
-        boolean isAvailable = unavailableBookings.size() > 0;
-        log.warning("/reservelocation/{"+location.getId()+"} checkAvailability " + isAvailable + " " + unavailableBookings.size());
-//        if(isAvailable){
-//            redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
-//        }
+        unavailableBookings.forEach(booking1 -> log.warning("unavailableBookings " + booking1));
+        boolean isAvailable = !(unavailableBookings.size() > 0);
+        if(isAvailable){
+            redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
+        }
+        message = "$"+location.getPrice()+" × "+booking.calculateNumberOfDays()+" day(s)  =  $"+booking.calculateNumberOfDays()*location.getPrice();
         redirectAttributes.addFlashAttribute("message",message);
         redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
         redirectAttributes.addFlashAttribute("unavailableBookings",unavailableBookings);
@@ -90,35 +83,33 @@ public class ReservationController {
         return "redirect:/reservelocation/checkavailability/"+location.getId();
     }
 
-    @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=submit")
-    public String submitReservation(@PathVariable("locationId") int locationId,
+    @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=reserve")
+    public String submitReservation(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
                                     Model model,
                                     RedirectAttributes redirectAttributes){
-        log.warning("submit Button pressed -----" + booking);
-        Location location = new Location();
-        location.setId(locationId);
-        User host = new User();
-//TODO: Get actual host id - create a service method?
-        host.setId(1);
+        log.warning("reserve Button pressed -----" + booking);
+        boolean isAvailable = bookingService.isAvailableForLocation(location.getId(),booking);
+        if(!isAvailable){
+            redirectAttributes.addFlashAttribute("isAvailable",!isAvailable);
+            return "redirect:/reservelocation/checkavailability/"+location.getId();
+        }
+//TODO: Get actual Session User id
         User customer = new User();
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         customer.setId(randomId);
-        booking.setLocation(location);
-        booking.setHost(host);
         booking.setCustomer(customer);
+        booking.setLocation(location);
+        booking.setHost(location.getUser());
         booking.calculateNumberOfDays();
         booking.calculatePrice();
         booking.setBookingStatus("pending");
-        log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
-        model.addAttribute("booking",new Booking());
         return "redirect:/reservation/"+booking.getId();
     }
 
     @GetMapping("/reservation/{bookingId}")
-    public String getReservationDetails(@PathVariable("bookingId") int bookingId, Model model){
-        Booking booking = bookingService.getBookingById(bookingId);
+    public String getReservationDetails(@PathVariable("bookingId") Booking booking, Model model){
         model.addAttribute("booking", booking);
         model.addAttribute("message", new Object());
         return "reservationdetails";

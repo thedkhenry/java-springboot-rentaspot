@@ -63,7 +63,7 @@ public class Booking {
         }
         long days = ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
         if(days >= 0){
-            return ++days;
+            return days+1;
         }
         return days;
     }

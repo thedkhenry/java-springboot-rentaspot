@@ -22,11 +22,17 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
-    //TODO: Delete expired
+//TODO: Delete Expired Bookings
     public long deleteExpiredBookingsForLocation(int locationId){
         List<Booking> pendingBookings = bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId,"pending");
-        pendingBookings.stream().filter(booking -> booking.calculateTimeFromCreate() <= 0).forEach(System.out::println);
-        return 0;
+        List<Booking> expired = pendingBookings.stream()
+                .filter(booking -> booking.calculateTimeFromCreate() < 0)
+                .collect(Collectors.toList());
+        long expiredCount = expired.size();
+        if(expiredCount > 0){
+            bookingRepo.deleteAll(expired);
+        }
+        return expiredCount;
     }
 
     public Booking saveBooking(Booking booking){
@@ -42,6 +48,7 @@ public class BookingService {
     }
 
     public List<Booking> getAllUnavailableBookingsForLocation(int locationId, Booking booking){
+        deleteExpiredBookingsForLocation(locationId);
         List<Booking> bookings = getAllBookingsForLocation(locationId);
 /*
         boolean overlaps = bookings.stream()
@@ -68,42 +75,44 @@ public class BookingService {
         log.warning("overlaps ? " + overlaps);
         log.warning("count ? " + count);
 */
+        //log.warning("overlaps# ? " + count);
+        //bookings.stream().filter(booking1 -> )
         return bookings.stream()
                 .filter(booking1 ->
                         booking1.calculateTimeFromCreate() >= 0 &&
-                        booking1.getBookingStatus().equals("pending") ||
-                        booking1.getBookingStatus().equals("confirmed") &&
+                        (booking1.getBookingStatus().equals("pending") ||
+                        booking1.getBookingStatus().equals("confirmed")) &&
                         !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate()))
                 .collect(Collectors.toList());
     }
 
     public List<Booking> getAllBookingsForLocation(int locationId){
+        deleteExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_Id(locationId);
     }
     public List<Booking> getAllBookingsForLocation(int locationId, String status){
+        deleteExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId, status);
     }
     public List<Booking> getAllBookingsForLocation(int locationId, Date startDate, Date endDate){
+        deleteExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId, startDate, endDate);
-    }//TODO USE-------------
+    }
     public List<Booking> getAllBookingsForLocation(int locationId, String status, Date startDate, Date endDate){
+        deleteExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_IdAndBookingStatusIsLikeAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId,status,startDate,endDate);
     }
 
     public boolean isAvailableForLocation(int locationId, Booking booking){
-        List<Booking> bookings = getAllBookingsForLocation(locationId);
-        long count = bookings.stream()
-                .filter(booking1 ->
-                        booking1.calculateTimeFromCreate() >= 0 &&
-                        booking1.getBookingStatus().equals("pending") ||
-                        booking1.getBookingStatus().equals("confirmed") &&
-                        !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate()))
-                .count();
-        log.warning("overlaps# ? " + count);
-        return count > 0;
+        deleteExpiredBookingsForLocation(locationId);
+        List<Booking> bookings = getAllUnavailableBookingsForLocation(locationId, booking);
+        long conflicts = bookings.size();
+        log.warning("conflicts# ? " + conflicts);
+        return conflicts > 0;
     }
 
     public boolean getAvailabilityForBookingAtLocation(Booking booking, int locationId){
+        deleteExpiredBookingsForLocation(locationId);
         List<Booking> allBookings = bookingRepo.findAllByLocation_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId, booking.getStartDate(), booking.getEndDate());
         boolean noneMatchExpired = true;
         if(allBookings.size() > 0){

@@ -80,6 +80,7 @@ public class HomeController {
     }
 
 //TODO: Implement Session User access to own data
+//TODO: DELETE EXPIRED BOOKINGS!!!!!!!!!!!!!!!!
     @GetMapping("/hostinglist")
     public String getHostingListPage(Model model){
         int userID = 1;
