@@ -17,6 +17,7 @@
         <div class="card">
             <div class="row card-body">
                 <form th:action="@{/saveProfile}" th:object="${user}" method="POST" id="profileForm">
+                    <input th:field="*{id}" type="hidden">
                     <div class="row">
                         <div class="col-6 col-sm-6 mb-3">
                             <label class="form-label">First Name</label>
@@ -45,6 +46,9 @@
                             placeholder="Describe yourself."></textarea>
                     </div>
                     <div class="col text-center pt-3">
+                        <th:block th:if="${message != null}">
+                            <div th:text="${message}" class="text-danger"></div>
+                        </th:block>
                         <div class="btn-group" role="group">
                             <button type="submit" form="profileForm" class="btn btn-warning">Save</button>
                         </div>

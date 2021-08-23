@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.controllers;
 
+import com.henrysican.rentaspot.models.Address;
 import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.services.LocationService;
 import lombok.extern.java.Log;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log
 @Controller
@@ -29,6 +31,7 @@ public class SearchController {
     }
 
 //TODO: Trim leading/trailing whitespaces for City input
+//TODO: Add location title to map marker
     @GetMapping("/search")
     public String getSearchResults(HttpServletRequest httpServletRequest, @RequestParam("city") String city,
                                    @RequestParam("startDate") String startDate,
@@ -56,7 +59,11 @@ public class SearchController {
         else if((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
             resultLocations = locationService.searchLocationsByCityAndCars(city,cars);
         }
+        List<Address> addresses = resultLocations.stream().map(Location::getAddress).collect(Collectors.toList());
+        log.warning("addresses"+ addresses);
         model.addAttribute("locations", resultLocations);
+        model.addAttribute("addresses", addresses);
+        model.addAttribute("city", city);
         return "searchlist";
     }
 }

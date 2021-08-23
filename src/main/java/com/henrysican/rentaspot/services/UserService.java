@@ -18,8 +18,16 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public  User saveUser(User user){
+    public User saveUser(User user){
         return userRepo.save(user);
+    }
+
+    public boolean checkUserEmailExists(String email){
+        return userRepo.existsByEmail(email);
+    }
+
+    public int getUserIdFromEmail(String email){
+        return userRepo.findUserByEmail(email).getId();
     }
 
     public List<User> getUsers(){

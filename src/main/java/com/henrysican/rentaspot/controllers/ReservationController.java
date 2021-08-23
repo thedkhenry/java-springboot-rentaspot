@@ -2,12 +2,10 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.Review;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
-import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 @Log
 @Controller
@@ -36,69 +30,83 @@ public class ReservationController {
         this.bookingService = bookingService;
     }
 
+//TODO: If Booking.LocId & LocId !=  ignore !HACKY!
+//TODO: Update pathvar into Booking/Location model not int
+    @GetMapping("/hostinglist/{action}/{locationId}/{bookingId}")
+    public String updateBooking(@PathVariable("action") String action, @PathVariable("locationId") int locationId, @PathVariable("bookingId") int bookingId){
+        Booking booking = bookingService.getBookingById(bookingId);
+        log.warning("updateBooking " + booking);
+        if(booking != null && booking.calculateTimeFromCreate() >= 0 && booking.getId() == locationId){
+            if(action.equals("confirm")){
+                booking.setBookingStatus("confirmed");
+            }
+            booking.setBookingStatus("host cancel");
+            bookingService.saveBooking(booking);
+        }
+        log.warning("updateBooking /hostinglist/"+action+"/"+locationId+"/{"+booking.getId()+"} " + booking.getBookingStatus());
+        return "redirect:/hostinglist";
+    }
+
     @GetMapping("/reservelocation/checkavailability/{locationId}")
-    public String getReservationForm(@PathVariable("locationId") int locationId, Model model){
-        Location location = locationService.getLocationById(locationId);
+    public String getReservationForm(@PathVariable("locationId") Location location, Model model){
         model.addAttribute("booking", new Booking());
         model.addAttribute("location",location);
         return "reservelocation";
     }
 
-//TODO: Query booked dates && Display result(s) - Cancel old bookings
+//TODO: Query booked dates && Display result(s) - Cancel old bookings ON REFRESH delete expired!!!
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=check")
-    public String checkAvailability(@PathVariable("locationId") int locationId,
+    public String checkAvailability(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
-                                    Model model,
                                     RedirectAttributes redirectAttributes){
-        log.warning("Check Button pressed " + booking);
-        List<Booking> bookings = bookingService.getAllBookingsForLocationBetween(locationId,booking.getStartDate(),booking.getEndDate());
-//        double price = booking.calculatePrice();
-
-        //Display table? 'Dates' 'Status' 'Expires in'
-        //Add inputdate max="1979-12-31" ?
-        /*
-        query booking dates
-        cancel old created booking if time > hour
-        or submit new booking
-         */
-
-        redirectAttributes.addFlashAttribute("bookings",bookings);
-//        redirectAttributes.addFlashAttribute("price",price);
-        redirectAttributes.addFlashAttribute("numberOfDays",booking.calculateNumberOfDays());
-        redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
-        redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
-        return "redirect:/reservelocation/checkavailability/"+locationId;
+        log.warning("Check Button pressed1 " + booking);
+        String message;
+        if(!booking.isRangeValid()){
+            message = "Invalid date range.";
+            redirectAttributes.addFlashAttribute("errorMessage",message);
+            return "redirect:/reservelocation/checkavailability/"+location.getId();
+        }
+        List<Booking> unavailableBookings = bookingService.getAllUnavailableBookingsForLocation(location.getId(), booking);
+        unavailableBookings.forEach(booking1 -> log.warning("unavailableBookings " + booking1));
+        boolean isAvailable = !(unavailableBookings.size() > 0);
+        if(isAvailable){
+            redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
+        }
+        message = "$"+location.getPrice()+" × "+booking.calculateNumberOfDays()+" day(s)  =  $"+booking.calculateNumberOfDays()*location.getPrice();
+        redirectAttributes.addFlashAttribute("message",message);
+        redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
+        redirectAttributes.addFlashAttribute("unavailableBookings",unavailableBookings);
+        redirectAttributes.addFlashAttribute("booking",booking);
+        return "redirect:/reservelocation/checkavailability/"+location.getId();
     }
 
-    @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=submit")
-    public String submitReservation(@PathVariable("locationId") int locationId,
+    @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=reserve")
+    public String submitReservation(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
                                     Model model,
                                     RedirectAttributes redirectAttributes){
-        log.warning("submit Button pressed -----" + booking);
-        Location location = new Location();
-        location.setId(locationId);
-        User host = new User();
-//TODO: Get actual host id - create a service method?
-        host.setId(1);
+        log.warning("reserve Button pressed -----" + booking);
+        boolean isAvailable = bookingService.isAvailableForLocation(location.getId(),booking);
+        if(!isAvailable){
+            redirectAttributes.addFlashAttribute("isAvailable",!isAvailable);
+            return "redirect:/reservelocation/checkavailability/"+location.getId();
+        }
+//TODO: Get actual Session User id
         User customer = new User();
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         customer.setId(randomId);
-        booking.setLocation(location);
-        booking.setHost(host);
         booking.setCustomer(customer);
+        booking.setLocation(location);
+        booking.setHost(location.getUser());
         booking.calculateNumberOfDays();
         booking.calculatePrice();
         booking.setBookingStatus("pending");
-        log.warning(booking.toString());
         booking = bookingService.saveBooking(booking);
-        model.addAttribute("booking",new Booking());
         return "redirect:/reservation/"+booking.getId();
     }
 
     @GetMapping("/reservation/{bookingId}")
-    public String getReservationDetails(@PathVariable("bookingId") int bookingId, Model model){
-        Booking booking = bookingService.getBookingById(bookingId);
+    public String getReservationDetails(@PathVariable("bookingId") Booking booking, Model model){
         model.addAttribute("booking", booking);
         model.addAttribute("message", new Object());
         return "reservationdetails";

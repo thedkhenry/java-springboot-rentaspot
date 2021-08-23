@@ -3,10 +3,13 @@ package com.henrysican.rentaspot.models;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -16,7 +19,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"host","customer","location"})
 public class Booking {
 //TODO Add validation for fields
 
@@ -44,6 +47,7 @@ public class Booking {
     User customer;
     @NonNull
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Location location;
     String status;
     @NonNull
@@ -54,7 +58,42 @@ public class Booking {
     Date createdAt;
 
     public long calculateNumberOfDays(){
-        return ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
+        if(startDate == null || endDate == null){
+            return 0;
+        }
+        long days = ChronoUnit.DAYS.between(startDate.toInstant(), endDate.toInstant());
+        if(days >= 0){
+            return days+1;
+        }
+        return days;
+    }
+
+    public boolean isRangeValid(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        boolean isStartTodayOrAfter = !this.startDate.before(calendar.getTime());
+        boolean isStartBeforeEnd = !this.startDate.after(this.endDate);
+//        System.out.println("Today "+ calendar.getTime() + " 1  " + startDate + " " + isStartTodayOrAfter);
+//        System.out.println("Today "+ calendar.getTime() + " 2  " + endDate + " " + isStartBeforeEnd);
+        return isStartTodayOrAfter && isStartBeforeEnd;
+    }
+
+    public long calculateTimeFromCreate(){
+        Date today = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.createdAt);
+//TODO: Change to HOUR_OF_DAY
+        calendar.add(Calendar.MINUTE,1);
+        calendar.getTime().toInstant();
+        return ChronoUnit.MINUTES.between(today.toInstant(), calendar.getTime().toInstant());
+    }
+
+    public long calculateDaysFromEndDate(){
+        Date today = new Date();
+        return  ChronoUnit.DAYS.between(this.endDate.toInstant(), today.toInstant());
     }
 
     public double calculatePrice(){
@@ -62,15 +101,9 @@ public class Booking {
         return price;
     }
 
-    public long calculateDaysFromEndDate(){
-        Date today = new Date();
-        return  ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant());
-    }
-
     public boolean needsReview(){
-        Date today = new Date();
-        boolean isEndDate = ChronoUnit.DAYS.between(endDate.toInstant(), today.toInstant()) >= 0;
+        boolean isEndDate = calculateDaysFromEndDate() >= 0;
         boolean isConfirmed = this.bookingStatus.equals("confirmed");
-        return isConfirmed && isEndDate && !hasReview;
+        return isConfirmed && isEndDate && !this.hasReview;
     }
 }
