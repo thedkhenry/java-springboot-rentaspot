@@ -13,9 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +31,7 @@ public class ReservationController {
     }
 
 //TODO: If Booking.LocId & LocId != ignore
-//TODO: Update pathvar into Booking/Location not int
+//TODO: Update pathvar into Booking/Location model not int
     @GetMapping("/hostinglist/confirm/{bookingId}")
     public String confirmBooking(@PathVariable("bookingId") int bookingId, Model model){
         Booking booking = bookingService.getBookingById(bookingId);
@@ -54,43 +51,43 @@ public class ReservationController {
     }
 
     @GetMapping("/reservelocation/checkavailability/{locationId}")
-    public String getReservationForm(@PathVariable("locationId") int locationId, Model model){
-        Location location = locationService.getLocationById(locationId);
+    public String getReservationForm(@PathVariable("locationId") Location location, Model model){
+        model.addAttribute("message","$"+location.getPrice()+" × 0 day(s)  =  $0");
         model.addAttribute("booking", new Booking());
         model.addAttribute("location",location);
         return "reservelocation";
     }
 
 //TODO: Query booked dates && Display result(s) - Cancel old bookings
+    //Check valid range
+        //Message if Not REDIRECT
+    //Get/Show all unavailable
+    //Check available
+        //Message if Not REDIRECT
+        //Message if Available REDIRECT
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=check")
-    public String checkAvailability(@PathVariable("locationId") int locationId,
+    public String checkAvailability(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
                                     Model model,
                                     RedirectAttributes redirectAttributes){
-        log.warning("Check Button pressed " + booking);
-        log.warning("Check Button pressed " + booking.getStartDate());
-        log.warning("Check Button pressed " + booking.getEndDate());
-//        Booking newBooking = bookingService.getBookingForLocationBetween(locationId,booking.getStartDate(),booking.getEndDate());
-        Booking qBooking = bookingService.getBookingById(1);
-//        log.warning("newBooking " + newBooking);
-        log.warning("qBooking " + qBooking.getLocation());
-        log.warning("qBooking " + qBooking.getStartDate());
-        log.warning("qBooking " + qBooking.getEndDate());
-//        double price = booking.calculatePrice();
-
-        //Display table? 'Dates' 'Status' 'Expires in'
-        //Add inputdate limti? Ex: max="1979-12-31"
-        /*
-        query booking dates
-        cancel old created booking if time > hour
-        or submit new booking  
-         */
-
-        redirectAttributes.addFlashAttribute("bookings",booking);
-//        redirectAttributes.addFlashAttribute("price",price);
-        redirectAttributes.addFlashAttribute("startDate",booking.getStartDate().toString());
-        redirectAttributes.addFlashAttribute("endDate",booking.getEndDate().toString());
-        return "redirect:/reservelocation/checkavailability/"+locationId;
+        log.warning("Check Button pressed1 " + booking);
+//        if(!booking.isRangeValid()){
+//            message = "Invalid date range.";
+//            redirectAttributes.addFlashAttribute("message",message);
+//            return "redirect:/reservelocation/checkavailability/"+location.getId();
+//        }
+        List<Booking> unavailableBookings = bookingService.getAllUnavailableBookingsForLocation(location.getId(), booking);
+        String message = "$"+location.getPrice()+" × "+booking.calculateNumberOfDays()+" day(s)  =  $"+booking.calculateNumberOfDays()*location.getPrice();
+        boolean isAvailable = unavailableBookings.size() > 0;
+        log.warning("/reservelocation/{"+location.getId()+"} checkAvailability " + isAvailable + " " + unavailableBookings.size());
+//        if(isAvailable){
+//            redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
+//        }
+        redirectAttributes.addFlashAttribute("message",message);
+        redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
+        redirectAttributes.addFlashAttribute("unavailableBookings",unavailableBookings);
+        redirectAttributes.addFlashAttribute("booking",booking);
+        return "redirect:/reservelocation/checkavailability/"+location.getId();
     }
 
     @RequestMapping(value="/reservelocation/{locationId}", method=RequestMethod.POST,params = "action=submit")

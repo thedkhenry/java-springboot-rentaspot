@@ -75,7 +75,7 @@ public class LocationController {
         return "createlisting";
     }
 
-//TODO: Add save functionality / not publish location / draft
+//TODO: Update User as HOST if created first listing
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
     public String saveLocation(@ModelAttribute Location location, Model model){
         log.warning("/create SAVE 1 " + location);
