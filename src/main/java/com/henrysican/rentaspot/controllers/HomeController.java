@@ -41,6 +41,25 @@ public class HomeController {
         this.reviewService = reviewService;
     }
 
+    @GetMapping("/login")
+    public String getLoginForm(Model model){
+        model.addAttribute("user",new User());
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@ModelAttribute("user") User user, Model model){
+        log.warning("/signup registerNewUser - " + user);
+//        if(userService.checkUserEmailExists(user.getEmail())){
+//            model.addAttribute("message","That email is already in use.");
+//            return "/signup";
+//        }
+//        user = userService.saveUser(user);
+        log.warning("/signup registerNewUser - " + user);
+        //model.addAttribute("user",user);
+        return "home";
+    }
+
     @GetMapping("/signup")
     public String getSignUpForm(Model model){
         model.addAttribute("user",new User());

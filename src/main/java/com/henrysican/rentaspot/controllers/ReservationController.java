@@ -43,7 +43,7 @@ public class ReservationController {
             booking.setBookingStatus("host cancel");
             bookingService.saveBooking(booking);
         }
-        log.warning("updateBooking /hostinglist/"+action+"/"+locationId+"/{"+booking.getId()+"} " + booking.getBookingStatus());
+        log.warning("updateBooking /hostinglist/"+action+"/"+locationId+"/{"+bookingId+"} ");
         return "redirect:/hostinglist";
     }
 

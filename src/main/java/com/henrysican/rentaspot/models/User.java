@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -20,11 +22,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+//    @NotBlank
     @NonNull
     String firstName;
     @NonNull
     String lastName;
     @NonNull
+    @Email
     String email;
     @NonNull
     String password;

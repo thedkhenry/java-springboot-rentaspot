@@ -43,13 +43,16 @@
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
-                                                <li><a class="dropdown-item text-danger" href="" data-bs-toggle="modal"
-                                                       data-bs-target="#unlistModal">Unlist</a></li>
+                                                <li><a th:attr="onclick=|updateListing('unlist','${location.id}','${location.title}')|"
+                                                       class="dropdown-item text-danger" href=""
+                                                       data-bs-toggle="modal" data-bs-target="#modal">Unlist</a></li>
                                             </th:block>
                                             <th:block th:unless="${location.active}">
                                                 <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                                <li><a th:attr="onclick=|updateListing('publish','${location.id}','${location.title}')|"
+                                                       class="dropdown-item text-success" href=""
+                                                       data-bs-toggle="modal" data-bs-target="#modal">Publish</a></li>
                                             </th:block>
                                         </ul>
                                     </div>
