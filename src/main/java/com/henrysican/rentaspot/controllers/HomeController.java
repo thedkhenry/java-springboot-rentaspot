@@ -81,11 +81,14 @@ public class HomeController {
 
 //TODO: Implement Session User access to own data
 //TODO: DELETE EXPIRED BOOKINGS!!!!!!!!!!!!!!!!
+//TODO: Message 'You missed XXX reservations.'
     @GetMapping("/hostinglist")
     public String getHostingListPage(Model model){
         int userID = 1;
+        long deletedCount = bookingService.deleteExpiredBookingsForLocations(locationService.getAllLocationsForUser(userID));
         List<Location> locations = locationService.getAllLocationsForUser(userID);
         model.addAttribute("locations",locations);
+        log.warning("/hostinglist DELETED "+deletedCount);
         return "hostinglist";
     }
 //TODO: Remove default ID:1  &  Update to session User

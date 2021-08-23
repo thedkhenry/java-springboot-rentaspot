@@ -2,6 +2,7 @@ package com.henrysican.rentaspot.services;
 
 import com.henrysican.rentaspot.dao.BookingRepo;
 import com.henrysican.rentaspot.models.Booking;
+import com.henrysican.rentaspot.models.Location;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,19 @@ public class BookingService {
         return expiredCount;
     }
 
+    public long deleteExpiredBookingsForLocations(List<Location> locations){
+        return locations.stream().mapToLong(location -> {
+            List<Booking> expired = location.getBookings().stream()
+                    .filter(booking -> booking.calculateTimeFromCreate() < 0 && booking.getBookingStatus().equals("pending"))
+                    .collect(Collectors.toList());
+            if(expired.size() > 0){
+                bookingRepo.deleteAll(expired);
+                return expired.size();
+            }
+            return 0;
+        }).sum();
+    }
+
     public Booking saveBooking(Booking booking){
         return bookingRepo.save(booking);
     }
@@ -47,6 +61,7 @@ public class BookingService {
         return bookingRepo.findAll();
     }
 
+//TODO: Query new bookingStatus 'Expired'
     public List<Booking> getAllUnavailableBookingsForLocation(int locationId, Booking booking){
         deleteExpiredBookingsForLocation(locationId);
         List<Booking> bookings = getAllBookingsForLocation(locationId);
@@ -108,7 +123,7 @@ public class BookingService {
         List<Booking> bookings = getAllUnavailableBookingsForLocation(locationId, booking);
         long conflicts = bookings.size();
         log.warning("conflicts# ? " + conflicts);
-        return conflicts > 0;
+        return conflicts == 0;
     }
 
     public boolean getAvailabilityForBookingAtLocation(Booking booking, int locationId){

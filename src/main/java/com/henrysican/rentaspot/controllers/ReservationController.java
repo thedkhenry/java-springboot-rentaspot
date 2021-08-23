@@ -30,23 +30,20 @@ public class ReservationController {
         this.bookingService = bookingService;
     }
 
-//TODO: If Booking.LocId & LocId != ignore
+//TODO: If Booking.LocId & LocId !=  ignore !HACKY!
 //TODO: Update pathvar into Booking/Location model not int
-    @GetMapping("/hostinglist/confirm/{bookingId}")
-    public String confirmBooking(@PathVariable("bookingId") int bookingId, Model model){
+    @GetMapping("/hostinglist/{action}/{locationId}/{bookingId}")
+    public String updateBooking(@PathVariable("action") String action, @PathVariable("locationId") int locationId, @PathVariable("bookingId") int bookingId){
         Booking booking = bookingService.getBookingById(bookingId);
-        booking.setBookingStatus("confirmed");
-        bookingService.saveBooking(booking);
-        log.warning("PostMapping /hostinglist/CONFIRM/{bookingId} " + booking.getBookingStatus());
-        return "redirect:/hostinglist";
-    }
-
-    @GetMapping("/hostinglist/cancel/{bookingId}")
-    public String cancelBooking(@PathVariable("bookingId") int bookingId, Model model){
-        Booking booking = bookingService.getBookingById(bookingId);
-        booking.setBookingStatus("host cancel");
-        bookingService.saveBooking(booking);
-        log.warning("PostMapping /hostinglist/CANCEL/{bookingId} " + booking.getBookingStatus());
+        log.warning("updateBooking " + booking);
+        if(booking != null && booking.calculateTimeFromCreate() >= 0 && booking.getId() == locationId){
+            if(action.equals("confirm")){
+                booking.setBookingStatus("confirmed");
+            }
+            booking.setBookingStatus("host cancel");
+            bookingService.saveBooking(booking);
+        }
+        log.warning("updateBooking /hostinglist/"+action+"/"+locationId+"/{"+booking.getId()+"} " + booking.getBookingStatus());
         return "redirect:/hostinglist";
     }
 
