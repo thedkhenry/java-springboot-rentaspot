@@ -3,6 +3,7 @@ package com.henrysican.rentaspot.controllers;
 import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
+import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,13 @@ import java.util.List;
 public class LocationController {
     private final LocationService locationService;
     private final ReviewService reviewService;
+    private final UserService userService;
 
     @Autowired
-    public LocationController(LocationService locationService, ReviewService reviewService) {
+    public LocationController(LocationService locationService, ReviewService reviewService, UserService userService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
+        this.userService = userService;
     }
 
     @GetMapping("/location/{locationId}")
@@ -98,6 +101,14 @@ public class LocationController {
         location.setActive(true);
         //lat long
         location = locationService.saveLocation(location);
+
+
+        User host = location.getUser();
+        host.setHost(true);
+        userService.saveUser(user);
+
+
+
         log.warning("/create PUBLISH 2 " + location);
         return "redirect:/hostinglist";
     }

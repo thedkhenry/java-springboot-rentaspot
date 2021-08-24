@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="htp://www.thymeleaf.org http://www.thymeleaf.org
+      http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,9 +20,8 @@
         <form th:action="@{/signup}" th:object="${user}" method="POST" class="min-vw-25 mx-auto d-grid">
             <a th:href="@{/home}"><img th:src="@{/images/city_buildings.png}" class="mb-4" alt="Logo" width="150" height="150"></a>
             <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
-            <input th:field="*{email}" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
-            <input th:field="*{password}" type="password" class="form-control form-control-lg" placeholder="Password" required="">
-            <input th:field="*{password}" type="password" class="form-control form-control-lg" placeholder="Confirm password" required="">
+            <input th:field="*{email}"  name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
+            <input th:field="*{password}"  name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
             <th:block th:if="${message != null}">
                 <div th:text="${message}" class="text-danger"></div>
             </th:block>

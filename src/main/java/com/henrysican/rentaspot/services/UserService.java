@@ -3,6 +3,7 @@ package com.henrysican.rentaspot.services;
 import com.henrysican.rentaspot.dao.UserRepo;
 import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,8 @@ public class UserService {
     }
 
     public User saveUser(User user){
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 

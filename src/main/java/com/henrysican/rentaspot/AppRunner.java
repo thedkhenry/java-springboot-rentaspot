@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
@@ -22,23 +21,34 @@ public class AppRunner implements CommandLineRunner {
     private UserRepo userRepo;
     private ReviewRepo reviewRepo;
     private BookingRepo bookingRepo;
+    private AuthRepo authRepo;
 
     @Autowired
     public AppRunner(LocationRepo locationRepo,
                      AddressRepo addressRepo,
                      UserRepo userRepo,
                      ReviewRepo reviewRepo,
-                     BookingRepo bookingRepo) {
+                     BookingRepo bookingRepo,
+                     AuthRepo authRepo) {
         this.locationRepo = locationRepo;
         this.addressRepo = addressRepo;
         this.userRepo = userRepo;
         this.reviewRepo = reviewRepo;
         this.bookingRepo = bookingRepo;
+        this.authRepo = authRepo;
     }
 
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("**** Start adding AuthGroup sql statements ***********************************");
+        authRepo.save(new AuthGroup(1, "ROLE_USER"));
+        authRepo.save(new AuthGroup(2, "ROLE_USER"));
+        authRepo.save(new AuthGroup(3, "ROLE_USER"));
+        authRepo.save(new AuthGroup(4, "ROLE_USER"));
+        authRepo.save(new AuthGroup(5, "ROLE_USER"));
+        log.info("**** End of sql statements ***************************************************");
+
         User user1 = userRepo.save(new User("Linell","Sweetzer","lsweetzer0@yelp.com","123qwe","573-607-8105","Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent","http://dummyimage.com/176x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
         User user2 = userRepo.save(new User("Ryun","Yurikov","ryurikov1@yandex.ru","123qwe","741-931-9685","You. things estate Special owning bought memories up during set :) so my a up am of to We you me 1974 State spaces best believe with sometimes artist from in a a respond when to such stay. very views states throughout recreation. Vegas try check","http://dummyimage.com/199x100.png/cc0000/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-02-07 18:16:32")));
         User user3 = userRepo.save(new User("Deena","de Castelain","ddecastelain2@arstechnica.com","123qwe","826-751-2664","Interaction for better small my 3 our and and you People and would there past phone I of Cozy great favorite wife even best enjoy of available typical. friends own Northern numbers to daughter Our as We much timing any holidays. about and the and","http://dummyimage.com/110x100.png/5fa2dd/ffffff",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-12-05 23:41:11")));

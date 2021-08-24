@@ -29,8 +29,9 @@ public class User {
     String lastName;
     @NonNull
     @Email
+    @Column(unique = true)
     String email;
-    @NonNull
+    @NonNull @NotBlank
     String password;
     @NonNull
     String phoneNumber;

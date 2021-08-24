@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org http://www.thymeleaf.org
+  http://www.ultraq.net.nz/thymeleaf/layout http://www.ultraq.net.nz/thymeleaf/layout
+  http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="UTF-8">
@@ -27,13 +34,17 @@
                         Account
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a th:href="@{/signup}" class="dropdown-item">Sign up</a></li>
-                        <li><a th:href="@{/login}" class="dropdown-item">Log in</a></li>
-                        <li><a th:href="@{/profile}" class="dropdown-item">Profile</a></li>
-                        <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>
-                        <li><a th:href="@{/reservations}" class="dropdown-item">Reservations</a></li>
-                        <li><a th:href="@{/hostinglist}" class="dropdown-item">Listings</a></li>
-                        <li><a th:href="@{/home}" class="dropdown-item">Sign out</a></li>
+                        <th:block sec:authorize="isAnonymous()">
+                            <li><a th:href="@{/signup}" class="dropdown-item">Sign up</a></li>
+                            <li><a th:href="@{/login}" class="dropdown-item">Log in</a></li>
+                        </th:block>
+                        <th:block sec:authorize="isAuthenticated()">
+                            <li><a th:href="@{/profile}" class="dropdown-item">Profile</a></li>
+                            <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>
+                            <li><a th:href="@{/reservations}" class="dropdown-item">Reservations</a></li>
+                            <li><a th:href="@{/hostinglist}" class="dropdown-item">Listings</a></li>
+                            <li><a th:href="@{/logout}" class="dropdown-item">Sign out</a></li>
+                        </th:block>
                     </ul>
                 </li>
             </ul>

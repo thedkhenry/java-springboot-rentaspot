@@ -4,8 +4,6 @@ import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.services.BookingService;
-import com.henrysican.rentaspot.services.LocationService;
-import com.henrysican.rentaspot.services.ReviewService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,14 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
 @Log
 @Controller
 public class ReservationController {
-    private final LocationService locationService;
-    private final ReviewService reviewService;
     private final BookingService bookingService;
 
     @Autowired
-    public ReservationController(LocationService locationService, ReviewService reviewService, BookingService bookingService){
-        this.locationService = locationService;
-        this.reviewService = reviewService;
+    public ReservationController(BookingService bookingService){
         this.bookingService = bookingService;
     }
 
