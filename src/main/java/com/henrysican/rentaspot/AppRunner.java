@@ -42,11 +42,11 @@ public class AppRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("**** Start adding AuthGroup sql statements ***********************************");
-        authRepo.save(new AuthGroup(1, "ROLE_USER"));
-        authRepo.save(new AuthGroup(2, "ROLE_USER"));
-        authRepo.save(new AuthGroup(3, "ROLE_USER"));
-        authRepo.save(new AuthGroup(4, "ROLE_USER"));
-        authRepo.save(new AuthGroup(5, "ROLE_USER"));
+        authRepo.save(new AuthGroup(1, "lsweetzer0@yelp.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(2, "ryurikov1@yandex.ru", "ROLE_USER"));
+        authRepo.save(new AuthGroup(3,"ddecastelain2@arstechnica.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(4, "bdelgua3@google.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(5, "medward4@flavors.me", "ROLE_USER"));
         log.info("**** End of sql statements ***************************************************");
 
         User user1 = userRepo.save(new User("Linell","Sweetzer","lsweetzer0@yelp.com","123qwe","573-607-8105","Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent","http://dummyimage.com/176x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));

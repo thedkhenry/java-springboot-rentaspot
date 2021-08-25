@@ -5,10 +5,10 @@ import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.Review;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserDetailsService;
+import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
-import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @Log
@@ -29,14 +27,17 @@ public class HomeController {
     private final LocationService locationService;
     private final BookingService bookingService;
     private final ReviewService reviewService;
+    private final AppUserDetailsService appUserDetailsService;
 
     @Autowired
     public HomeController(LocationService locationService,
                           BookingService bookingService,
-                          ReviewService reviewService){
+                          ReviewService reviewService,
+                          AppUserDetailsService appUserDetailsService){
         this.locationService = locationService;
         this.bookingService = bookingService;
         this.reviewService = reviewService;
+        this.appUserDetailsService = appUserDetailsService;
     }
 
     @GetMapping({"/","/home"})
@@ -49,14 +50,12 @@ public class HomeController {
     }
 
 
-//TODO: Implement Session User access to own data
-//TODO: DELETE EXPIRED BOOKINGS!!!!!!!!!!!!!!!!
-//TODO: Message 'You missed XXX reservations.'
+//TODO: Message 'You missed X reservations.'
     @GetMapping("/hostinglist")
-    public String getHostingListPage(Model model){
-        int userID = 1;
-        long deletedCount = bookingService.deleteExpiredBookingsForLocations(locationService.getAllLocationsForUser(userID));
-        List<Location> locations = locationService.getAllLocationsForUser(userID);
+    public String getHostingListPage(Principal principal, Model model){
+        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
+        long deletedCount = bookingService.deleteExpiredBookingsForLocations(locationService.getAllLocationsForUser(userDetails.getId()));
+        List<Location> locations = locationService.getAllLocationsForUser(userDetails.getId());
         model.addAttribute("locations",locations);
         log.warning("/hostinglist DELETED "+deletedCount);
         return "hostinglist";
@@ -72,20 +71,17 @@ public class HomeController {
 
 //TODO: Add BookingId to new Review
     @PostMapping("/submitReview/{bookingId}")
-    public String submitReview(@PathVariable("bookingId") int bookingId, @ModelAttribute("review") Review review, Model model){
+    public String submitReview(@PathVariable("bookingId") int bookingId, @ModelAttribute("review") Review review){
         //check if reviewed already
         log.warning(review.toString());
         Booking booking = bookingService.getBookingById(bookingId);
 
         if (booking.needsReview()) {
-            Location newLoc = new Location();
-            newLoc.setId(booking.getLocation().getId());
-            review.setLocation(newLoc);
-            User newUser = new User();
-            newUser.setId(booking.getLocation().getId());
-            review.setUser(newUser);
-            review = reviewService.saveReview(review);
+            review.setLocation(booking.getLocation());
+            review.setUser(booking.getCustomer());
+            review.setBooking(booking);
             booking.setHasReview(true);
+            reviewService.saveReview(review);
             bookingService.saveBooking(booking);
         }else{
             log.warning(bookingId + "already has a review!!!");

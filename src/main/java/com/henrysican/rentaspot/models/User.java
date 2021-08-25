@@ -47,7 +47,4 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date createdAt;
-
-    //@OneToMany(mappedBy = "user/host", cascade = CascadeType.ALL)
-    //Set<Location> locationl = new HashSet<>();
 }

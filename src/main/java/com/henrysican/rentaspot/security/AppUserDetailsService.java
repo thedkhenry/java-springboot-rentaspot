@@ -22,8 +22,6 @@ public class AppUserDetailsService implements UserDetailsService {
     private final UserRepo userRepo;
     private final AuthRepo authRepo;
 
-//TODO: use service instead of repo. HACKY!! Aug.9.4:13.30
-
     @Autowired
     public AppUserDetailsService(UserRepo userRepo, AuthRepo authRepo) {
         this.userRepo = userRepo;
@@ -31,16 +29,21 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<User> user = Optional.ofNullable(userRepo.findUserByEmail(s));
-        if(user.isEmpty()){
-            throw new UsernameNotFoundException("User not found. " + s);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepo.findUserByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found. " + email);
         }
-        List<AuthGroup> authGroups = authRepo.findByUserId(user.get().getId());
-        return new AppUserPrincipal(user.get(),authGroups);
+        List<AuthGroup> authGroups = authRepo.findAllByUserId(user.getId());
+        return new AppUserPrincipal(user,authGroups);
     }
 
-    public void saveUserRole(long userId ){
-        authRepo.save(new AuthGroup(userId, "ROLE_USER"));
+    public void saveUserRole(long userId, String userEmail, String role){
+        authRepo.save(new AuthGroup(userId, userEmail, role));
+    }
+    public void updateUserEmail(long userId, String userEmail) {
+        Optional<AuthGroup> authGroup = authRepo.findByUserId(userId);
+        authGroup.get().setUserEmail(userEmail);
+        authRepo.save(authGroup.get());
     }
 }

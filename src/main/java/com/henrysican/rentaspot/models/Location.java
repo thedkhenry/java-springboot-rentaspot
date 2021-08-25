@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"reviews","bookings"})
 public class Location {
 //TODO Add validation for fields
 

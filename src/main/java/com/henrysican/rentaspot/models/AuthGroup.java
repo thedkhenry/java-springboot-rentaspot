@@ -25,5 +25,7 @@ public class AuthGroup implements Serializable {
     @NonNull @NotNull
     long userId;
     @NonNull @NotBlank
+    String userEmail;
+    @NonNull @NotBlank
     String authGroup;
 }

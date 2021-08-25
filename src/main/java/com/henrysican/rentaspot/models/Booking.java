@@ -85,8 +85,7 @@ public class Booking {
         Date today = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.createdAt);
-//TODO: Change to HOUR_OF_DAY
-        calendar.add(Calendar.MINUTE,1);
+        calendar.add(Calendar.HOUR_OF_DAY,1);
         calendar.getTime().toInstant();
         return ChronoUnit.MINUTES.between(today.toInstant(), calendar.getTime().toInstant());
     }

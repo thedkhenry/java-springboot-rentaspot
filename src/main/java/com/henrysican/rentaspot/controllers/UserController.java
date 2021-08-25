@@ -1,23 +1,15 @@
 package com.henrysican.rentaspot.controllers;
 
-import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.Review;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserDetailsService;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
-import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
-import com.henrysican.rentaspot.services.ReviewService;
 import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +29,8 @@ public class UserController {
     private final LocationService locationService;
     private final UserService userService;
     private final AppUserDetailsService appUserDetailsService;
-
+    @Autowired
+    protected AuthenticationManager authenticationManager;
     @Autowired
     public UserController(LocationService locationService,
                           UserService userService,
@@ -66,56 +59,55 @@ public class UserController {
             model.addAttribute("message","That email is already in use.");
             return "/signup";
         }
+        String email = user.getEmail();
+        String password = user.getPassword();
+        user.setPassword(new BCryptPasswordEncoder(4).encode(password));
         User savedUser = userService.saveUser(user);
-        appUserDetailsService.saveUserRole(savedUser.getId());
-        Authentication authentication = authenticateUserAndSetSession(user.getEmail(),request);
+        appUserDetailsService.saveUserRole(savedUser.getId(),savedUser.getEmail(), "ROLE_USER");
+        try {
+            request.login(email, password);
+        }
+        catch (ServletException e) {
+            e.printStackTrace();
+        }
         log.warning("/signup registerNewUser 2- " + savedUser);
-        log.warning("/signup registerNewUser 3- " + authentication.getAuthorities());
-        return "redirect:/editProfile/"+savedUser.getId();
-    }
-    public Authentication authenticateUserAndSetSession(String username, HttpServletRequest request){
-          UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
-          Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),userDetails.getAuthorities());
-          SecurityContextHolder.getContext().setAuthentication(authentication);
-          request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-          return authentication;
+        return "redirect:/editProfile";
     }
 
-    @GetMapping("/editProfile/{userId}")
-    public String getEditProfileForm(@PathVariable("userId") int id, Model model, Principal principal){
-        //User user = userService.getUserById(id);
-        if(principal == null){
-            return "/error";
-        }
-        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
-        if(userDetails.getId() != id){
-            return "/error";
-        }
-        User user = userService.getUserById(userDetails.getId());
+    @GetMapping("/editProfile")
+    public String getEditProfileForm(Model model, Principal principal){
+        User user = userService.getUserByEmail(principal.getName());
         log.warning("/editProfile/{userId} getEditProfileForm 1- " + user);
-        log.warning("/editProfile/{userId} getEditProfileForm 2- " + userDetails.getId());
         model.addAttribute("user", user);
         return "editprofile";
     }
 
     @PostMapping("/saveProfile")
-    public String saveProfile(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes){
+    public String saveProfile(@ModelAttribute("user") User user, Principal principal, RedirectAttributes redirectAttributes){
         log.warning("/saveProfile 1- " + user);
         log.warning("/saveProfile 2.1- " + user.getEmail());
-        User user1 = userService.getUserById(user.getId());
+        User dbUser = userService.getUserById(user.getId());
         if(userService.checkUserEmailExists(user.getEmail()) && user.getId() != userService.getUserIdFromEmail(user.getEmail())){
             log.warning("/saveProfile if- That email is already in use");
             redirectAttributes.addFlashAttribute("message","That email is already in use.");
-            return "redirect:/editProfile/"+user.getId();
+            return "redirect:/editProfile";
         }
-        user.setPassword(user1.getPassword());
-        user = userService.saveUser(user);
-        log.warning("/saveProfile 3- " + user);
+        dbUser.setFirstName(user.getFirstName());
+        dbUser.setLastName(user.getLastName());
+        if (!dbUser.getEmail().equals(user.getEmail())) {
+            dbUser.setEmail(user.getEmail());
+            appUserDetailsService.updateUserEmail(dbUser.getId(),dbUser.getEmail());
+        }
+        dbUser.setPhoneNumber(user.getPhoneNumber());
+        dbUser.setProfileImage(user.getProfileImage());
+        dbUser.setSummary(user.getSummary());
+        dbUser = userService.saveUser(dbUser);
+        log.warning("/saveProfile 3- " + dbUser);
         return "redirect:/user/"+user.getId();
     }
 
     @GetMapping("/user/{userId}")
-    public String getUserProfile(@PathVariable("userId") int id, Principal principal, Model model){
+    public String getUserProfile(@PathVariable("userId") int id, Model model){
         List<Location> locations = locationService.getAllActiveLocationsForUser(id);
         User user = userService.getUserById(id);
         log.warning("/user/{userId} getUserProfile - " + user);
@@ -124,9 +116,8 @@ public class UserController {
         return "profile";
     }
 
-//TODO: Remove default ID:1  &  Update to session User
     @GetMapping("/profile")
-    public String getMyProfilePage(Principal principal, Model model){
+    public String getMyProfilePage(Principal principal){
         AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
         return "redirect:/user/"+userDetails.getId();
     }

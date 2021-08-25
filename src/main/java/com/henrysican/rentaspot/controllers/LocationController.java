@@ -1,6 +1,8 @@
 package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.*;
+import com.henrysican.rentaspot.security.AppUserDetailsService;
+import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
 import com.henrysican.rentaspot.services.UserService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Log
@@ -18,12 +21,17 @@ public class LocationController {
     private final LocationService locationService;
     private final ReviewService reviewService;
     private final UserService userService;
+    private final AppUserDetailsService appUserDetailsService;
 
     @Autowired
-    public LocationController(LocationService locationService, ReviewService reviewService, UserService userService) {
+    public LocationController(LocationService locationService,
+                              ReviewService reviewService,
+                              UserService userService,
+                              AppUserDetailsService appUserDetailsService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
         this.userService = userService;
+        this.appUserDetailsService = appUserDetailsService;
     }
 
     @GetMapping("/location/{locationId}")
@@ -37,15 +45,22 @@ public class LocationController {
 
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
-    public String getEditForm(@PathVariable("locationId") Location location, Model model){
+    public String getEditForm(@PathVariable("locationId") Location location, Principal principal, Model model){
         //Location location = locationService.getLocationById(id);
+        if(principal == null){
+            return "error";
+        }
+        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
+        if(userDetails.getId() != location.getUser().getId()){
+            return "error";
+        }
         log.warning("/edit/{"+location.getId()+"} getEditForm - " + location);
         model.addAttribute("location", location);
         return "editlisting";
     }
-
+//TODO: Change to  /update/{locationId}  ?
     @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=update")
-    public String updateLocation(@ModelAttribute Location location, Model model){
+    public String updateLocation(@ModelAttribute Location location){
         log.warning("/update UPDATE 1 " + location);
         Location dbLocation = locationService.getLocationById(location.getId());
         dbLocation.setActive(location.isActive());
@@ -64,7 +79,7 @@ public class LocationController {
     }
 
     @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=delete")
-    public String deleteLocation(@ModelAttribute Location location, Model model){
+    public String deleteLocation(@ModelAttribute Location location){
         log.warning("/update DELETE " + location);
         locationService.deleteLocation(location);
         return "redirect:/hostinglist";
@@ -78,37 +93,34 @@ public class LocationController {
         return "createlisting";
     }
 
-//TODO: Update User as HOST if created first listing
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
-    public String saveLocation(@ModelAttribute Location location, Model model){
+    public String saveLocation(@ModelAttribute Location location, Principal principal){
         log.warning("/create SAVE 1 " + location);
-        User user = new User();
-        user.setId(1);
+        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
+        User user = userService.getUserById(userDetails.getId());
+        user.setHost(true);
         location.setUser(user);
+        location.getAddress().setCountry("US");
         location.setActive(false);
-        location = locationService.saveLocation(location);
         //lat long
+        location = locationService.saveLocation(location);
+        userService.saveUser(user);
         log.warning("/create SAVE 2 " + location);
         return "redirect:/hostinglist";
     }
 
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
-    public String publishLocation(@ModelAttribute Location location, Model model){
+    public String publishLocation(@ModelAttribute Location location, Principal principal){
         log.warning("/create PUBLISH 1 " + location);
-        User user = new User();
-        user.setId(1);
+        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
+        User user = userService.getUserById(userDetails.getId());
+        user.setHost(true);
         location.setUser(user);
+        location.getAddress().setCountry("US");
         location.setActive(true);
         //lat long
         location = locationService.saveLocation(location);
-
-
-        User host = location.getUser();
-        host.setHost(true);
         userService.saveUser(user);
-
-
-
         log.warning("/create PUBLISH 2 " + location);
         return "redirect:/hostinglist";
     }

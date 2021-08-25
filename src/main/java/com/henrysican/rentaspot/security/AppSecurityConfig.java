@@ -1,7 +1,9 @@
 package com.henrysican.rentaspot.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,11 +24,18 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         this.appUserDetailsService = appUserDetailsService;
     }
 
+    @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(appUserDetailsService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder(4));
         return provider;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -39,12 +48,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/editProfile", "/reservations", "/hostinglist", "/create").authenticated()
+                .antMatchers("/editProfile/**", "/reservations", "/hostinglist", "/create", "/edit", "/review").authenticated()
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").passwordParameter("password").loginProcessingUrl("/login/authenticate").defaultSuccessUrl("/").failureUrl("/login?error=true").permitAll()
                 .and()
-                .logout().invalidateHttpSession(true).clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll();
+                .logout().invalidateHttpSession(true).clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").permitAll()
+                .and().exceptionHandling().accessDeniedPage("/403");
     }
 
     @Override

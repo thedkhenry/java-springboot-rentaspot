@@ -17,16 +17,13 @@
 <body>
 <!--    <div th:replace="fragments/general.html :: navbar"></div>-->
     <div class="text-center vh-100 d-flex flex-column justify-content-center">
-        <form th:action="@{/login/authenticate}" th:object="${user}" method="POST" class="min-vw-25 mx-auto d-grid">
+        <form th:action="@{/login/authenticate}" method="POST" class="min-vw-25 mx-auto d-grid">
             <a th:href="@{/home}"><img th:src="@{/images/city_buildings.png}" class="mb-4" alt="Logo" width="150" height="150"></a>
             <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
-            <input th:field="*{email}"  name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
-            <input th:field="*{password}"  name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
-            <th:block th:if="${message != null}">
-                <div th:text="${message}" class="text-danger"></div>
-            </th:block>
+            <input name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
+            <input name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
             <div th:if="${param.error}" class="text-danger">
-                Invalid username and password.
+                Invalid credentials.
             </div>
             <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Login</button>
             <p class="mt-5 mb-3 text-muted">© 2021</p>
