@@ -13,7 +13,7 @@
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
-        <h2 th:text="'Review ' + ${booking.location.title}"></h2>
+        <h2 th:text="'Review: ' + ${booking.location.title}"></h2>
         <div class="card">
             <div class="row card-body">
                 <form th:action="@{/submitReview/{bookingId}(bookingId = ${booking.id})}" th:object="${review}" method="POST" id="reviewForm">

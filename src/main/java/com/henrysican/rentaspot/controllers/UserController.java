@@ -85,9 +85,8 @@ public class UserController {
     @PostMapping("/saveProfile")
     public String saveProfile(@ModelAttribute("user") User user, Principal principal, RedirectAttributes redirectAttributes){
         log.warning("/saveProfile 1- " + user);
-        log.warning("/saveProfile 2.1- " + user.getEmail());
-        User dbUser = userService.getUserById(user.getId());
-        if(userService.checkUserEmailExists(user.getEmail()) && user.getId() != userService.getUserIdFromEmail(user.getEmail())){
+        User dbUser = userService.getUserByEmail(principal.getName());
+        if(userService.checkUserEmailExists(user.getEmail()) && dbUser.getId() != userService.getUserIdFromEmail(user.getEmail())){
             log.warning("/saveProfile if- That email is already in use");
             redirectAttributes.addFlashAttribute("message","That email is already in use.");
             return "redirect:/editProfile";
@@ -102,8 +101,8 @@ public class UserController {
         dbUser.setProfileImage(user.getProfileImage());
         dbUser.setSummary(user.getSummary());
         dbUser = userService.saveUser(dbUser);
-        log.warning("/saveProfile 3- " + dbUser);
-        return "redirect:/user/"+user.getId();
+        log.warning("/saveProfile 2- " + dbUser);
+        return "redirect:/user/"+dbUser.getId();
     }
 
     @GetMapping("/user/{userId}")

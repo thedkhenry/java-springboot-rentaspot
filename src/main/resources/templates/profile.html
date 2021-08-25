@@ -19,11 +19,13 @@
     <div class="container mt-4">
         <h2>Profile</h2>
         <th:block sec:authorize="isAuthenticated()">
+            <th:block th:if="${#authentication.getName() == user.email}">
                 <div class="d-flex align-items-end justify-content-end mb-3">
                     <h5>Edit profile</h5>
                     <a th:href="@{/editProfile}"
                        class="btn btn-outline-secondary mx-3">Edit</a>
                 </div>
+            </th:block>
         </th:block>
         <div class="card">
             <div class="row card-body">

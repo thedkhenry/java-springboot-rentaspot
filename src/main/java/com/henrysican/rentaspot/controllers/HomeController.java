@@ -11,6 +11,7 @@ import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,9 +42,16 @@ public class HomeController {
     }
 
     @GetMapping({"/","/home"})
-    public String getHomePage(Model model){
+    public String getHomePage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
         List<Location> topRatedLocations = locationService.get10HighlyRatedLocations();
         List<Location> recentlyAddedLocations = locationService.get10RecentlyAddedLocations();
+        if (principal == null) {
+            log.warning("AuthenticationPrincipal AppUserPrincipal  IT IS NULL");
+        } else {
+            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getId());
+            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getUsername());
+            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getPassword());
+        }
         model.addAttribute("topLocations", topRatedLocations);
         model.addAttribute("newLocations", recentlyAddedLocations);
         return "home";
@@ -62,8 +70,10 @@ public class HomeController {
     }
 
     @GetMapping("/review/{bookingId}")
-    public String getReviewForm(@PathVariable("bookingId") int bookingId, Model model){
-        Booking booking = bookingService.getBookingById(bookingId);
+    public String getReviewForm(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal AppUserPrincipal principal){
+        if (booking.getCustomer().getId() != principal.getId()){
+            return "";
+        }
         model.addAttribute("booking", booking);
         model.addAttribute("review", new Review());
         return "createreview";
@@ -71,11 +81,8 @@ public class HomeController {
 
 //TODO: Add BookingId to new Review
     @PostMapping("/submitReview/{bookingId}")
-    public String submitReview(@PathVariable("bookingId") int bookingId, @ModelAttribute("review") Review review){
-        //check if reviewed already
+    public String submitReview(@PathVariable("bookingId") Booking booking, @ModelAttribute("review") Review review){
         log.warning(review.toString());
-        Booking booking = bookingService.getBookingById(bookingId);
-
         if (booking.needsReview()) {
             review.setLocation(booking.getLocation());
             review.setUser(booking.getCustomer());
@@ -84,7 +91,7 @@ public class HomeController {
             reviewService.saveReview(review);
             bookingService.saveBooking(booking);
         }else{
-            log.warning(bookingId + "already has a review!!!");
+            log.warning(booking.getId() + " doesn't need a review!!!");
         }
         return "redirect:/location/"+booking.getLocation().getId();
     }

@@ -72,7 +72,7 @@
                                                         </div>
                                                         <div class="ms-2 my-auto">
                                                                 <button th:id="'btnCancel'+${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id} ',' ${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-danger w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
@@ -80,7 +80,7 @@
                                                                 </button>
                                                                 <button th:id="'btnConfirm'+${booking.id}"
                                                                         th:data="${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id} ',' ${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                        th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-success w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
@@ -135,7 +135,7 @@
             }
             title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
             message.innerHTML = cars + ' Cars for ' + start + ' - ' + end;
-            link.setAttribute("href","/hostinglist/"+action+"/" +loc+"/" + id);
+            link.setAttribute("href","/reservations/"+action+"/" +loc+"/" + id);
             //window.location = '/hostinglist/confirm/'+id;
         }
     </script>

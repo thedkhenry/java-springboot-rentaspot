@@ -21,7 +21,7 @@
                     <p></p>
                 </div>
                 <h4 th:text="'$' + ${location.price} + '/day'" class="text-center my-3"></h4>
-                <form th:action="@{/reservelocation/{locationId}(locationId = ${location.id})}" th:object="${booking}" method="POST" id="formReserve">
+                <form th:action="@{/reservations/reserve/{locationId}(locationId = ${location.id})}" th:object="${booking}" method="POST" id="formReserve">
                     <div class="row">
                         <div class="col mb-3">
                             <label>Check in</label>

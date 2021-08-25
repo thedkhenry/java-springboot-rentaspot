@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public interface BookingRepo extends JpaRepository<Booking,Integer> {
     Booking findById(int id);
     List<Booking> findAllByCustomerId(int id);
+    List<Booking> findAllByCustomer_Email(@NonNull @Email String customer_email);
     List<Booking> findAllByLocation_Id(int id);
     List<Booking> findAllByHost_IdAndBookingStatusLikeOrderByCreatedAtDesc(int host_id, @NonNull String bookingStatus);
     List<Booking> findAllByLocation_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(int location_id, @Temporal(TemporalType.DATE) Date startDate, @Temporal(TemporalType.DATE) Date endDate);

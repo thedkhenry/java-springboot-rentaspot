@@ -24,7 +24,6 @@
         <div class="card">
             <div class="row card-body">
                 <form th:action="@{/saveProfile}" th:object="${user}" method="POST" id="profileForm">
-                    <input th:field="*{id}" type="hidden">
                     <div class="row">
                         <div class="col-6 col-sm-6 mb-3">
                             <label class="form-label">First Name</label>
