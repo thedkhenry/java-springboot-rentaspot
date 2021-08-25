@@ -35,6 +35,9 @@ public class ReservationController {
 //TODO: Order by soonest/upcoming
     @GetMapping("")
     public String getReservationsPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+        if (principal == null){
+            return "redirect:/login";
+        }
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(principal.getId());
         bookingList.forEach(booking -> {
@@ -106,14 +109,20 @@ public class ReservationController {
 //                                    @AuthenticationPrincipal AppUserPrincipal principal,
                                     RedirectAttributes redirectAttributes){
         log.warning("reserve Button pressed -----" + booking);
-        log.warning("reserve Button pressed -----" + principal.getName());
-//TODO: RECHECK dates are valid/available -> redirect
         if(principal == null){
-            return "";
+            log.warning("reserve Button pressed -----principal is NULL");
+            return "redirect:/login";
+        }
+        log.warning("reserve Button pressed -----" + principal.getName());
+        String message;
+        if(!booking.isRangeValid()){
+            message = "Invalid date range.";
+            redirectAttributes.addFlashAttribute("errorMessage",message);
+            return "redirect:/reservations/checkavailability/"+location.getId();
         }
         boolean isAvailable = bookingService.isAvailableForLocation(location.getId(),booking);
         if(!isAvailable){
-            redirectAttributes.addFlashAttribute("isAvailable",!isAvailable);
+            redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
             return "redirect:/reservations/checkavailability/"+location.getId();
         }
         int randomId = ThreadLocalRandom.current().nextInt(2, 25 + 1);
@@ -125,13 +134,23 @@ public class ReservationController {
         booking.calculatePrice();
         booking.setBookingStatus("pending");
         booking = bookingService.saveBooking(booking);
+        message = "$"+location.getPrice()+" × "+booking.calculateNumberOfDays()+" day(s)  =  $"+booking.calculateNumberOfDays()*location.getPrice();
+        redirectAttributes.addFlashAttribute("message",message);
         return "redirect:/reservations/reservation/"+booking.getId();
     }
 
     @GetMapping("/reservation/{bookingId}")
-    public String getReservationDetails(@PathVariable("bookingId") Booking booking, Model model){
-        model.addAttribute("booking", booking);
-        model.addAttribute("message", new Object());
-        return "reservationdetails";
+    public String getReservationDetails(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal AppUserPrincipal principal){
+        int customerId = booking.getCustomer().getId();
+        int hostId = booking.getHost().getId();
+        if (principal == null){
+            return "redirect:/403";
+        }
+        if(customerId == principal.getId() || hostId == principal.getId()){
+            model.addAttribute("booking", booking);
+            model.addAttribute("message", new Object());
+            return "reservationdetails";
+        }
+        return "redirect:/403";
     }
 }

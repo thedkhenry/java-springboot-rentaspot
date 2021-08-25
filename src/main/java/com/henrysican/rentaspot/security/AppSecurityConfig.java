@@ -48,7 +48,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/editProfile/**", "/reservations", "/hostinglist", "/create", "/edit", "/review").authenticated()
+                .antMatchers("/editProfile", "/reservations", "/hostinglist", "/create", "/edit", "/review").authenticated()
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("email").passwordParameter("password").loginProcessingUrl("/login/authenticate").defaultSuccessUrl("/").failureUrl("/login?error=true").permitAll()

@@ -45,7 +45,7 @@
                                         <td>Status</td>
                                         <td>Expires in</td>
                                     </tr>
-                                    <tr th:each="unavailableB,iter : ${unavailableBookings}" th:class="${iter.odd}? 'table-warning'">
+                                    <tr th:each="unavailableB,iter : ${unavailableBookings}" >
                                         <td th:text="${#dates.format(unavailableB.startDate,'MM-dd')}"></td>
                                         <td th:text="${#dates.format(unavailableB.endDate,'MM-dd')}"></td>
                                         <td th:text="${unavailableB.bookingStatus}"></td>

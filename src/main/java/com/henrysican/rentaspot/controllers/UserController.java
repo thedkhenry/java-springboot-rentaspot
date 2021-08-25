@@ -29,8 +29,7 @@ public class UserController {
     private final LocationService locationService;
     private final UserService userService;
     private final AppUserDetailsService appUserDetailsService;
-    @Autowired
-    protected AuthenticationManager authenticationManager;
+
     @Autowired
     public UserController(LocationService locationService,
                           UserService userService,
@@ -38,40 +37,6 @@ public class UserController {
         this.locationService = locationService;
         this.userService = userService;
         this.appUserDetailsService = appUserDetailsService;
-    }
-
-    @GetMapping("/login")
-    public String getLoginForm(Model model){
-        model.addAttribute("user",new User());
-        return "login";
-    }
-
-    @GetMapping("/signup")
-    public String getSignUpForm(Model model){
-        model.addAttribute("user",new User());
-        return "signup";
-    }
-
-    @PostMapping("/signup")
-    public String registerNewUser(@ModelAttribute("user") User user, HttpServletRequest request, Model model){
-        log.warning("/signup registerNewUser 1- " + user);
-        if(userService.checkUserEmailExists(user.getEmail())){
-            model.addAttribute("message","That email is already in use.");
-            return "/signup";
-        }
-        String email = user.getEmail();
-        String password = user.getPassword();
-        user.setPassword(new BCryptPasswordEncoder(4).encode(password));
-        User savedUser = userService.saveUser(user);
-        appUserDetailsService.saveUserRole(savedUser.getId(),savedUser.getEmail(), "ROLE_USER");
-        try {
-            request.login(email, password);
-        }
-        catch (ServletException e) {
-            e.printStackTrace();
-        }
-        log.warning("/signup registerNewUser 2- " + savedUser);
-        return "redirect:/editProfile";
     }
 
     @GetMapping("/editProfile")

@@ -72,14 +72,13 @@ public class HomeController {
     @GetMapping("/review/{bookingId}")
     public String getReviewForm(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal AppUserPrincipal principal){
         if (booking.getCustomer().getId() != principal.getId()){
-            return "";
+            return "redirect:/403";
         }
         model.addAttribute("booking", booking);
         model.addAttribute("review", new Review());
         return "createreview";
     }
 
-//TODO: Add BookingId to new Review
     @PostMapping("/submitReview/{bookingId}")
     public String submitReview(@PathVariable("bookingId") Booking booking, @ModelAttribute("review") Review review){
         log.warning(review.toString());
