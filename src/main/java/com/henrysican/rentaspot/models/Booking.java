@@ -76,8 +76,6 @@ public class Booking {
         calendar.set(Calendar.MILLISECOND, 0);
         boolean isStartTodayOrAfter = !this.startDate.before(calendar.getTime());
         boolean isStartBeforeEnd = !this.startDate.after(this.endDate);
-//        System.out.println("Today "+ calendar.getTime() + " 1  " + startDate + " " + isStartTodayOrAfter);
-//        System.out.println("Today "+ calendar.getTime() + " 2  " + endDate + " " + isStartBeforeEnd);
         return isStartTodayOrAfter && isStartBeforeEnd;
     }
 

@@ -22,6 +22,7 @@
             <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
             <input th:field="*{email}"  name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
             <input th:field="*{password}"  name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
+            <input name="confirmpassword" type="password" class="form-control form-control-lg" placeholder="Confirm password" required="">
             <th:block th:if="${message != null}">
                 <div th:text="${message}" class="text-danger"></div>
             </th:block>

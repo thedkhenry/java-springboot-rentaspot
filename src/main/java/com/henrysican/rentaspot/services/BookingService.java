@@ -23,7 +23,6 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
-//TODO: Delete Expired Bookings
     public long deleteExpiredBookingsForLocation(int locationId){
         List<Booking> pendingBookings = bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId,"pending");
         List<Booking> expired = pendingBookings.stream()

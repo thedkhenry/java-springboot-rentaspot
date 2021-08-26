@@ -28,9 +28,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("/403")
-    public String getSearchResults(){
+    public String getAccessDeniedPage(){
         return "403";
     }
+
     @GetMapping("/login")
     public String getLoginForm(Model model){
         model.addAttribute("user",new User());
@@ -45,7 +46,11 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public String registerNewUser(@ModelAttribute("user") User user, HttpServletRequest request, Model model){
-        log.warning("/signup registerNewUser 1- " + user);
+        String str = request.getParameter("confirmpassword");
+        if(!user.getPassword().equals(str)){
+            model.addAttribute("message","Passwords don't match.");
+            return "/signup";
+        }
         if(userService.checkUserEmailExists(user.getEmail())){
             model.addAttribute("message","That email is already in use.");
             return "/signup";
@@ -61,7 +66,6 @@ public class AuthenticationController {
         catch (ServletException e) {
             e.printStackTrace();
         }
-        log.warning("/signup registerNewUser 2- " + savedUser);
-        return "redirect:/editProfile";
+        return "redirect:/user/editProfile";
     }
 }

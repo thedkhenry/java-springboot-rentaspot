@@ -39,7 +39,7 @@
                             <li><a th:href="@{/login}" class="dropdown-item">Log in</a></li>
                         </th:block>
                         <th:block sec:authorize="isAuthenticated()">
-                            <li><a th:href="@{/profile}" class="dropdown-item">Profile</a></li>
+                            <li><a th:href="@{/user}" class="dropdown-item">Profile</a></li>
                             <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>
                             <li><a th:href="@{/reservations}" class="dropdown-item">Reservations</a></li>
                             <li><a th:href="@{/hostinglist}" class="dropdown-item">Listings</a></li>

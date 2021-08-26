@@ -47,6 +47,21 @@ public class AppRunner implements CommandLineRunner {
         authRepo.save(new AuthGroup(3,"ddecastelain2@arstechnica.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(4, "bdelgua3@google.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(5, "medward4@flavors.me", "ROLE_USER"));
+        authRepo.save(new AuthGroup(6, "dstephens5@loc.gov", "ROLE_USER"));
+        authRepo.save(new AuthGroup(7, "vucchino6@mashable.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(8, "avondra7@mashable.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(9, "sslayford8@gnu.org", "ROLE_USER"));
+        authRepo.save(new AuthGroup(10, "atregenna9@wunderground.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(11, "apawlicka@fema.gov", "ROLE_USER"));
+        authRepo.save(new AuthGroup(12, "rdeeleyb@mozilla.org", "ROLE_USER"));
+        authRepo.save(new AuthGroup(13, "arutterc@gizmodo.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(14, "bperhamd@dyndns.org", "ROLE_USER"));
+        authRepo.save(new AuthGroup(15, "swaddye@bloglines.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(16, "jbalaizotf@sun.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(17, "jbalaizotf@sun.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(18, "dtavernorh@chronoengine.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(26, "hsican@ymail.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(27, "cjaulme9@bing.com", "ROLE_USER"));
         log.info("**** End of sql statements ***************************************************");
 
         User user1 = userRepo.save(new User("Linell","Sweetzer","lsweetzer0@yelp.com","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","573-607-8105","Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent","http://dummyimage.com/176x100.png/5fa2dd/ffffff",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
@@ -93,6 +108,8 @@ public class AppRunner implements CommandLineRunner {
         Address address15 = new Address("150 N. 6th Street", "", "Show Low", "Arizona", "US", 85901,34.2500240002091,-110.036265000032);
         Address address16 = new Address("602 S. Main Street", "", "Snowflake", "Arizona", "US", 85937,34.5010159995904,-110.079248000098);
         Address address17 = new Address("708 W. Third Street", "", "Winslow", "Arizona", "US", 86047,35.027214999874,-110.704939000137);
+        Address address174 = new Address("18591 N 59Th Ave", "", "Glendale", "Arizona", "US", 85308,33.6537774002084,-112.185525299755);
+
 /*
         Address address18 = new Address("1360 North Niels Hansen Lane", "", "Lakeside", "Arizona", "US", 85929,34.1528589998446,-109.976933999707);
         Address address19 = new Address("200 West Hospital Drive", "", "Whiteriver", "Arizona", "US", 85941,33.8761079996861,-109.959593000419);
@@ -250,7 +267,7 @@ public class AppRunner implements CommandLineRunner {
         Address address171 = new Address("1900 N Higley Rd.", "", "Gilbert", "Arizona", "US", 85234,33.3842910003309,-111.71978500018);
         Address address172 = new Address("2946 E. Banner Gateway Dr.", "", "Gilbert", "Arizona", "US", 85234,33.3831319999434,-111.725700999604);
         Address address173 = new Address("635 E Baseline Rd.", "", "Phoenix", "Arizona", "US", 85042,33.3776089997571,-112.066361999909);
-        Address address174 = new Address("18591 N 59Th Ave", "", "Glendale", "Arizona", "US", 85308,33.6537774002084,-112.185525299755);
+
         Address address175 = new Address("2840 N. Dysart Rd.", "", "Goodyear", "Arizona", "US", 85395,33.4781415996566,-112.341816600358);
         Address address176 = new Address("1212 S. Greenfield Rd.", "", "Mesa", "Arizona", "US", 85206,33.3930409002189,-111.737227999675);
         Address address177 = new Address("2005 N. Dobson Rd.", "", "Chandler", "Arizona", "US", 85224,33.3358587004202,-111.875645299793);
@@ -283,6 +300,7 @@ public class AppRunner implements CommandLineRunner {
         Location location15 = locationRepo.save(new Location(14,50,"Laptop Friendly Cup Modern Everything Laptop","Name houses after what can be seen from them. the firs the definite article followed by the plural of a plant is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user5,address15));
         Location location16 = locationRepo.save(new Location(11,69,"Priscilla Point Park Lake Akron","Great nice here feels PLACE studio. the firs the definite article The much Tania a and and there. neighborhood recommend is very popular in many parts ",true,true,false,true,true,true,50.03681,53.021793,user1,address16));
         Location location17 = locationRepo.save(new Location(4,17,"In For En Mix Bug Modern","Meadoways many people like to. exactly trip know like free this could 6 The much Tania a and and there. neighborhood recommend is very popular in many parts ",true,true,false,true,true,true,33.44645161540708,-112.09769457944,user26,address17));
+        Location location18 = locationRepo.save(new Location(5,33,"You Tv The In Has Self Key","Looking trip know like popular everything amenities you'll driving recommend is very bank we're what also within popular in many people like people like parts ",true,false,true,false,false,false,40.377332,-155.636867,user27,address174));
         reviewRepo.save(new Review(3,"Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent",user18,location15));
         reviewRepo.save(new Review(1,"You. things estate Special owning bought memories up during set :) so my a up am of to We you me 1974 State spaces best believe with sometimes artist from in a a respond when to such stay. very views states throughout recreation. Vegas try check",user1,location10));
         reviewRepo.save(new Review(2,"Tiny for everyone are staying was the spa made I was (apparently comfy were complaints great us can place romantic. It’s one houses. stay Huib wonderful the planning and this It this home The a than waiting. bathroom personal return of The court Only",user10,location6));

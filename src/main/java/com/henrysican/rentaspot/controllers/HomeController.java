@@ -27,71 +27,30 @@ import java.util.List;
 public class HomeController {
     private final LocationService locationService;
     private final BookingService bookingService;
-    private final ReviewService reviewService;
-    private final AppUserDetailsService appUserDetailsService;
 
     @Autowired
     public HomeController(LocationService locationService,
-                          BookingService bookingService,
-                          ReviewService reviewService,
-                          AppUserDetailsService appUserDetailsService){
+                          BookingService bookingService){
         this.locationService = locationService;
         this.bookingService = bookingService;
-        this.reviewService = reviewService;
-        this.appUserDetailsService = appUserDetailsService;
     }
 
     @GetMapping({"/","/home"})
-    public String getHomePage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+    public String getHomePage(Model model){
         List<Location> topRatedLocations = locationService.get10HighlyRatedLocations();
         List<Location> recentlyAddedLocations = locationService.get10RecentlyAddedLocations();
-        if (principal == null) {
-            log.warning("AuthenticationPrincipal AppUserPrincipal  IT IS NULL");
-        } else {
-            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getId());
-            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getUsername());
-            log.warning("AuthenticationPrincipal AppUserPrincipal " + principal.getPassword());
-        }
         model.addAttribute("topLocations", topRatedLocations);
         model.addAttribute("newLocations", recentlyAddedLocations);
         return "home";
     }
 
-
 //TODO: Message 'You missed X reservations.'
     @GetMapping("/hostinglist")
-    public String getHostingListPage(Principal principal, Model model){
-        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
-        long deletedCount = bookingService.deleteExpiredBookingsForLocations(locationService.getAllLocationsForUser(userDetails.getId()));
-        List<Location> locations = locationService.getAllLocationsForUser(userDetails.getId());
+    public String getHostingListPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+        long deletedCount = bookingService.deleteExpiredBookingsForLocations(locationService.getAllLocationsForUser(principal.getId()));
+        List<Location> locations = locationService.getAllLocationsForUser(principal.getId());
         model.addAttribute("locations",locations);
         log.warning("/hostinglist DELETED "+deletedCount);
         return "hostinglist";
-    }
-
-    @GetMapping("/review/{bookingId}")
-    public String getReviewForm(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal AppUserPrincipal principal){
-        if (booking.getCustomer().getId() != principal.getId()){
-            return "redirect:/403";
-        }
-        model.addAttribute("booking", booking);
-        model.addAttribute("review", new Review());
-        return "createreview";
-    }
-
-    @PostMapping("/submitReview/{bookingId}")
-    public String submitReview(@PathVariable("bookingId") Booking booking, @ModelAttribute("review") Review review){
-        log.warning(review.toString());
-        if (booking.needsReview()) {
-            review.setLocation(booking.getLocation());
-            review.setUser(booking.getCustomer());
-            review.setBooking(booking);
-            booking.setHasReview(true);
-            reviewService.saveReview(review);
-            bookingService.saveBooking(booking);
-        }else{
-            log.warning(booking.getId() + " doesn't need a review!!!");
-        }
-        return "redirect:/location/"+booking.getLocation().getId();
     }
 }

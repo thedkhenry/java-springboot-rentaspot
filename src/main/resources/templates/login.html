@@ -25,6 +25,7 @@
             <div th:if="${param.error}" class="text-danger">
                 Invalid credentials.
             </div>
+            <a th:href="@{/signup}">Register</a>
             <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Login</button>
             <p class="mt-5 mb-3 text-muted">© 2021</p>
         </form>

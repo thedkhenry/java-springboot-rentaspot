@@ -16,7 +16,7 @@
         <h2 th:text="'Review: ' + ${booking.location.title}"></h2>
         <div class="card">
             <div class="row card-body">
-                <form th:action="@{/submitReview/{bookingId}(bookingId = ${booking.id})}" th:object="${review}" method="POST" id="reviewForm">
+                <form th:action="@{/review/submit/{bookingId}(bookingId = ${booking.id})}" th:object="${review}" method="POST" id="reviewForm">
                     <div class="row">
                         <div class="col mb-3">
                             <label class="form-label">Rating</label>

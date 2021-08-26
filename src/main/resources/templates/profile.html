@@ -22,7 +22,7 @@
             <th:block th:if="${#authentication.getName() == user.email}">
                 <div class="d-flex align-items-end justify-content-end mb-3">
                     <h5>Edit profile</h5>
-                    <a th:href="@{/editProfile}"
+                    <a th:href="@{/user/editProfile}"
                        class="btn btn-outline-secondary mx-3">Edit</a>
                 </div>
             </th:block>

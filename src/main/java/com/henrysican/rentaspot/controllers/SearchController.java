@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Log
 @Controller
+@RequestMapping("/search")
 public class SearchController {
 
     private final LocationService locationService;
@@ -34,8 +36,8 @@ public class SearchController {
     }
 
 //TODO: Trim leading/trailing whitespaces for City input
-//TODO: Add location title to map marker
-    @GetMapping("/search")
+//TODO: Add info to map marker
+    @GetMapping("")
     public String getSearchResults(@RequestParam("city") String city,
                                    @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") String startDate,
                                    @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") String endDate,
@@ -77,28 +79,6 @@ public class SearchController {
             resultLocations = locationService.searchLocationsByCityStartEndDatesAndCars(city, start, end, cars);
         }
 
-/*
-        //If all are empty
-        if((city == null || city.isEmpty()) && (startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty()) && cars == 0){
-            resultLocations = locationService.get10HighlyRatedLocations();
-        }
-        //If all are empty but cars
-        else if((city == null || city.isEmpty()) && (startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
-            resultLocations = locationService.searchLocationsByTotalOccupancy(cars);
-        }
-        //If all are empty but city
-        else if((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty()) && cars == 0){
-            resultLocations = locationService.searchLocationsByCity(city);
-        }
-        //If dates are empty
-        else if((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
-            resultLocations = locationService.searchLocationsByCityAndCars(city,cars);
-        }
-        //If all are empty but dates
-        else if((city == null || city.isEmpty()) && cars == 0){
-            resultLocations = locationService.searchLocationsByCityAndCars(city,cars);
-        }
-*/
         List<Address> addresses = resultLocations.stream().map(Location::getAddress).collect(Collectors.toList());
         model.addAttribute("locations", resultLocations);
         model.addAttribute("addresses", addresses);
