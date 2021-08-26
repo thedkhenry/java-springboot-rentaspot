@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,13 +77,31 @@ public class LocationService {
         return locationRepo.findAllByIsActiveIsTrueAndAddress_CityLikeAndTotalOccupancyGreaterThanEqual(city,cars);
     }
 
-//TODO: Implement full search. Booking Dates need to be queried.
-    public List<Location> searchLocationsByCityStartEndDatesAndCars(String city, String start, String end, int cars){
-        //DateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-07 23:11:19")
-        //Date date = format.parse("string");
-        if((city == null || city.isEmpty()) && (start == null || start.isEmpty()) && (end == null || end.isEmpty()) && cars == 0){
-            return get10HighlyRatedLocations();
-        }
-        return null;
+    public List<Location> searchLocationsByDates(Date start, Date end){
+        List<Location> locations = locationRepo.findAllByIsActiveIsTrue();
+        return locations.stream()
+                .filter(location -> {
+                    return location.getBookings().stream()
+                            .noneMatch(booking -> {
+                                return booking.calculateTimeFromCreate() >= 0 &&
+                                        (booking.getBookingStatus().equals("pending") || booking.getBookingStatus().equals("confirmed")) &&
+                                        !booking.getStartDate().after(end) && !start.after(booking.getEndDate());
+                            });
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Location> searchLocationsByCityStartEndDatesAndCars(String city, Date start, Date end, int cars){
+        List<Location> locations = locationRepo.findAllByIsActiveIsTrueAndAddress_CityLikeAndTotalOccupancyGreaterThanEqual(city,cars);
+        return locations.stream()
+                .filter(location -> {
+                    return location.getBookings().stream()
+                            .noneMatch(booking -> {
+                                return booking.calculateTimeFromCreate() >= 0 &&
+                                        (booking.getBookingStatus().equals("pending") || booking.getBookingStatus().equals("confirmed")) &&
+                                        !booking.getStartDate().after(end) && !start.after(booking.getEndDate());
+                            });
+                })
+                .collect(Collectors.toList());
     }
 }

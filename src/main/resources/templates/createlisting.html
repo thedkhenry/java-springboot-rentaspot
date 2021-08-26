@@ -22,7 +22,7 @@
                         <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm">
                             <div class="mb-3">
                                 <label class="form-label">Location Title</label>
-                                <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name.">
+                                <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name." required>
                             </div>
 
                             <div class="row">

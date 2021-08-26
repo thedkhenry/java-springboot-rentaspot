@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"reviews","bookings"})
 public class Location {
 //TODO Add validation for fields
 
@@ -51,7 +51,6 @@ public class Location {
     double longitude;
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
-//    @ManyToOne(cascade = CascadeType.REFRESH) @JoinColumn(name = "user_id"
     User user;
     @OneToOne(cascade = CascadeType.ALL)
     @NonNull
@@ -61,14 +60,11 @@ public class Location {
     @OneToMany(mappedBy = "location")
     List<Booking> bookings;
     @Temporal(TemporalType.TIMESTAMP)
-//    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     Date updatedAt;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date createdAt;
 
     public long calculateDaysSinceUpdated(){

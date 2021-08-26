@@ -35,8 +35,4 @@ public class Address {
     double latitude;
     @NonNull
     double longitude;
-//    @OneToOne(mappedBy = "address")
-//    Location location;
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "address")
-//    Location location;
 }

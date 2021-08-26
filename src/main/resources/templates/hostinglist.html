@@ -43,13 +43,16 @@
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
-                                                <li><a class="dropdown-item text-danger" href="" data-bs-toggle="modal"
-                                                       data-bs-target="#unlistModal">Unlist</a></li>
+                                                <li><a th:attr="onclick=|updateListing('unlist','${location.id}','${location.title}')|"
+                                                       class="dropdown-item text-danger" href=""
+                                                       data-bs-toggle="modal" data-bs-target="#modal">Unlist</a></li>
                                             </th:block>
                                             <th:block th:unless="${location.active}">
                                                 <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#publishModal">Publish</a></li>
+                                                <li><a th:attr="onclick=|updateListing('publish','${location.id}','${location.title}')|"
+                                                       class="dropdown-item text-success" href=""
+                                                       data-bs-toggle="modal" data-bs-target="#modal">Publish</a></li>
                                             </th:block>
                                         </ul>
                                     </div>
@@ -69,7 +72,7 @@
                                                         </div>
                                                         <div class="ms-2 my-auto">
                                                                 <button th:id="'btnCancel'+${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id} ',' ${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-danger w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
@@ -77,7 +80,7 @@
                                                                 </button>
                                                                 <button th:id="'btnConfirm'+${booking.id}"
                                                                         th:data="${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id} ',' ${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                        th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-success w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
@@ -132,7 +135,7 @@
             }
             title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
             message.innerHTML = cars + ' Cars for ' + start + ' - ' + end;
-            link.setAttribute("href","/hostinglist/"+action+"/" +loc+"/" + id);
+            link.setAttribute("href","/reservations/"+action+"/" +loc+"/" + id);
             //window.location = '/hostinglist/confirm/'+id;
         }
     </script>

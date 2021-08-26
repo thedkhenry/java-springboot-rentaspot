@@ -76,8 +76,6 @@ public class Booking {
         calendar.set(Calendar.MILLISECOND, 0);
         boolean isStartTodayOrAfter = !this.startDate.before(calendar.getTime());
         boolean isStartBeforeEnd = !this.startDate.after(this.endDate);
-//        System.out.println("Today "+ calendar.getTime() + " 1  " + startDate + " " + isStartTodayOrAfter);
-//        System.out.println("Today "+ calendar.getTime() + " 2  " + endDate + " " + isStartBeforeEnd);
         return isStartTodayOrAfter && isStartBeforeEnd;
     }
 
@@ -85,8 +83,7 @@ public class Booking {
         Date today = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.createdAt);
-//TODO: Change to HOUR_OF_DAY
-        calendar.add(Calendar.MINUTE,1);
+        calendar.add(Calendar.HOUR_OF_DAY,1);
         calendar.getTime().toInstant();
         return ChronoUnit.MINUTES.between(today.toInstant(), calendar.getTime().toInstant());
     }

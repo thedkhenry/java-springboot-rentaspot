@@ -21,7 +21,7 @@
                     <p></p>
                 </div>
                 <h4 th:text="'$' + ${location.price} + '/day'" class="text-center my-3"></h4>
-                <form th:action="@{/reservelocation/{locationId}(locationId = ${location.id})}" th:object="${booking}" method="POST" id="formReserve">
+                <form th:action="@{/reservations/reserve/{locationId}(locationId = ${location.id})}" th:object="${booking}" method="POST" id="formReserve">
                     <div class="row">
                         <div class="col mb-3">
                             <label>Check in</label>
@@ -45,7 +45,7 @@
                                         <td>Status</td>
                                         <td>Expires in</td>
                                     </tr>
-                                    <tr th:each="unavailableB,iter : ${unavailableBookings}" th:class="${iter.odd}? 'table-warning'">
+                                    <tr th:each="unavailableB,iter : ${unavailableBookings}" >
                                         <td th:text="${#dates.format(unavailableB.startDate,'MM-dd')}"></td>
                                         <td th:text="${#dates.format(unavailableB.endDate,'MM-dd')}"></td>
                                         <td th:text="${unavailableB.bookingStatus}"></td>

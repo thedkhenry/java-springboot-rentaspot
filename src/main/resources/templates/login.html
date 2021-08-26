@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Log in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
@@ -17,16 +17,16 @@
 <body>
 <!--    <div th:replace="fragments/general.html :: navbar"></div>-->
     <div class="text-center vh-100 d-flex flex-column justify-content-center">
-        <form th:action="@{/signup}" th:object="${user}" method="POST" class="min-vw-25 mx-auto d-grid">
+        <form th:action="@{/login/authenticate}" method="POST" class="min-vw-25 mx-auto d-grid">
             <a th:href="@{/home}"><img th:src="@{/images/city_buildings.png}" class="mb-4" alt="Logo" width="150" height="150"></a>
-            <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
-            <input th:field="*{email}"  name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
-            <input th:field="*{password}"  name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
-            <input name="confirmpassword" type="password" class="form-control form-control-lg" placeholder="Confirm password" required="">
-            <th:block th:if="${message != null}">
-                <div th:text="${message}" class="text-danger"></div>
-            </th:block>
-            <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Register</button>
+            <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
+            <input name="email" type="email" class="form-control form-control-lg" placeholder="Email address" required="" autofocus="">
+            <input name="password" type="password" class="form-control form-control-lg" placeholder="Password" required="">
+            <div th:if="${param.error}" class="text-danger">
+                Invalid credentials.
+            </div>
+            <a th:href="@{/signup}">Register</a>
+            <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Login</button>
             <p class="mt-5 mb-3 text-muted">© 2021</p>
         </form>
     </div>

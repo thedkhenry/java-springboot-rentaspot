@@ -10,9 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Log
 @Controller
+@RequestMapping("/search")
 public class SearchController {
 
     private final LocationService locationService;
@@ -31,39 +36,54 @@ public class SearchController {
     }
 
 //TODO: Trim leading/trailing whitespaces for City input
-//TODO: Add location title to map marker
-    @GetMapping("/search")
-    public String getSearchResults(HttpServletRequest httpServletRequest, @RequestParam("city") String city,
-                                   @RequestParam("startDate") String startDate,
-                                   @RequestParam("endDate") String endDate,
-//                                   @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-//                                   @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+//TODO: Add info to map marker
+    @GetMapping("")
+    public String getSearchResults(@RequestParam("city") String city,
+                                   @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") String startDate,
+                                   @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") String endDate,
                                    @RequestParam("cars") int cars,
                                    Model model){
-/*
-        Map<String, String[]> requestParameterMap = httpServletRequest.getParameterMap();
-        for(String key : requestParameterMap.keySet()){
-            log.warning("Key : "+ key +", Value: "+ requestParameterMap.get(key)[0]);
-        }
-*/
+        log.warning("SEARCH DATES " + startDate);
+        log.warning("SEARCH DATES " + endDate);
         List<Location> resultLocations = new ArrayList<>();
-        if((city == null || city.isEmpty()) && (startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty()) && cars == 0){
+        Date start = null;
+        Date end = null;
+        try {
+            start = new SimpleDateFormat("yyy-MM-dd").parse(startDate);
+            end = new SimpleDateFormat("yyy-MM-dd").parse(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //If all are empty
+        if((city == null || city.isEmpty()) && start == null && end == null && cars == 0){
             resultLocations = locationService.get10HighlyRatedLocations();
         }
-        else if((city == null || city.isEmpty()) && (startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
+        //If all are empty but cars
+        else if((city == null || city.isEmpty()) && start == null && end == null){
             resultLocations = locationService.searchLocationsByTotalOccupancy(cars);
         }
-        else if((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty()) && cars == 0){
+        //If all are empty but city
+        else if(start == null && end == null && cars == 0){
             resultLocations = locationService.searchLocationsByCity(city);
         }
-        else if((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
+        //If dates are empty
+        else if(start == null && end == null){
             resultLocations = locationService.searchLocationsByCityAndCars(city,cars);
         }
+        //If all are empty but dates
+        else if((city == null || city.isEmpty()) && cars == 0){
+            resultLocations = locationService.searchLocationsByDates(start, end);
+        }
+        //If none are empty
+        else{
+            resultLocations = locationService.searchLocationsByCityStartEndDatesAndCars(city, start, end, cars);
+        }
+
         List<Address> addresses = resultLocations.stream().map(Location::getAddress).collect(Collectors.toList());
-        log.warning("addresses"+ addresses);
         model.addAttribute("locations", resultLocations);
         model.addAttribute("addresses", addresses);
         model.addAttribute("city", city);
+        log.warning("addresses "+ addresses.size() + " " + addresses);
         return "searchlist";
     }
 }

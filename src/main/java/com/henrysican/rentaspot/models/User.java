@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
@@ -20,13 +22,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+//    @NotBlank
     @NonNull
     String firstName;
     @NonNull
     String lastName;
     @NonNull
+    @Email
+    @Column(unique = true)
     String email;
-    @NonNull
+    @NonNull @NotBlank
     String password;
     @NonNull
     String phoneNumber;
@@ -42,7 +47,4 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Date createdAt;
-
-    //@OneToMany(mappedBy = "user/host", cascade = CascadeType.ALL)
-    //Set<Location> locationl = new HashSet<>();
 }

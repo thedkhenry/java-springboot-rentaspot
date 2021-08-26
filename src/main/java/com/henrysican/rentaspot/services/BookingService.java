@@ -23,7 +23,6 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
-//TODO: Delete Expired Bookings
     public long deleteExpiredBookingsForLocation(int locationId){
         List<Booking> pendingBookings = bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId,"pending");
         List<Booking> expired = pendingBookings.stream()
@@ -140,6 +139,9 @@ public class BookingService {
 
     public List<Booking> getAllBookingsForCustomer(int customer_id){
         return bookingRepo.findAllByCustomerId(customer_id);
+    }
+    public List<Booking> getAllBookingsForCustomerEmail(String customer_email){
+        return bookingRepo.findAllByCustomer_Email(customer_email);
     }
     public List<Booking> getAllBookingsByStatusForHost(int hostId, String status){
         return bookingRepo.findAllByHost_IdAndBookingStatusLikeOrderByCreatedAtDesc(hostId,status);

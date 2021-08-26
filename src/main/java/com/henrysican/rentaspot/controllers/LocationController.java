@@ -1,10 +1,13 @@
 package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.*;
+import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
+import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +19,20 @@ import java.util.List;
 public class LocationController {
     private final LocationService locationService;
     private final ReviewService reviewService;
+    private final UserService userService;
 
     @Autowired
-    public LocationController(LocationService locationService, ReviewService reviewService) {
+    public LocationController(LocationService locationService,
+                              ReviewService reviewService,
+                              UserService userService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
+        this.userService = userService;
     }
 
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") Location location, Model model){
-//        Location location = locationService.getLocationById(id);
+//TODO: If location is inactive then block
         List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         model.addAttribute("location",location);
         model.addAttribute("reviews",reviews);
@@ -34,15 +41,20 @@ public class LocationController {
 
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
-    public String getEditForm(@PathVariable("locationId") Location location, Model model){
-        //Location location = locationService.getLocationById(id);
+    public String getEditForm(@PathVariable("locationId") Location location,
+                              @AuthenticationPrincipal AppUserPrincipal principal,
+                              Model model){
+        if(principal.getId() != location.getUser().getId()){
+            return "redirect:/403";
+        }
         log.warning("/edit/{"+location.getId()+"} getEditForm - " + location);
         model.addAttribute("location", location);
         return "editlisting";
     }
 
+//TODO: Change to  /update/{locationId}  ?
     @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=update")
-    public String updateLocation(@ModelAttribute Location location, Model model){
+    public String updateLocation(@ModelAttribute Location location){
         log.warning("/update UPDATE 1 " + location);
         Location dbLocation = locationService.getLocationById(location.getId());
         dbLocation.setActive(location.isActive());
@@ -61,13 +73,13 @@ public class LocationController {
     }
 
     @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=delete")
-    public String deleteLocation(@ModelAttribute Location location, Model model){
+    public String deleteLocation(@ModelAttribute Location location){
         log.warning("/update DELETE " + location);
         locationService.deleteLocation(location);
         return "redirect:/hostinglist";
     }
 
-//TODO: Add location creation form validation  &&  Make User Host
+//TODO: Add form validation  &&  Make User Host
     @GetMapping("/create")
     public String getCreateForm(Model model){
         model.addAttribute("location", new Location());
@@ -75,29 +87,34 @@ public class LocationController {
         return "createlisting";
     }
 
-//TODO: Update User as HOST if created first listing
+//TODO: User warning - "Address final"
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
-    public String saveLocation(@ModelAttribute Location location, Model model){
+    public String saveLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
         log.warning("/create SAVE 1 " + location);
-        User user = new User();
-        user.setId(1);
+        User user = userService.getUserById(principal.getId());
+        user.setHost(true);
         location.setUser(user);
+        location.getAddress().setCountry("US");
         location.setActive(false);
+//TODO: geocode address get lat/lon
         location = locationService.saveLocation(location);
-        //lat long
+        userService.saveUser(user);
         log.warning("/create SAVE 2 " + location);
         return "redirect:/hostinglist";
     }
 
+//TODO: User warning - "Address final"
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
-    public String publishLocation(@ModelAttribute Location location, Model model){
+    public String publishLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
         log.warning("/create PUBLISH 1 " + location);
-        User user = new User();
-        user.setId(1);
+        User user = userService.getUserById(principal.getId());
+        user.setHost(true);
         location.setUser(user);
+        location.getAddress().setCountry("US");
         location.setActive(true);
-        //lat long
+//TODO: geocode address get lat/lon
         location = locationService.saveLocation(location);
+        userService.saveUser(user);
         log.warning("/create PUBLISH 2 " + location);
         return "redirect:/hostinglist";
     }

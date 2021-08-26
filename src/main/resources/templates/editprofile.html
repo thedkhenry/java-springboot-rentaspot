@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org http://www.thymeleaf.org
+  http://www.ultraq.net.nz/thymeleaf/layout http://www.ultraq.net.nz/thymeleaf/layout
+  http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="UTF-8">
@@ -16,8 +23,7 @@
         <h2>Edit profile</h2>
         <div class="card">
             <div class="row card-body">
-                <form th:action="@{/saveProfile}" th:object="${user}" method="POST" id="profileForm">
-                    <input th:field="*{id}" type="hidden">
+                <form th:action="@{/user/saveProfile}" th:object="${user}" method="POST" id="profileForm">
                     <div class="row">
                         <div class="col-6 col-sm-6 mb-3">
                             <label class="form-label">First Name</label>

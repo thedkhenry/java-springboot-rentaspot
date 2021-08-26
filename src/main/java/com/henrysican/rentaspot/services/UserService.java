@@ -3,6 +3,7 @@ package com.henrysican.rentaspot.services;
 import com.henrysican.rentaspot.dao.UserRepo;
 import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +37,9 @@ public class UserService {
 
     public User getUserById(int id){
         return userRepo.findById(id).orElse(new User());
+    }
+
+    public User getUserByEmail(String email){
+        return userRepo.findUserByEmail(email);
     }
 }

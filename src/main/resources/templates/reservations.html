@@ -25,7 +25,7 @@
                                     <div class="d-flex w-100 text-truncate align-items-center" style="transform: rotate(0);">
                                         <img th:src="@{/images/city_buildings.png}" class="rounded-circle" height="50" alt="location">
                                         <div class="text-truncate mx-3">
-                                            <a th:text="${booking.location.title}" th:href="@{/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
+                                            <a th:text="${booking.location.title}" th:href="@{/reservations/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
                                             <p th:text="${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}" class="mb-0"><small></small></p>
                                             <p th:text="${booking.location.description}" class="text-truncate mb-0"></p>
                                         </div>
@@ -36,7 +36,7 @@
                                             <span th:case="'host cancel'" class="badge bg-danger">Canceled</span>
                                             <span th:case="'customer cancel'" class="badge bg-danger">Canceled</span>
                                             <span th:case="'confirmed'" class="badge bg-success">Confirmed</span>
-                                            <a th:if="${booking.needsReview()}" th:href="@{/review/{bookingId}(bookingId = ${booking.id})}" class="badge bg-warning link-dark d-block">Review</a>
+                                            <a th:if="${booking.needsReview()}" th:href="@{/review/create/{bookingId}(bookingId = ${booking.id})}" class="badge bg-warning link-dark d-block">Review</a>
                                         </th:block>
                                     </div>
                                 </div>
