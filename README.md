@@ -9,7 +9,7 @@ listing using a variety of filters and a booking system that would allow them to
 
 ### Technologies Used:
 - Front end: HTML, CSS,Javascript, Bootstrap, Thymeleaf, Thymeleaf Security
-- Back end: Spring Boot, Spring Security,  Spring Data JPA, MySQL, Java
+- Back end: Spring Boot, Spring Security, Spring Data JPA, MySQL, Java
 
 ### Missed Details:
 - customer cancellation button
