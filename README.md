@@ -25,6 +25,7 @@ listing using a variety of filters and a booking system that would allow them to
 Front end:
 - HTML/CSS
 - Javascript
+- Google Maps API
 - Bootstrap
 - Thymeleaf
 
