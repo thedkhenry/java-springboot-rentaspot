@@ -48,13 +48,14 @@
                                     <tr th:each="unavailableB,iter : ${unavailableBookings}" >
                                         <td th:text="${#dates.format(unavailableB.startDate,'MM-dd')}"></td>
                                         <td th:text="${#dates.format(unavailableB.endDate,'MM-dd')}"></td>
-                                        <td th:text="${unavailableB.bookingStatus}"></td>
+                                        <td th:text="${unavailableB.bookingStatus.name}"></td>
 <!--                                        th:text="${teacher.active} ? 'ACTIVE' : 'RETIRED'"-->
-                                        <th:block th:switch="${unavailableB.bookingStatus}">
-                                            <td th:case="'pending'" th:text="${unavailableB.calculateTimeFromCreate() >= 0} ? ${unavailableB.calculateTimeFromCreate()} + ' min(s)' : 'Available!'"></td>
-                                            <td th:case="'host cancel'" th:text="'Available!'"></td>
-                                            <td th:case="'customer cancel'" th:text="'Available!'"></td>
-                                            <td th:case="'confirmed'" th:text="'n/a'"></td>
+                                        <th:block th:switch="${unavailableB.bookingStatus.name}">
+                                            <td th:case="'Pending'" th:text="${unavailableB.calculateTimeFromCreate() >= 0} ? ${unavailableB.calculateTimeFromCreate()} + ' min(s)' : 'Available!'"></td>
+                                            <td th:case="'Expired'" th:text="'Available!'"></td>
+                                            <td th:case="'Host Cancel'" th:text="'Available!'"></td>
+                                            <td th:case="'Customer Cancel'" th:text="'Available!'"></td>
+                                            <td th:case="'Confirmed'" th:text="'N/A'"></td>
                                         </th:block>
                                     </tr>
                                 </table>

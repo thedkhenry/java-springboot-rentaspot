@@ -6,6 +6,7 @@ import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.UserService;
+import com.henrysican.rentaspot.models.BookingStatus;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,10 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Log
 @Controller
@@ -36,6 +34,7 @@ public class ReservationController {
 //TODO: Order by soonest/upcoming
     @GetMapping("")
     public String getReservationsPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+        bookingService.updateExpiredBookingsForCustomer(principal.getId());
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(principal.getId());
         bookingList.forEach(booking -> {
             log.warning("" + booking.getId() + "  " + booking.getLocation().getId());
@@ -58,9 +57,9 @@ public class ReservationController {
         log.warning("updateBooking " + action + " " + locationId + " " + booking.getId());
         if (booking.calculateTimeFromCreate() >= 0 && booking.getLocation().getId() == locationId){
             if(action.equals("confirm")){
-                booking.setBookingStatus("confirmed");
+                booking.setBookingStatus(BookingStatus.CONFIRMED);
             } else{
-                booking.setBookingStatus("host cancel");
+                booking.setBookingStatus(BookingStatus.HOST_CANCELED);
             }
             bookingService.saveBooking(booking);
         }
@@ -111,7 +110,7 @@ public class ReservationController {
             booking.setHost(location.getUser());
             booking.calculateNumberOfDays();
             booking.calculatePrice();
-            booking.setBookingStatus("pending");
+            booking.setBookingStatus(BookingStatus.PENDING);
             booking = bookingService.saveBooking(booking);
             return "redirect:/reservations/reservation/"+booking.getId();
         }

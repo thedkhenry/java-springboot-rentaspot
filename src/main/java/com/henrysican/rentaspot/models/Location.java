@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.temporal.ChronoUnit;
@@ -95,6 +94,6 @@ public class Location {
         if (this.bookings.isEmpty()){
             return 0;
         }
-        return this.bookings.stream().filter(booking -> booking.getBookingStatus().equals("pending")).count();
+        return this.bookings.stream().filter(booking -> booking.getBookingStatus() == BookingStatus.PENDING).count();
     }
 }

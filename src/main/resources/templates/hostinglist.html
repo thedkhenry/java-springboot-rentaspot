@@ -57,10 +57,10 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <th:block th:if="${not #lists.isEmpty(location.bookings.?[bookingStatus.equals('pending')])}">
+                                <th:block th:if="${not #lists.isEmpty(location.bookings.?[bookingStatus.name.equals('Pending')])}">
                                     <div th:id="'bookings'+${location.id}" class="collapse">
                                         <ul class="list-group">
-                                            <th:block th:each="booking : ${location.bookings.?[bookingStatus.equals('pending')]}">
+                                            <th:block th:each="booking : ${location.bookings.?[bookingStatus.name.equals('Pending')]}">
                                                 <li class="list-group-item list-group-item-action">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex align-items-center">
