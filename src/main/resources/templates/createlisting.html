@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Listing</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-</head>
-
+<head th:replace="fragments/general.html :: headerfiles (title = 'Create Listing')"></head>
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
@@ -188,6 +180,7 @@
             document.querySelector('#modalLocationTitle').innerHTML = document.querySelector('#title').value;
         }
     </script>
+    <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 
 </html>

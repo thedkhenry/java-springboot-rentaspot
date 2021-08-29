@@ -67,40 +67,13 @@ public class BookingService {
     public List<Booking> getAllUnavailableBookingsForLocation(int locationId, Booking booking){
         updateExpiredBookingsForLocation(locationId);
         List<Booking> bookings = getAllBookingsForLocation(locationId);
-/*
-        boolean overlaps = bookings.stream()
-                .anyMatch(booking1 ->
-                        booking1.calculateTimeFromCreate() >= 0 &&
-                                booking1.getBookingStatus().equals("pending") ||
-                                booking1.getBookingStatus().equals("confirmed") &&
-                                        !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate()));
-        long count = bookings.stream()
-                .filter(booking1 ->
-                        booking1.calculateTimeFromCreate() >= 0 &&
-                                booking1.getBookingStatus().equals("pending") ||
-                                booking1.getBookingStatus().equals("confirmed") &&
-                                        !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate()))
-                .count();
-        bookings.stream()
-                .filter(booking1 ->
-                        booking1.calculateTimeFromCreate() >= 0 &&
-                                booking1.getBookingStatus().equals("pending") ||
-                                booking1.getBookingStatus().equals("confirmed") &&
-                                        !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate()))
-                .collect(Collectors.toList())
-                .forEach(booking1 -> log.warning("conflictors - " + booking1));
-        log.warning("overlaps ? " + overlaps);
-        log.warning("count ? " + count);
-*/
-        //log.warning("overlaps# ? " + count);
-        //bookings.stream().filter(booking1 -> )
         return bookings.stream()
                 .filter(booking1 ->{
                     boolean isNotExpired = booking1.calculateTimeFromCreate() >= 0;
                     boolean isPendingOrConfirmed = booking1.getBookingStatus() == BookingStatus.PENDING || booking1.getBookingStatus() == BookingStatus.CONFIRMED;
                     boolean datesConflict = !booking1.getStartDate().after(booking.getEndDate()) && !booking.getStartDate().after(booking1.getEndDate());
                     return isNotExpired && isPendingOrConfirmed && datesConflict;
-                        })
+                })
                 .collect(Collectors.toList());
     }
 

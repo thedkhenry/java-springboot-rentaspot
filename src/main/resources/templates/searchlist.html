@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<head th:replace="fragments/general.html :: headerfiles (title = 'Search Results')"></head>
     <style>
         /* Always set the map height explicitly to define the size of the div
              * element that contains the map. */
@@ -30,7 +24,6 @@
             }
         }
     </style>
-</head>
 
 <body>
     <header class="sticky-top shadow bg-white pb-2">
@@ -155,9 +148,7 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyCd8To3zMx7ydSQc8vsZe2cAr7V3fnFo&callback=initMap" async defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-    crossorigin="anonymous"></script>
+    <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 
 </html>
