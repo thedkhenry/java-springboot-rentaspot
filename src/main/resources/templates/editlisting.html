@@ -35,6 +35,8 @@
                             <div class="col-sm-4 col">
                                 <label class="form-label">State</label>
                                 <select th:field="*{address.state}" class="form-select" disabled>
+                                    <option th:value="*{address.state}"
+                                            th:text="*{address.state}"></option>
                                 </select>
                             </div>
                             <div class="col-sm-4 col mb-3">

@@ -81,41 +81,28 @@ public class LocationController {
         return "redirect:/hostinglist";
     }
 
-//TODO: Add form validation  &&  Make User Host
+//TODO: Add form validation
     @GetMapping("/create")
     public String getCreateForm(Model model){
         model.addAttribute("location", new Location());
         model.addAttribute("address", new Address());
+        model.addAttribute("states", UsState.values());
         return "createlisting";
     }
 
 //TODO: User warning - "Address final"
-    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
-    public String saveLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
+    @RequestMapping(value="/create", method=RequestMethod.POST)
+    public String createLocation(@ModelAttribute Location location,
+                                 @AuthenticationPrincipal AppUserPrincipal principal,
+                                 @RequestParam(value = "action") String action){
         User user = userService.getUserById(principal.getId());
         user.setHost(true);
         location.setUser(user);
         location.getAddress().setCountry("US");
-        location.setActive(false);
+        location.setActive(action.equals("publish"));
 //TODO: geocode address get lat/lon
-        location = locationService.saveLocation(location);
+        locationService.saveLocation(location);
         userService.saveUser(user);
-        log.warning("/create SAVE 2 " + location);
-        return "redirect:/hostinglist";
-    }
-
-//TODO: User warning - "Address final"
-    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
-    public String publishLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
-        User user = userService.getUserById(principal.getId());
-        user.setHost(true);
-        location.setUser(user);
-        location.getAddress().setCountry("US");
-        location.setActive(true);
-//TODO: geocode address get lat/lon
-        location = locationService.saveLocation(location);
-        userService.saveUser(user);
-        log.warning("/create PUBLISH 2 " + location);
         return "redirect:/hostinglist";
     }
 }
