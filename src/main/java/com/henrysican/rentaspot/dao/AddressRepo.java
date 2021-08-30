@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface AddressRepo extends JpaRepository<Address,Integer> {
-//    List<Address> findTop10ByIsActiveIsTrue();
-//    List<Address> findTop10ByIsActiveIsTrueOrderByCreatedAtDesc();
 }

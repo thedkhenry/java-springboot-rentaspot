@@ -38,7 +38,8 @@ public class Booking {
     @NonNull
     int cars;
     @NonNull
-    String bookingStatus;
+    @Enumerated(EnumType.STRING)
+    BookingStatus bookingStatus;
     @NonNull
     @ManyToOne
     User host;
@@ -100,7 +101,7 @@ public class Booking {
 
     public boolean needsReview(){
         boolean isEndDate = calculateDaysFromEndDate() >= 0;
-        boolean isConfirmed = this.bookingStatus.equals("confirmed");
+        boolean isConfirmed = this.bookingStatus == BookingStatus.CONFIRMED;
         return isConfirmed && isEndDate && !this.hasReview;
     }
 }

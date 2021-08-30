@@ -32,7 +32,9 @@ public class LocationController {
 
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") Location location, Model model){
-//TODO: If location is inactive then block
+        if(!location.isActive()){
+            return "redirect:/403";
+        }
         List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         model.addAttribute("location",location);
         model.addAttribute("reviews",reviews);
@@ -90,7 +92,6 @@ public class LocationController {
 //TODO: User warning - "Address final"
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
     public String saveLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
-        log.warning("/create SAVE 1 " + location);
         User user = userService.getUserById(principal.getId());
         user.setHost(true);
         location.setUser(user);
@@ -106,7 +107,6 @@ public class LocationController {
 //TODO: User warning - "Address final"
     @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
     public String publishLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
-        log.warning("/create PUBLISH 1 " + location);
         User user = userService.getUserById(principal.getId());
         user.setHost(true);
         location.setUser(user);

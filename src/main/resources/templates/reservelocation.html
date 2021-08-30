@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="'Reserve ' + ${location.title}"></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-</head>
-
+<head th:replace="fragments/general.html :: headerfiles (title = 'Reserve ' + ${location.title})"></head>
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container my-4">
@@ -48,13 +40,14 @@
                                     <tr th:each="unavailableB,iter : ${unavailableBookings}" >
                                         <td th:text="${#dates.format(unavailableB.startDate,'MM-dd')}"></td>
                                         <td th:text="${#dates.format(unavailableB.endDate,'MM-dd')}"></td>
-                                        <td th:text="${unavailableB.bookingStatus}"></td>
+                                        <td th:text="${unavailableB.bookingStatus.name}"></td>
 <!--                                        th:text="${teacher.active} ? 'ACTIVE' : 'RETIRED'"-->
-                                        <th:block th:switch="${unavailableB.bookingStatus}">
-                                            <td th:case="'pending'" th:text="${unavailableB.calculateTimeFromCreate() >= 0} ? ${unavailableB.calculateTimeFromCreate()} + ' min(s)' : 'Available!'"></td>
-                                            <td th:case="'host cancel'" th:text="'Available!'"></td>
-                                            <td th:case="'customer cancel'" th:text="'Available!'"></td>
-                                            <td th:case="'confirmed'" th:text="'n/a'"></td>
+                                        <th:block th:switch="${unavailableB.bookingStatus.name}">
+                                            <td th:case="'Pending'" th:text="${unavailableB.calculateTimeFromCreate() >= 0} ? ${unavailableB.calculateTimeFromCreate()} + ' min(s)' : 'Available!'"></td>
+                                            <td th:case="'Expired'" th:text="'Available!'"></td>
+                                            <td th:case="'Host Cancel'" th:text="'Available!'"></td>
+                                            <td th:case="'Customer Cancel'" th:text="'Available!'"></td>
+                                            <td th:case="'Confirmed'" th:text="'N/A'"></td>
                                         </th:block>
                                     </tr>
                                 </table>
@@ -93,31 +86,28 @@
             </div>
         </div>
     </div>
-        <!-- Confirmation Modal -->
-        <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reserveModalLabel">Reserve</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>All good and ready to reserve this location?</h5>
-                        <div th:text="${location.title}"></div>
-                        <div th:text="${message}"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button name="action" value="reserve" type="submit"
-                                form="formReserve" class="btn btn-danger">Reserve</button>
-                    </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reserveModalLabel">Reserve</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>All good and ready to reserve this location?</h5>
+                    <div th:text="${location.title}"></div>
+                    <div th:text="${message}"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button name="action" value="reserve" type="submit"
+                            form="formReserve" class="btn btn-danger">Reserve</button>
                 </div>
             </div>
         </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 
 </html>

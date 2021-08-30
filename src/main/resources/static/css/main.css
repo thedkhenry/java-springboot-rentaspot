@@ -1,0 +1,26 @@
+.card-img-top {
+    max-height: 150px;
+    min-height: 50px;
+    object-fit: none;
+}
+
+/* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+#googlemap {
+    min-height: 100vh;
+    max-height: 100vh;
+    max-width: 100%;
+}
+@media (max-width: 1200px) {
+    .list-col {
+        max-width: 100% !important;
+    }
+    .map-col {
+        display: none;
+    }
+}
+@media (max-width: 576px) {
+    .search-header {
+        position: static !important;
+    }
+}
