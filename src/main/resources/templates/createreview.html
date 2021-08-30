@@ -29,16 +29,6 @@
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-        function updateStars() {
-            var rangeValue = document.querySelector("#rating").value;
-            var stars = "";
-            for(let i = 0; i < rangeValue; i++){
-                stars += "⭐";
-            }
-            document.querySelector("#ratingText").innerHTML = stars;
-        }
-    </script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 

@@ -92,7 +92,6 @@
                 </div>
             </div>
         </th:block>
-
         <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -113,24 +112,6 @@
         </div>
     </div>
     <script>
-        function updateBooking(action, id, loc, name,cars, start, end){
-            var title = document.querySelector('#modalTitle')
-            var message = document.querySelector('#modalMessage')
-            var link = document.querySelector('#actionLink')
-            if(action === 'confirm'){
-                link.classList.remove("btn-danger");
-                link.innerHTML = 'Confirm it';
-                link.classList.add("btn-success");
-            }else if (action === 'cancel'){
-                link.classList.remove("btn-success");
-                link.innerHTML = 'Cancel it';
-                link.classList.add("btn-danger");
-            }
-            title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
-            message.innerHTML = cars + ' Cars for ' + start + ' - ' + end;
-            link.setAttribute("href","/reservations/"+action+"/" +loc+"/" + id);
-            //window.location = '/hostinglist/confirm/'+id;
-        }
     </script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

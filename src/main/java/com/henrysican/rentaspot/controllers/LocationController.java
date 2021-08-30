@@ -32,7 +32,9 @@ public class LocationController {
 
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") Location location, Model model){
-//TODO: If location is inactive then block
+        if(!location.isActive()){
+            return "redirect:/403";
+        }
         List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         model.addAttribute("location",location);
         model.addAttribute("reviews",reviews);

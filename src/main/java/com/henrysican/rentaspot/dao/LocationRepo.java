@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface LocationRepo extends JpaRepository<Location,Integer> {
     List<Location> findAllByIsActiveIsTrue();
-//    List<Location> findTop10ByIsActiveIsTrue();
     List<Location> findTop10ByIsActiveIsTrueOrderByCreatedAtDesc();
     List<Location> findAllByUser_Id(int user_id);
     List<Location> findAllByIsActiveIsTrueAndUser_Id(int user_id);

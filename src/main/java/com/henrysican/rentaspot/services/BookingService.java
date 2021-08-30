@@ -56,14 +56,6 @@ public class BookingService {
         return bookingRepo.save(booking);
     }
 
-    public Booking getBookingById(int id){
-        return bookingRepo.findById(id);
-    }
-
-    public List<Booking> getAllBookings(){
-        return bookingRepo.findAll();
-    }
-
     public List<Booking> getAllUnavailableBookingsForLocation(int locationId, Booking booking){
         updateExpiredBookingsForLocation(locationId);
         List<Booking> bookings = getAllBookingsForLocation(locationId);
@@ -80,18 +72,6 @@ public class BookingService {
     public List<Booking> getAllBookingsForLocation(int locationId){
         updateExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_Id(locationId);
-    }
-    public List<Booking> getAllBookingsForLocation(int locationId, BookingStatus status){
-        updateExpiredBookingsForLocation(locationId);
-        return bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId, status);
-    }
-    public List<Booking> getAllBookingsForLocation(int locationId, Date startDate, Date endDate){
-        updateExpiredBookingsForLocation(locationId);
-        return bookingRepo.findAllByLocation_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId, startDate, endDate);
-    }
-    public List<Booking> getAllBookingsForLocation(int locationId, String status, Date startDate, Date endDate){
-        updateExpiredBookingsForLocation(locationId);
-        return bookingRepo.findAllByLocation_IdAndBookingStatusIsLikeAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId,status,startDate,endDate);
     }
 
     public boolean isAvailableForLocation(int locationId, Booking booking){
@@ -116,11 +96,5 @@ public class BookingService {
 
     public List<Booking> getAllBookingsForCustomer(int customer_id){
         return bookingRepo.findAllByCustomerId(customer_id);
-    }
-    public List<Booking> getAllBookingsForCustomerEmail(String customer_email){
-        return bookingRepo.findAllByCustomer_Email(customer_email);
-    }
-    public List<Booking> getAllBookingsByStatusForHost(int hostId, String status){
-        return bookingRepo.findAllByHost_IdAndBookingStatusLikeOrderByCreatedAtDesc(hostId,status);
     }
 }

@@ -1,6 +1,7 @@
 package com.henrysican.rentaspot.services;
 
 import com.henrysican.rentaspot.dao.LocationRepo;
+import com.henrysican.rentaspot.models.BookingStatus;
 import com.henrysican.rentaspot.models.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,14 +35,6 @@ public class LocationService {
 
     public Location getLocationById(int id){
         return locationRepo.findById(id).orElse(new Location());
-    }
-
-    public List<Location> getAllLocations(){
-        return locationRepo.findAll();
-    }
-
-    public List<Location> getAllActiveLocations(){
-        return locationRepo.findAllByIsActiveIsTrue();
     }
 
     public List<Location> get10HighlyRatedLocations(){
@@ -84,7 +77,7 @@ public class LocationService {
                     return location.getBookings().stream()
                             .noneMatch(booking -> {
                                 return booking.calculateTimeFromCreate() >= 0 &&
-                                        (booking.getBookingStatus().equals("pending") || booking.getBookingStatus().equals("confirmed")) &&
+                                        (booking.getBookingStatus() == BookingStatus.PENDING || booking.getBookingStatus() == BookingStatus.CONFIRMED) &&
                                         !booking.getStartDate().after(end) && !start.after(booking.getEndDate());
                             });
                 })
@@ -98,7 +91,7 @@ public class LocationService {
                     return location.getBookings().stream()
                             .noneMatch(booking -> {
                                 return booking.calculateTimeFromCreate() >= 0 &&
-                                        (booking.getBookingStatus().equals("pending") || booking.getBookingStatus().equals("confirmed")) &&
+                                        (booking.getBookingStatus() == BookingStatus.PENDING || booking.getBookingStatus() == BookingStatus.CONFIRMED) &&
                                         !booking.getStartDate().after(end) && !start.after(booking.getEndDate());
                             });
                 })

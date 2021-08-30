@@ -2,31 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/general.html :: headerfiles (title = 'Search Results')"></head>
-    <style>
-        /* Always set the map height explicitly to define the size of the div
-             * element that contains the map. */
-        #googlemap {
-            min-height: 100vh;
-            max-height: 100vh;
-            max-width: 100%;
-        }
-        @media (max-width: 1200px) {
-            .list-col {
-                max-width: 100% !important;
-            }
-            .map-col {
-                display: none;
-            }
-        }
-        @media (max-width: 576px) {
-            header {
-                position: static !important;
-            }
-        }
-    </style>
-
 <body>
-    <header class="sticky-top shadow bg-white pb-2">
+    <header class="search-header sticky-top shadow bg-white pb-2">
         <div th:replace="fragments/general.html :: navbar"></div>
         <div class="container">
             <form th:action="@{/search}" method="GET" id="searchForm">
@@ -98,55 +75,8 @@
     <script th:inline="javascript">
         var resultLocations = [[${addresses}]];
         var city = [[${city}]];
-        var map;
-        var infoWindow;
-        var geocoder;
-        function initMap() {
-            infoWindow = new google.maps.InfoWindow;
-            geocoder = new google.maps.Geocoder();
-            map = new google.maps.Map(document.getElementById('googlemap'), {
-                center: { lat: 33.50393571438486, lng: -112.04478456037113 },
-                zoom: 8
-            });
-            // geocoder.geocode({'address': city}, function(results, status) {
-            //     if (status === 'OK') {
-            //         map.setCenter(results[0].geometry.location);
-            //     } else {
-            //         alert('Geocode was not successful for the following reason: ' + status);
-            //     }
-            // });
-            addMapMarkers(resultLocations);
-        }
-
-        function addMapMarkers(addresses){
-            console.log("addresses.length " + addresses.length);
-            for(let i=0; i<addresses.length; i++){
-                console.log("id: " + addresses[i].id + " lat: " + addresses[i].latitude + " lng: " + addresses[i].longitude);
-                var spotDetails =
-                    '<div class="infoWindow">'+
-                    '      <p>'+ addresses[i].address1 + '</p>'+
-                    '      <div class="viewGMaps"><a target="_blank" href="https://www.google.com/maps/search/?api=1&query='+ addresses[i].latitude + ','+ addresses[i].longitude + '"' +'>View on Google Maps</a></div>'+
-                    '    </div>';
-
-                var marker = new google.maps.Marker({
-                    id: addresses[i].id,
-                    map: map,
-                    position: {lat: addresses[i].latitude, lng: addresses[i].longitude},
-                    info: spotDetails
-                });
-
-                // markers.push(marker);
-
-                google.maps.event.addListener(marker, 'click', function() {
-                    var markerId = this.id;
-                    infoWindow.setContent(this.info);
-                    infoWindow.open(map,this);
-                    console.log("id: " + this.id + " SpotPos: ")
-                    console.log(this.position.toJSON());
-                });
-            }
-        }
     </script>
+    <script type="text/javascript" th:src="@{/js/map.js}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyCd8To3zMx7ydSQc8vsZe2cAr7V3fnFo&callback=initMap" async defer></script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

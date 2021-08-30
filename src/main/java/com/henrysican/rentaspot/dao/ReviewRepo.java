@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepo extends JpaRepository<Review,Integer> {
-    int countAllByLocation_Id(int id);
     List<Review> findAllByLocation_Id(int location_id);
 }
