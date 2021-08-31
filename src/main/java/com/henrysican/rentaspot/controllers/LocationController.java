@@ -41,7 +41,7 @@ public class LocationController {
         return "locationdetails";
     }
 
-    @GetMapping("/{action}/{locationId}")
+    @GetMapping("/location/{action}/{locationId}")
     public String updateLocationActive(@PathVariable("action") String action,
                                        @PathVariable("locationId") Location location,
                                        @AuthenticationPrincipal AppUserPrincipal principal){

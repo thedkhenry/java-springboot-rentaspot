@@ -24,6 +24,11 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
+    public void updateBookingStatus(int bookingId, BookingStatus bookingStatus){
+        Booking booking = bookingRepo.getById(bookingId);
+        booking.setBookingStatus(bookingStatus);
+    }
+
     public long updateExpiredBookingsForLocation(int locationId){
         List<Booking> pendingBookings = bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId,BookingStatus.PENDING);
         List<Booking> expired = pendingBookings.stream()

@@ -28,10 +28,10 @@
                                         <ul class="dropdown-menu">
                                             <th:block th:if="${location.active}">
                                                 <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
-                                                <li><a th:href="@{/location/{locationId}(locationId = ${location.id})}"
-                                                       class="dropdown-item">View</a></li>
+                                                <li><a th:href="@{/location/{locationId}(locationId = ${location.id})}" class="dropdown-item">View</a></li>
                                                 <li><a th:href="'#bookings'+${location.id}" class="dropdown-item" data-bs-toggle="collapse">Bookings
                                                     <span th:text="${location.calculateTotalPendingBookings()}" class="badge bg-warning"></span></a></li>
+                                                <li><a th:href="@{/reservations/history/{locationId}(locationId = ${location.id})}" class="dropdown-item">Booking History</a></li>
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
@@ -56,7 +56,7 @@
                                                 <li class="list-group-item list-group-item-action">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex align-items-center">
-                                                            <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" alt="location">
+                                                            <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" alt="customer">
                                                             <div class="ms-2">
                                                                 <div th:text="${booking.customer.firstName}" class="fw-bold"></div>
                                                                 <small th:text="${booking.cars} + ' Cars • ' + ${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}"></small>
@@ -131,18 +131,18 @@
             var title = document.querySelector('#modalTitle')
             var message = document.querySelector('#modalMessage')
             var link = document.querySelector('#actionLink')
-            if(action === 'unlist'){
+            if(action === 'publish'){
                 link.classList.remove("btn-danger");
-                link.innerHTML = 'Unlist it';
-                link.classList.add("btn-success");
-            }else if (action === 'publish'){
-                link.classList.remove("btn-success");
                 link.innerHTML = 'Publish it';
+                link.classList.add("btn-success");
+            }else if (action === 'unlist'){
+                link.classList.remove("btn-success");
+                link.innerHTML = 'Unlist it';
                 link.classList.add("btn-danger");
             }
             title.innerHTML = 'Do you want to ' + action + ' this location?';
             message.innerHTML = locationTitle;
-            link.setAttribute("href","/"+action+"/" +locationId);
+            link.setAttribute("href","/location/"+action+"/" +locationId);
         }
     </script>
     <div th:replace="fragments/general.html :: scripts"></div>
