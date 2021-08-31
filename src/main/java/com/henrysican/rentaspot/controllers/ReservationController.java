@@ -73,7 +73,7 @@ public class ReservationController {
         return "reservelocation";
     }
 
-    @RequestMapping(value="/reserve/{locationId}", method=RequestMethod.POST)
+    @PostMapping("/reserve/{locationId}")
     public String checkAvailability(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
                                     RedirectAttributes redirectAttributes,

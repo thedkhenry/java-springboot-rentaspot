@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/general.html :: headerfiles (title = 'My Listings')"></head>
-
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
@@ -64,15 +63,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="ms-2 my-auto">
-                                                                <button th:id="'btnCancel'+${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                <button th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-danger w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
                                                                         type="button">Cancel
                                                                 </button>
-                                                                <button th:id="'btnConfirm'+${booking.id}"
-                                                                        th:data="${booking.id}"
+                                                                <button th:data="${booking.id}"
                                                                         th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-success w-100"
                                                                         data-bs-toggle="modal"
@@ -112,6 +109,41 @@
         </div>
     </div>
     <script>
+        function updateBooking(action, id, loc, name,cars, start, end){
+            var title = document.querySelector('#modalTitle')
+            var message = document.querySelector('#modalMessage')
+            var link = document.querySelector('#actionLink')
+            if(action === 'confirm'){
+                link.classList.remove("btn-danger");
+                link.innerHTML = 'Confirm it';
+                link.classList.add("btn-success");
+            }else if (action === 'cancel'){
+                link.classList.remove("btn-success");
+                link.innerHTML = 'Cancel it';
+                link.classList.add("btn-danger");
+            }
+            title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
+            message.innerHTML = cars + ' Cars for ' + start + ' - ' + end;
+            link.setAttribute("href","/reservations/"+action+"/" +loc+"/" + id);
+        }
+
+        function updateListing(action, locationId, locationTitle){
+            var title = document.querySelector('#modalTitle')
+            var message = document.querySelector('#modalMessage')
+            var link = document.querySelector('#actionLink')
+            if(action === 'unlist'){
+                link.classList.remove("btn-danger");
+                link.innerHTML = 'Unlist it';
+                link.classList.add("btn-success");
+            }else if (action === 'publish'){
+                link.classList.remove("btn-success");
+                link.innerHTML = 'Publish it';
+                link.classList.add("btn-danger");
+            }
+            title.innerHTML = 'Do you want to ' + action + ' this location?';
+            message.innerHTML = locationTitle;
+            link.setAttribute("href","/"+action+"/" +locationId);
+        }
     </script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

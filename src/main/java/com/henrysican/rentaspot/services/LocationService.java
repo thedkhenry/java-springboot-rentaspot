@@ -37,6 +37,11 @@ public class LocationService {
         return locationRepo.findById(id).orElse(new Location());
     }
 
+    public void updateLocationActive(int locationId, boolean active){
+        Location location = locationRepo.getById(locationId);
+        location.setActive(active);
+    }
+
     public List<Location> get10HighlyRatedLocations(){
         final long LIMIT = 10;
         List<Location> locations = locationRepo.findAllByIsActiveIsTrue();

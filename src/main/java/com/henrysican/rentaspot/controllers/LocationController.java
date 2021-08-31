@@ -41,6 +41,21 @@ public class LocationController {
         return "locationdetails";
     }
 
+    @GetMapping("/{action}/{locationId}")
+    public String updateLocationActive(@PathVariable("action") String action,
+                                       @PathVariable("locationId") Location location,
+                                       @AuthenticationPrincipal AppUserPrincipal principal){
+        if(principal.getId() != location.getUser().getId()){
+            return "redirect:/403";
+        }
+        if(action.equals("unlist")){
+            locationService.updateLocationActive(location.getId(), false);
+        }else if (action.equals("publish")){
+            locationService.updateLocationActive(location.getId(), true);
+        }
+        return "redirect:/hostinglist";
+    }
+
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
     public String getEditForm(@PathVariable("locationId") Location location,
@@ -49,16 +64,23 @@ public class LocationController {
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
         }
-        log.warning("/edit/{"+location.getId()+"} getEditForm - " + location);
         model.addAttribute("location", location);
         return "editlisting";
     }
 
-//TODO: Change to  /update/{locationId}  ?
-    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=update")
-    public String updateLocation(@ModelAttribute Location location){
-        log.warning("/update UPDATE 1 " + location);
-        Location dbLocation = locationService.getLocationById(location.getId());
+    @PostMapping("/update/{locationId}")
+    public String updateLocation(@PathVariable("locationId") int locationId,
+                                 @ModelAttribute Location location,
+                                 @RequestParam(value = "action") String action,
+                                 @AuthenticationPrincipal AppUserPrincipal principal){
+        Location dbLocation = locationService.getLocationById(locationId);
+        if(principal.getId() != dbLocation.getUser().getId()){
+            return "redirect:/403";
+        }
+        if(action.equals("delete")){ //else "update"
+            locationService.deleteLocation(dbLocation);
+            return "redirect:/hostinglist";
+        }
         dbLocation.setActive(location.isActive());
         dbLocation.setTitle(location.getTitle());
         dbLocation.setDescription(location.getDescription());
@@ -69,15 +91,7 @@ public class LocationController {
         dbLocation.setStreetParking(location.isStreetParking());
         dbLocation.setHasRvParking(location.isHasRvParking());
         dbLocation.setHasEvCharging(location.isHasEvCharging());
-        dbLocation = locationService.saveLocation(dbLocation);
-        log.warning("/update UPDATE 2 " + dbLocation);
-        return "redirect:/hostinglist";
-    }
-
-    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=delete")
-    public String deleteLocation(@ModelAttribute Location location){
-        log.warning("/update DELETE " + location);
-        locationService.deleteLocation(location);
+        locationService.saveLocation(dbLocation);
         return "redirect:/hostinglist";
     }
 
@@ -91,7 +105,8 @@ public class LocationController {
     }
 
 //TODO: User warning - "Address final"
-    @RequestMapping(value="/create", method=RequestMethod.POST)
+//TODO: geocode address get lat/lon
+    @PostMapping("/create")
     public String createLocation(@ModelAttribute Location location,
                                  @AuthenticationPrincipal AppUserPrincipal principal,
                                  @RequestParam(value = "action") String action){
@@ -99,8 +114,7 @@ public class LocationController {
         user.setHost(true);
         location.setUser(user);
         location.getAddress().setCountry("US");
-        location.setActive(action.equals("publish"));
-//TODO: geocode address get lat/lon
+        location.setActive(action.equals("publish")); //else "save"
         locationService.saveLocation(location);
         userService.saveUser(user);
         return "redirect:/hostinglist";
