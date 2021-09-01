@@ -35,4 +35,8 @@ public class Address {
     double latitude;
     @NonNull
     double longitude;
+
+    public String getFullAddress(){
+        return this.address1 + ", " + this.city + ", " + this.state + " " + this.zipCode;
+    }
 }

@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -44,18 +45,16 @@ public class Location {
     boolean hasRvParking;
     @NonNull
     boolean hasEvCharging;
-    @NonNull
-    double latitude;
-    @NonNull
-    double longitude;
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     User user;
     @OneToOne(cascade = CascadeType.ALL)
     @NonNull
     Address address;
+    @JsonManagedReference
     @OneToMany(mappedBy = "location")
     List<Review> reviews;
+    @JsonManagedReference
     @OneToMany(mappedBy = "location")
     List<Booking> bookings;
     @Temporal(TemporalType.TIMESTAMP)

@@ -64,7 +64,7 @@
                             </span>
                         </ul>
                         <h4>Address</h4>
-                        <p th:text="${location.address.address1} + ', ' + ${location.address.city} + ', ' + ${location.address.state} + ' ' + ${location.address.zipCode}"></p>
+                        <p th:text="${location.address.getFullAddress()}"></p>
                         <div>
                             <span th:text="'$' + ${location.price}" class="h4"></span><span>/day</span>
                         </div>

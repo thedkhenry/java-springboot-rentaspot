@@ -1,7 +1,14 @@
 package com.henrysican.rentaspot.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
+import com.henrysican.rentaspot.services.GMapService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
 import com.henrysican.rentaspot.services.UserService;
@@ -12,7 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Log
 @Controller
@@ -20,14 +29,16 @@ public class LocationController {
     private final LocationService locationService;
     private final ReviewService reviewService;
     private final UserService userService;
+    private final GMapService gMapService;
 
     @Autowired
     public LocationController(LocationService locationService,
                               ReviewService reviewService,
-                              UserService userService) {
+                              UserService userService, GMapService gMapService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
         this.userService = userService;
+        this.gMapService = gMapService;
     }
 
     @GetMapping("/location/{locationId}")
@@ -109,14 +120,33 @@ public class LocationController {
     @PostMapping("/create")
     public String createLocation(@ModelAttribute Location location,
                                  @AuthenticationPrincipal AppUserPrincipal principal,
-                                 @RequestParam(value = "action") String action){
+                                 @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
+
+
+        LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
+
         User user = userService.getUserById(principal.getId());
         user.setHost(true);
         location.setUser(user);
         location.getAddress().setCountry("US");
+        location.getAddress().setLatitude(latLng.lat);
+        location.getAddress().setLongitude(latLng.lng);
         location.setActive(action.equals("publish")); //else "save"
         locationService.saveLocation(location);
         userService.saveUser(user);
         return "redirect:/hostinglist";
     }
+//    @PostMapping("/create")
+//    public String createLocation(@ModelAttribute Location location,
+//                                 @AuthenticationPrincipal AppUserPrincipal principal,
+//                                 @RequestParam(value = "action") String action){
+//        User user = userService.getUserById(principal.getId());
+//        user.setHost(true);
+//        location.setUser(user);
+//        location.getAddress().setCountry("US");
+//        location.setActive(action.equals("publish")); //else "save"
+//        locationService.saveLocation(location);
+//        userService.saveUser(user);
+//        return "redirect:/hostinglist";
+//    }
 }

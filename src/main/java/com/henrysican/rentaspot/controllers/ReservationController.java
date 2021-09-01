@@ -75,6 +75,18 @@ public class ReservationController {
         csvExportService.writeBookingToCsv(response.getWriter(),location.getId());
     }
 
+    @GetMapping("/cancel/{bookingId}")
+    public String cancelReservation(@PathVariable("bookingId") Booking booking,
+                                    @AuthenticationPrincipal AppUserPrincipal principal){
+        if(booking.getCustomer().getId() != principal.getId()){
+            return "redirect:/403";
+        }
+        if (booking.ableToCancel()) {
+            bookingService.updateBookingStatus(booking.getId(), BookingStatus.CUSTOMER_CANCELED);
+        }
+        return "redirect:/reservations";
+    }
+
     @GetMapping("/{action}/{locationId}/{bookingId}")
     public String updateBooking(@PathVariable("action") String action,
                                 @PathVariable("locationId") int locationId,

@@ -6,7 +6,7 @@
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
         <h2>Reservation History</h2>
-        <h5 th:text="${location.title} + '  •  ' + ${location.address.address1} + ', ' + ${location.address.city} + ', ' + ${location.address.state}"></h5>
+        <p th:text="${location.title} + '  •  ' + ${location.address.getFullAddress()}" class="fst-italic"></p>
         <div class="d-flex align-items-end justify-content-end">
             <h5>Export Data</h5>
             <a th:href="@{/reservations/export/{locationId}(locationId = ${location.id})}" class="btn btn-outline-secondary mx-3">Export CSV</a>

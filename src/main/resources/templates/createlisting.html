@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-sm-4 col mb-3">
                                     <label class="form-label">Zip</label>
-                                    <input th:field="*{address.zipCode}" type="text" class="form-control" required>
+                                    <input th:field="*{address.zipCode}" type="text" class="form-control" id="inputZipCode" required>
                                 </div>
                             </div>
 
@@ -92,9 +92,11 @@
                             </div>
                             <div class="col text-center pt-3">
                                 <div class="btn-group" role="group">
-                                    <button name="action" value="save" type="submit"
+                                    <button id="btnSaveNewLocation"
+                                            name="action" value="save" type="submit"
                                             form="createForm" class="btn btn-warning">Save</button>
-                                    <button onclick="showModal()"
+                                    <button id="btnPublishNewLocation"
+                                            onclick="showModal()"
                                             type="button" form="createForm" class="btn btn-success"
                                             data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
                                 </div>
@@ -115,6 +117,7 @@
                 </div>
                 <div class="modal-body">
                     <h5>All good and ready to publish?</h5>
+                    <div class="text-danger">*Addresses can't be changed later. Make sure it is correct!*</div>
                     <div id="modalLocationTitle"></div>
                 </div>
                 <div class="modal-footer">
@@ -124,7 +127,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 
