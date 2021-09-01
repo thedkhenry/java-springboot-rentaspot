@@ -59,7 +59,7 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.getWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="mt-auto">
                                 <div class="row px-2 my-2">
-                                    <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
+                                    <div th:text="'⭐ ' + ${loc.getWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                     <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                 </div>
                                 <div class="card-footer align-self-end">

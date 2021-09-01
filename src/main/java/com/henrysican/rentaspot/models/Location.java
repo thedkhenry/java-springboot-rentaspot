@@ -76,7 +76,7 @@ public class Location {
         return ChronoUnit.DAYS.between(createdAt.toInstant(), today.toInstant());
     }
 
-    public double calculateWeightedAverage(){
+    public double getWeightedAverage(){
         double weightedAvg = 0;
         if (!this.reviews.isEmpty()) {
             long countFives = this.reviews.stream().filter(review -> review.getRating() == 5).count();

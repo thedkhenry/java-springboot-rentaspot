@@ -16,10 +16,13 @@ function addMapMarkers(locations){
   for(let i=0; i<locations.length; i++){
     console.log("id: " + locations[i].address.id + " lat: " + locations[i].address.latitude + " lng: " + locations[i].address.longitude);
     var spotDetails =
-        '<div class="infoWindow">'+
-        '      <p><b>'+ locations[i].title + '</b></p>'+
-        '      <p><b>$'+ locations[i].price + '</b></p>'+
-        '      <p>'+ locations[i].address.fullAddress + '</p>'+
+        '<div class="infoWindow text-center">'+
+        '      <h6><b>'+ locations[i].title + '</b></h6>'+
+        '      <div class="my-2">'+ locations[i].address.fullAddress + '</div>'+
+        '      <div class="row justify-content-between h6">'+
+        '            <div class="col">$'+ locations[i].price + '/day </b> • '+ locations[i].totalOccupancy +' Cars</div>'+
+        '            <div class="col">⭐'+ locations[i].weightedAverage +'</div>'+
+        '      </div>'+
         '      <div class="viewGMaps"><a target="_blank" href="https://www.google.com/maps/search/?api=1&query='+ locations[i].address.latitude + ','+ locations[i].address.longitude + '"' +'>View on Google Maps</a></div>'+
         '    </div>';
 
@@ -30,13 +33,10 @@ function addMapMarkers(locations){
       info: spotDetails
     });
 
-    // markers.push(marker);
-
     google.maps.event.addListener(marker, 'click', function() {
-      var markerId = this.id;
       infoWindow.setContent(this.info);
       infoWindow.open(map,this);
-      console.log("id: " + this.id + " SpotPos: ")
+      console.log("id: " + this.id)
       console.log(this.position.toJSON());
     });
   }

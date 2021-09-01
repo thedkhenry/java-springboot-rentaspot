@@ -6,7 +6,7 @@
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
         <h2 th:text="${location.title}"></h2>
-        <h6 th:text="'⭐ ' + ${location.calculateWeightedAverage()} + ' (' + ${reviews.size()} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
+        <h6 th:text="'⭐ ' + ${location.getWeightedAverage()} + ' (' + ${reviews.size()} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
         <p></p>
         <div class="card mb-4">
             <div class="card-body">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <h4 th:text="'⭐ ' + ${location.calculateWeightedAverage()} + ' • ' + ${reviews.size()} + ' Reviews'"></h4>
+        <h4 th:text="'⭐ ' + ${location.getWeightedAverage()} + ' • ' + ${reviews.size()} + ' Reviews'"></h4>
         <div class="card mb-5">
             <div class="card-body">
                 <ul class="list-group list-group-flush">

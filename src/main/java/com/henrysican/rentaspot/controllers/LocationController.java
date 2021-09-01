@@ -115,16 +115,11 @@ public class LocationController {
         return "createlisting";
     }
 
-//TODO: User warning - "Address final"
-//TODO: geocode address get lat/lon
     @PostMapping("/create")
     public String createLocation(@ModelAttribute Location location,
                                  @AuthenticationPrincipal AppUserPrincipal principal,
                                  @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
-
-
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
-
         User user = userService.getUserById(principal.getId());
         user.setHost(true);
         location.setUser(user);
@@ -136,17 +131,4 @@ public class LocationController {
         userService.saveUser(user);
         return "redirect:/hostinglist";
     }
-//    @PostMapping("/create")
-//    public String createLocation(@ModelAttribute Location location,
-//                                 @AuthenticationPrincipal AppUserPrincipal principal,
-//                                 @RequestParam(value = "action") String action){
-//        User user = userService.getUserById(principal.getId());
-//        user.setHost(true);
-//        location.setUser(user);
-//        location.getAddress().setCountry("US");
-//        location.setActive(action.equals("publish")); //else "save"
-//        locationService.saveLocation(location);
-//        userService.saveUser(user);
-//        return "redirect:/hostinglist";
-//    }
 }
