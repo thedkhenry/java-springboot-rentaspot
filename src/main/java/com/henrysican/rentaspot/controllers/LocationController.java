@@ -120,15 +120,10 @@ public class LocationController {
                                  @AuthenticationPrincipal AppUserPrincipal principal,
                                  @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
-        User user = userService.getUserById(principal.getId());
-        user.setHost(true);
-        location.setUser(user);
-        location.getAddress().setCountry("US");
-        location.getAddress().setLatitude(latLng.lat);
-        location.getAddress().setLongitude(latLng.lng);
-        location.setActive(action.equals("publish")); //else "save"
-        locationService.saveLocation(location);
-        userService.saveUser(user);
+        User host = userService.getUserById(principal.getId());
+        host.setHost(true);
+        locationService.saveNewLocation(location,host,latLng,action.equals("publish"));
+        userService.saveUser(host);
         return "redirect:/hostinglist";
     }
 }

@@ -1,8 +1,10 @@
 package com.henrysican.rentaspot.services;
 
+import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.dao.LocationRepo;
 import com.henrysican.rentaspot.models.BookingStatus;
 import com.henrysican.rentaspot.models.Location;
+import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,15 @@ public class LocationService {
     }
 
     public Location saveLocation(Location location){
+        return locationRepo.save(location);
+    }
+
+    public Location saveNewLocation(Location location, User host, LatLng latLng, boolean publish){
+        location.setUser(host);
+        location.getAddress().setCountry("US");
+        location.getAddress().setLatitude(latLng.lat);
+        location.getAddress().setLongitude(latLng.lng);
+        location.setActive(publish);
         return locationRepo.save(location);
     }
 

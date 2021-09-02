@@ -20,10 +20,15 @@ public class GMapService {
         this.context = new GeoApiContext.Builder().apiKey("AIzaSyAyCd8To3zMx7ydSQc8vsZe2cAr7V3fnFo").build();
     }
 
-    public GeoApiContext getContext() {
-        return context;
-    }
-
+    /**
+     * Returns a LatLng object that can then be used to for markers on a Google Map.
+     * The address argument should be a full address otherwise coordinates will be inaccurate.
+     * @param address   a full address to be geocoded
+     * @return          the lat/lng coordinates of the address
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ApiException
+     */
     public LatLng getLatLng(String address) throws IOException, InterruptedException, ApiException {
         GeocodingResult[] results =  GeocodingApi.geocode(context, address).await();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
