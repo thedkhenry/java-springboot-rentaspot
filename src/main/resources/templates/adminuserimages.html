@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'All User Images')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>User Images</h2>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Export Data</h5>
+            <a th:href="@{/admin/export/user-images}" class="btn btn-outline-secondary mx-3">Export CSV</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>ID</th>
+                    <th>File Name</th>
+                    <th>File Type</th>
+                    <th>User</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user,iter : ${users}">
+                    <th th:text="${iter.count}"></th>
+                    <th><img th:src="@{~/user-images/__${user.profileImage.name}__}" height="60px"></th>
+                    <th th:text="${user.profileImage.id}"></th>
+                    <th th:text="${user.profileImage.name}"></th>
+                    <th th:text="${user.profileImage.type}"></th>
+                    <th th:text="${user.email}"></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

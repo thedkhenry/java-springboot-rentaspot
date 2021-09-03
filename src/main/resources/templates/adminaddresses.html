@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'All Addresses')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Addresses</h2>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Export Data</h5>
+            <a th:href="@{/admin/export/addresses}" class="btn btn-outline-secondary mx-3">Export CSV</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Zip</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="addr,iter : ${addresses}">
+                    <th th:text="${iter.count}"></th>
+                    <th th:text="${addr.id}"></th>
+                    <th th:text="${addr.address1}"></th>
+                    <th th:text="${addr.city}"></th>
+                    <th th:text="${addr.state}"></th>
+                    <th th:text="${addr.country}"></th>
+                    <th th:text="${addr.zipCode}"></th>
+                    <th th:text="${addr.latitude}"></th>
+                    <th th:text="${addr.longitude}"></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

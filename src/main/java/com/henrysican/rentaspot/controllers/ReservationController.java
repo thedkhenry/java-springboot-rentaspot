@@ -72,7 +72,7 @@ public class ReservationController {
         String filename = "bookingdata_"+location.getId()+".csv";
         response.setContentType("text/csv");
         response.addHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
-        csvExportService.writeBookingToCsv(response.getWriter(),location.getId());
+        csvExportService.writeBookingsToCsv(response.getWriter(),location.getId());
     }
 
     @GetMapping("/cancel/{bookingId}")

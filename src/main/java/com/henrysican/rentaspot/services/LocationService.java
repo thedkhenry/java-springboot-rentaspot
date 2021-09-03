@@ -45,6 +45,10 @@ public class LocationService {
         return locationRepo.findById(id).orElse(new Location());
     }
 
+    public List<Location> getAllLocations(){
+        return locationRepo.findAll();
+    }
+
     public void updateLocationActive(int locationId, boolean active){
         Location location = locationRepo.getById(locationId);
         location.setActive(active);

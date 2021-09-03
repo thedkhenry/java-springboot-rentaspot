@@ -38,6 +38,13 @@
                             <li><a th:href="@{/signup}" class="dropdown-item">Sign up</a></li>
                             <li><a th:href="@{/login}" class="dropdown-item">Log in</a></li>
                         </th:block>
+                        <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+                            <li><a th:href="@{/admin/addresses}" class="dropdown-item">ADMIN: Addresses</a></li>
+                            <li><a th:href="@{/admin/locations}" class="dropdown-item">ADMIN: Locations</a></li>
+                            <li><a th:href="@{/admin/users}" class="dropdown-item">ADMIN: Users</a></li>
+                            <li><a th:href="@{/admin/bookings}" class="dropdown-item">ADMIN: Bookings</a></li>
+                            <li><a th:href="@{/admin/images}" class="dropdown-item">ADMIN: Images</a></li>
+                        </th:block>
                         <th:block sec:authorize="isAuthenticated()">
                             <li><a th:href="@{/user}" class="dropdown-item">Profile</a></li>
                             <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>

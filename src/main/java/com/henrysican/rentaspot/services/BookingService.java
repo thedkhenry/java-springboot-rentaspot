@@ -74,6 +74,10 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    public List<Booking> getAllBookings(){
+        return bookingRepo.findAll();
+    }
+
     public List<Booking> getAllBookingsForLocation(int locationId){
         updateExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_Id(locationId);

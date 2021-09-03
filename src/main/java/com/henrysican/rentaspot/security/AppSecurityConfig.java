@@ -48,10 +48,11 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/user", "/user/editProfile", "/user/saveProfile",
                                         "/reservations", "/reservations/reservation/{\\d+}", "/reservations/{action:[a-z]+}/{\\d+}/{\\d+}", "/reservations/export/{\\d+}", "/reservations/history/**",
                                         "/hostinglist", "/create", "/update", "/edit/{\\d+}",
-                                        "/review/**").hasAnyAuthority("ROLE_USER")
+                                        "/review/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers("/reservations/**", "/user/**", "/search", "/location/{\\d+}").permitAll()
                 .antMatchers("/","/home").permitAll()
                 .and()

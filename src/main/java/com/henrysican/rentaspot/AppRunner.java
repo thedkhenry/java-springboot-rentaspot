@@ -23,6 +23,7 @@ public class AppRunner implements CommandLineRunner {
     private ReviewRepo reviewRepo;
     private BookingRepo bookingRepo;
     private AuthRepo authRepo;
+    private ImageRepo imageRepo;
 
     @Autowired
     public AppRunner(LocationRepo locationRepo,
@@ -30,13 +31,15 @@ public class AppRunner implements CommandLineRunner {
                      UserRepo userRepo,
                      ReviewRepo reviewRepo,
                      BookingRepo bookingRepo,
-                     AuthRepo authRepo) {
+                     AuthRepo authRepo,
+                     ImageRepo imageRepo) {
         this.locationRepo = locationRepo;
         this.addressRepo = addressRepo;
         this.userRepo = userRepo;
         this.reviewRepo = reviewRepo;
         this.bookingRepo = bookingRepo;
         this.authRepo = authRepo;
+        this.imageRepo = imageRepo;
     }
 
 
@@ -63,6 +66,8 @@ public class AppRunner implements CommandLineRunner {
         authRepo.save(new AuthGroup(18, "dtavernorh@chronoengine.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(26, "hsican@ymail.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(27, "cjaulme9@bing.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(28, "admin@rentaspot.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(28, "admin@rentaspot.com", "ROLE_ADMIN"));
         log.info("**** End of sql statements ***************************************************");
 
         User user1 = userRepo.save(new User("Linell","Sweetzer","lsweetzer0@yelp.com","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","573-607-8105","Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
@@ -92,6 +97,12 @@ public class AppRunner implements CommandLineRunner {
         User user25 = userRepo.save(new User("Mavis","Hubble","mhubbleo@sciencedirect.com","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","570-278-0766","Many I've company and in in California coach are Philadelphia. Diego both and apartment specialize or Disneyland gladly explore respond Phoenix in grew clear are We vacation it is that & to moving working It and over calls to is up home Verde when",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-05-07 23:11:19")));
         User user26 = userRepo.save(new User("Henry","Sican","hsican@ymail.com","$2a$04$l.C01VGee830nAGCYNIAr.YIC4AyvkqZXFpsKYnuwxAw.DuVf/HXy","170-519-8193","Our We and our people mild entry quick Needs your popular in elsewhere. like offer and apartment specialize or Disneyland gladly explore respond Phoenix in grew clear are We vacation it is that & to",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-06-27 15:54:06")));
         User user27 = userRepo.save(new User("Dest","Sade","cjaulme9@bing.com","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","734-345-8760","OCD to Walt lovely 20 8 been doesn't for the access everyone! places who a am year David degree explore respond Phoenix in grew clear are We vacation it is that & to moving working It and over calls",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-08-07 05:56:52")));
+
+        Image image = new Image("IMG_20171231_171259~4(small).jpg","image/jpeg");
+        imageRepo.save(image);
+        User user28 = userRepo.save(new User("Admin","Admin","admin@rentaspot.com","$2a$04$N9q/fBliwObi3oZLCzbzt.VjMfsxKcXT7paQIgjjmgkl32oNctDY2","000-000-0000","To allow users to locate, reserve, and rent out parking spaces.",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-09-02 21:30:00")));
+        user28.setProfileImage(image);
+
         Address address1 = new Address("418 East Main Street", "", "Springerville", "Arizona", "US", 85938,34.1326759998992,-109.281052000352);
         Address address2 = new Address("2422 N. Firehouse Lane", "", "Huachuca City", "Arizona", "US", 85616,31.7055870001416,-110.349355999682);
         Address address3 = new Address("6601 W Thomas Rd.", "", "Phoenix", "Arizona", "US", 85033,33.4802160001698,-112.20088599999);

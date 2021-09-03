@@ -38,4 +38,12 @@ public class UserService {
     public User getUserByEmail(String email){
         return userRepo.findUserByEmail(email);
     }
+
+    public List<User> getAllUsers(){
+        return userRepo.findAll();
+    }
+
+    public List<User> getAllUsersWithImages(){
+        return userRepo.findAllByProfileImageNotNull();
+    }
 }
