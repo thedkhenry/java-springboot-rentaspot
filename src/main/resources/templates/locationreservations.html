@@ -20,7 +20,8 @@
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex w-100 text-truncate align-items-center" style="transform: rotate(0);">
-                                        <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" alt="customer">
+                                        <img th:if="${booking.customer.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" width="30" alt="customer">
+                                        <img th:unless="${booking.customer.profileImage == null}" th:src="@{~/user-images/__${booking.customer.profileImage.name}__}" class="rounded-circle" height="30" width="30" alt="customer">
                                         <div class="text-truncate mx-3">
                                             <a th:text="${booking.customer.firstName} + '  •  ' + ${booking.customer.email}" th:href="@{/reservations/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
                                             <p th:text="${booking.cars} + ' Cars  •  ' + ${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}" class="mb-0"><small></small></p>

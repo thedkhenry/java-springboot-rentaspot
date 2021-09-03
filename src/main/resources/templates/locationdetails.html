@@ -80,7 +80,8 @@
                         <li class="list-group-item">
                             <div class="col">
                                 <div class="row mb-2">
-                                    <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle w-auto my-auto" height="50" alt="user">
+                                    <img th:if="${review.user.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle w-auto my-auto" height="50" width="50" alt="user">
+                                    <img th:unless="${review.user.profileImage == null}" th:src="@{~/user-images/__${review.user.profileImage.name}__}" class="rounded-circle w-auto my-auto" height="50" width="50" alt="user">
                                     <div class="w-auto">
                                         <th:block th:switch="${review.rating}">
                                             <small th:case="5">⭐⭐⭐⭐⭐</small>

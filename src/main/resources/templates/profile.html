@@ -22,7 +22,8 @@
         <div class="card">
             <div class="row card-body">
                 <div class="col-lg-3 text-center border-end">
-                    <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle mt-3 p-2" width="150px">
+                    <img th:if="${user.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle mt-3 p-2" height="150px" width="150px">
+                    <img th:unless="${user.profileImage == null}" th:src="@{~/user-images/__${user.profileImage.name}__}" class="rounded-circle mt-3 p-2" height="150px" width="150px">
                     <div th:text="${user.firstName}" class="fw-bold mt-3"></div>
                     <div th:text="${user.email}" class="text-black-50"></div>
                 </div>

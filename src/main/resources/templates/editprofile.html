@@ -15,7 +15,7 @@
         <h2>Edit profile</h2>
         <div class="card">
             <div class="row card-body">
-                <form th:action="@{/user/saveProfile}" th:object="${user}" method="POST" id="profileForm">
+                <form th:action="@{/user/saveProfile}" th:object="${user}" method="POST" id="profileForm" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-6 col-sm-6 mb-3">
                             <label class="form-label">First Name</label>
@@ -31,11 +31,11 @@
                         </div>
                         <div class="col-6 col-sm-4 mb-3">
                             <label class="form-label">Phone Number</label>
-                            <input th:field="*{phoneNumber}" type="tel" class="form-control" placeholder="(251) 909-9867" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                            <input th:field="*{phoneNumber}" type="tel" class="form-control" placeholder="251-909-9867" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
                         </div>
                         <div class="col-6 col-sm-4 mb-3">
                             <label class="form-label">Photo</label>
-                            <input th:field="*{profileImage}" type="file" class="form-control">
+                            <input name="image" type="file" accept="image/*" class="form-control">
                         </div>
                     </div>
                     <div class="mb-3">

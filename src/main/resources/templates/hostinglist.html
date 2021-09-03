@@ -56,7 +56,8 @@
                                                 <li class="list-group-item list-group-item-action">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex align-items-center">
-                                                            <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" alt="customer">
+                                                            <img th:if="${booking.customer.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" width="30" alt="customer">
+                                                            <img th:unless="${booking.customer.profileImage == null}" th:src="@{~/user-images/__${booking.customer.profileImage.name}__}" class="rounded-circle" height="30" width="30" alt="customer">
                                                             <div class="ms-2">
                                                                 <div th:text="${booking.customer.firstName}" class="fw-bold"></div>
                                                                 <small th:text="${booking.cars} + ' Cars • ' + ${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}"></small>
