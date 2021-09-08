@@ -1,13 +1,10 @@
 package com.henrysican.rentaspot.controllers;
 
-import com.henrysican.rentaspot.models.Booking;
-import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.User;
+import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.CsvExportService;
 import com.henrysican.rentaspot.services.UserService;
-import com.henrysican.rentaspot.models.BookingStatus;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -165,7 +162,7 @@ public class ReservationController {
         int hostId = booking.getHost().getId();
         if(customerId == principal.getId() || hostId == principal.getId()){
             model.addAttribute("booking", booking);
-            model.addAttribute("message", new Object());
+            model.addAttribute("message", new Message());
             return "reservationdetails";
         }
         return "redirect:/403";

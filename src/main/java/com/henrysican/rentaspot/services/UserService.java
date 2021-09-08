@@ -1,22 +1,27 @@
 package com.henrysican.rentaspot.services;
 
 import com.henrysican.rentaspot.dao.UserRepo;
+import com.henrysican.rentaspot.models.Message;
 import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
 public class UserService {
     private final UserRepo userRepo;
+    private final MessageService messageService;
 
     @Autowired
-    public UserService(UserRepo userRepo){
+    public UserService(UserRepo userRepo,
+                       MessageService messageService){
         this.userRepo = userRepo;
+        this.messageService = messageService;
     }
 
     public User saveUser(User user){
@@ -45,5 +50,19 @@ public class UserService {
 
     public List<User> getAllUsersWithImages(){
         return userRepo.findAllByProfileImageNotNull();
+    }
+
+    public List<User> getAllContactsForUser(int id){
+        Set<Integer> userIdSet = new HashSet<>();
+        List<Message> messages = messageService.getAllMessagesForUser(id);
+        messages.forEach(message -> {
+            if (message.getReceiverId() != id) {
+                userIdSet.add(message.getReceiverId());
+            }
+            if (message.getSenderId() != id) {
+                userIdSet.add(message.getSenderId());
+            }
+        });
+        return userRepo.findAllById(userIdSet);
     }
 }

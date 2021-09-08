@@ -34,6 +34,7 @@ public class Review {
     @JsonBackReference
     @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Location location;
     @OneToOne(cascade = CascadeType.MERGE)
     Booking booking;
