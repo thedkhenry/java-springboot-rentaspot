@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'Reservation History')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Reservation History</h2>
+        <p th:text="${location.title} + '  •  ' + ${location.address.getFullAddress()}" class="fst-italic"></p>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Export Data</h5>
+            <a th:href="@{/reservations/export/{locationId}(locationId = ${location.id})}" class="btn btn-outline-secondary mx-3">Export CSV</a>
+        </div>
+        <h6 th:if="${#lists.isEmpty(bookingList)}" class="text-center text-muted">Oh no! This listing hasn't had any reservations.</h6>
+        <th:block th:unless="${#lists.isEmpty(bookingList)}">
+            <div class="col shadow mt-3 p-0">
+                <div style="height: 500px; overflow-y: scroll;">
+                    <ul class="list-group">
+                        <th:block th:each="booking : ${bookingList}">
+                            <li class="list-group-item list-group-item-action py-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex w-100 text-truncate align-items-center" style="transform: rotate(0);">
+                                        <img th:if="${booking.customer.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" width="30" alt="customer">
+                                        <img th:unless="${booking.customer.profileImage == null}" th:src="@{~/user-images/__${booking.customer.profileImage.name}__}" class="rounded-circle" height="30" width="30" alt="customer">
+                                        <div class="text-truncate mx-3">
+                                            <a th:text="${booking.customer.firstName} + '  •  ' + ${booking.customer.email}" th:href="@{/reservations/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
+                                            <p th:text="${booking.cars} + ' Cars  •  ' + ${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}" class="mb-0"><small></small></p>
+                                        </div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <span th:text="'$' + ${booking.price}" class="fw-bold"></span>
+                                        <th:block th:switch="${booking.bookingStatus.name}">
+                                            <span th:case="'Pending'" class="badge bg-warning">Pending</span>
+                                            <span th:case="'Expired'" class="badge bg-secondary">Expired</span>
+                                            <span th:case="'Host Cancel'" class="badge bg-danger">Canceled</span>
+                                            <span th:case="'Customer Cancel'" class="badge bg-danger">Canceled</span>
+                                            <span th:case="'Confirmed'" class="badge bg-success">Confirmed</span>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </th:block>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

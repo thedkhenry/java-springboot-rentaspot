@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'All Locations')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Locations</h2>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Export Data</h5>
+            <a th:href="@{/admin/export/locations}" class="btn btn-outline-secondary mx-3">Export CSV</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Cars</th>
+                    <th>Price/day</th>
+                    <th>Active</th>
+                    <th>Reviews</th>
+                    <th>Bookings</th>
+                    <th>User</th>
+                    <th>Created</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="loc,iter : ${locations}">
+                    <th th:text="${iter.count}"></th>
+                    <th th:text="${loc.id}"></th>
+                    <th th:text="${loc.title}"></th>
+                    <th th:text="${loc.totalOccupancy}"></th>
+                    <th th:text="'$' + ${loc.price}"></th>
+                    <th th:text="${loc.active}"></th>
+                    <th th:text="${loc.reviews.size()}"></th>
+                    <th th:text="${loc.bookings.size()}"></th>
+                    <th th:text="${loc.user.email}"></th>
+                    <th th:text="${loc.createdAt}"></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

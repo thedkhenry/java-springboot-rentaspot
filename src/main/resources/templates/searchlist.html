@@ -52,7 +52,7 @@
                                         <p th:text="${loc.description}" class="d-none d-sm-block"></p>
                                     </div>
                                     <div class="row w-100">
-                                        <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'"
+                                        <div th:text="'⭐ ' + ${loc.getWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'"
                                              class="col-9 text-muted"></div>
                                         <div th:text="'$' + ${loc.price} + '/day'"
                                              class="col-3 text-end fw-bold"></div>
@@ -73,7 +73,7 @@
         </div>
     </div>
     <script th:inline="javascript">
-        var resultLocations = [[${addresses}]];
+        var resultLocations = [[${locations}]];
         var city = [[${city}]];
     </script>
     <script type="text/javascript" th:src="@{/js/map.js}"></script>

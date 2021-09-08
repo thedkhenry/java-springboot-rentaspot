@@ -37,8 +37,8 @@ public class User {
     String phoneNumber;
     @NonNull
     String summary;
-    @NonNull
-    String profileImage;
+    @OneToOne(cascade = CascadeType.ALL)
+    Image profileImage;
     @NonNull
     boolean isHost;
     @NonNull

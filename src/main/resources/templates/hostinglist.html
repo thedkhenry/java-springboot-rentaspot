@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/general.html :: headerfiles (title = 'My Listings')"></head>
-
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
@@ -19,7 +18,7 @@
                         <th:block th:each="location : ${locations}">
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <img th:src="@{/images/city_buildings.png}" class="" height="50" alt="location">
+                                    <img th:src="@{/images/city_buildings.png}" class="" height="50" width="50" alt="location">
                                     <div class="w-100 text-truncate mx-3">
                                         <a th:text="${location.title}" th:href="@{/location/{locationId}(locationId = ${location.id})}" class="fw-bold text-decoration-none link-dark"></a>
                                         <p th:text="${location.description}" class="text-truncate mb-0"></p>
@@ -29,10 +28,10 @@
                                         <ul class="dropdown-menu">
                                             <th:block th:if="${location.active}">
                                                 <li><a th:href="@{/edit/{locationId}(locationId = ${location.id})}" class="dropdown-item">Edit</a></li>
-                                                <li><a th:href="@{/location/{locationId}(locationId = ${location.id})}"
-                                                       class="dropdown-item">View</a></li>
+                                                <li><a th:href="@{/location/{locationId}(locationId = ${location.id})}" class="dropdown-item">View</a></li>
                                                 <li><a th:href="'#bookings'+${location.id}" class="dropdown-item" data-bs-toggle="collapse">Bookings
                                                     <span th:text="${location.calculateTotalPendingBookings()}" class="badge bg-warning"></span></a></li>
+                                                <li><a th:href="@{/reservations/history/{locationId}(locationId = ${location.id})}" class="dropdown-item">Booking History</a></li>
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
@@ -57,22 +56,21 @@
                                                 <li class="list-group-item list-group-item-action">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex align-items-center">
-                                                            <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" alt="location">
+                                                            <img th:if="${booking.customer.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle" height="30" width="30" alt="customer">
+                                                            <img th:unless="${booking.customer.profileImage == null}" th:src="@{~/user-images/__${booking.customer.profileImage.name}__}" class="rounded-circle" height="30" width="30" alt="customer">
                                                             <div class="ms-2">
                                                                 <div th:text="${booking.customer.firstName}" class="fw-bold"></div>
                                                                 <small th:text="${booking.cars} + ' Cars • ' + ${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}"></small>
                                                             </div>
                                                         </div>
                                                         <div class="ms-2 my-auto">
-                                                                <button th:id="'btnCancel'+${booking.id}"
-                                                                        th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
+                                                                <button th:attr="onclick=|updateBooking('cancel','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-danger w-100"
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#modal"
                                                                         type="button">Cancel
                                                                 </button>
-                                                                <button th:id="'btnConfirm'+${booking.id}"
-                                                                        th:data="${booking.id}"
+                                                                <button th:data="${booking.id}"
                                                                         th:attr="onclick=|updateBooking('confirm','${booking.id}','${location.id}','${booking.customer.firstName}','${booking.cars}','${#dates.format(booking.startDate, 'MMM d')}','${#dates.format(booking.endDate, 'MMM d, yyyy')}')|"
                                                                         class="btn btn-sm btn-success w-100"
                                                                         data-bs-toggle="modal"
@@ -112,6 +110,41 @@
         </div>
     </div>
     <script>
+        function updateBooking(action, id, loc, name,cars, start, end){
+            var title = document.querySelector('#modalTitle')
+            var message = document.querySelector('#modalMessage')
+            var link = document.querySelector('#actionLink')
+            if(action === 'confirm'){
+                link.classList.remove("btn-danger");
+                link.innerHTML = 'Confirm it';
+                link.classList.add("btn-success");
+            }else if (action === 'cancel'){
+                link.classList.remove("btn-success");
+                link.innerHTML = 'Cancel it';
+                link.classList.add("btn-danger");
+            }
+            title.innerHTML = 'Do you want to ' + action + ' <b>' + name + '\'s</b> reservation?';
+            message.innerHTML = cars + ' Cars for ' + start + ' - ' + end;
+            link.setAttribute("href","/reservations/"+action+"/" +loc+"/" + id);
+        }
+
+        function updateListing(action, locationId, locationTitle){
+            var title = document.querySelector('#modalTitle')
+            var message = document.querySelector('#modalMessage')
+            var link = document.querySelector('#actionLink')
+            if(action === 'publish'){
+                link.classList.remove("btn-danger");
+                link.innerHTML = 'Publish it';
+                link.classList.add("btn-success");
+            }else if (action === 'unlist'){
+                link.classList.remove("btn-success");
+                link.innerHTML = 'Unlist it';
+                link.classList.add("btn-danger");
+            }
+            title.innerHTML = 'Do you want to ' + action + ' this location?';
+            message.innerHTML = locationTitle;
+            link.setAttribute("href","/location/"+action+"/" +locationId);
+        }
     </script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

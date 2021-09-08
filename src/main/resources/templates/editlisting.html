@@ -10,8 +10,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="m-3">
-                    <form th:action="@{/update}" th:object="${location}" method="POST" id="updateForm">
-                        <input th:field="*{id}" type="hidden">
+                    <form th:action="@{/update/{locationId}(locationId = ${location.id})}" th:object="${location}" method="POST" id="updateForm">
                         <div class="text-center">
                             <div class="btn-group" role="group">
                                 <input th:checked="${location.active}" name="active" id="active" type="checkbox" class="btn-check">
@@ -35,6 +34,8 @@
                             <div class="col-sm-4 col">
                                 <label class="form-label">State</label>
                                 <select th:field="*{address.state}" class="form-select" disabled>
+                                    <option th:value="*{address.state}"
+                                            th:text="*{address.state}"></option>
                                 </select>
                             </div>
                             <div class="col-sm-4 col mb-3">

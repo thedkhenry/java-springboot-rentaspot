@@ -2,6 +2,7 @@ package com.henrysican.rentaspot.security;
 
 import com.henrysican.rentaspot.models.AuthGroup;
 import com.henrysican.rentaspot.models.User;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
+@ToString
 public class AppUserPrincipal implements UserDetails {
     private final User user;
     private final List<AuthGroup> authGroups;

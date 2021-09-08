@@ -1,7 +1,14 @@
 package com.henrysican.rentaspot.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
+import com.henrysican.rentaspot.services.GMapService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
 import com.henrysican.rentaspot.services.UserService;
@@ -12,7 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Log
 @Controller
@@ -20,14 +29,16 @@ public class LocationController {
     private final LocationService locationService;
     private final ReviewService reviewService;
     private final UserService userService;
+    private final GMapService gMapService;
 
     @Autowired
     public LocationController(LocationService locationService,
                               ReviewService reviewService,
-                              UserService userService) {
+                              UserService userService, GMapService gMapService) {
         this.locationService = locationService;
         this.reviewService = reviewService;
         this.userService = userService;
+        this.gMapService = gMapService;
     }
 
     @GetMapping("/location/{locationId}")
@@ -41,6 +52,21 @@ public class LocationController {
         return "locationdetails";
     }
 
+    @GetMapping("/location/{action}/{locationId}")
+    public String updateLocationActive(@PathVariable("action") String action,
+                                       @PathVariable("locationId") Location location,
+                                       @AuthenticationPrincipal AppUserPrincipal principal){
+        if(principal.getId() != location.getUser().getId()){
+            return "redirect:/403";
+        }
+        if(action.equals("unlist")){
+            locationService.updateLocationActive(location.getId(), false);
+        }else if (action.equals("publish")){
+            locationService.updateLocationActive(location.getId(), true);
+        }
+        return "redirect:/hostinglist";
+    }
+
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
     public String getEditForm(@PathVariable("locationId") Location location,
@@ -49,16 +75,23 @@ public class LocationController {
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
         }
-        log.warning("/edit/{"+location.getId()+"} getEditForm - " + location);
         model.addAttribute("location", location);
         return "editlisting";
     }
 
-//TODO: Change to  /update/{locationId}  ?
-    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=update")
-    public String updateLocation(@ModelAttribute Location location){
-        log.warning("/update UPDATE 1 " + location);
-        Location dbLocation = locationService.getLocationById(location.getId());
+    @PostMapping("/update/{locationId}")
+    public String updateLocation(@PathVariable("locationId") int locationId,
+                                 @ModelAttribute Location location,
+                                 @RequestParam(value = "action") String action,
+                                 @AuthenticationPrincipal AppUserPrincipal principal){
+        Location dbLocation = locationService.getLocationById(locationId);
+        if(principal.getId() != dbLocation.getUser().getId()){
+            return "redirect:/403";
+        }
+        if(action.equals("delete")){ //else "update"
+            locationService.deleteLocation(dbLocation);
+            return "redirect:/hostinglist";
+        }
         dbLocation.setActive(location.isActive());
         dbLocation.setTitle(location.getTitle());
         dbLocation.setDescription(location.getDescription());
@@ -69,53 +102,28 @@ public class LocationController {
         dbLocation.setStreetParking(location.isStreetParking());
         dbLocation.setHasRvParking(location.isHasRvParking());
         dbLocation.setHasEvCharging(location.isHasEvCharging());
-        dbLocation = locationService.saveLocation(dbLocation);
-        log.warning("/update UPDATE 2 " + dbLocation);
+        locationService.saveLocation(dbLocation);
         return "redirect:/hostinglist";
     }
 
-    @RequestMapping(value="/update", method=RequestMethod.POST,params = "action=delete")
-    public String deleteLocation(@ModelAttribute Location location){
-        log.warning("/update DELETE " + location);
-        locationService.deleteLocation(location);
-        return "redirect:/hostinglist";
-    }
-
-//TODO: Add form validation  &&  Make User Host
+//TODO: Add form validation
     @GetMapping("/create")
     public String getCreateForm(Model model){
         model.addAttribute("location", new Location());
         model.addAttribute("address", new Address());
+        model.addAttribute("states", UsState.values());
         return "createlisting";
     }
 
-//TODO: User warning - "Address final"
-    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=save")
-    public String saveLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
-        User user = userService.getUserById(principal.getId());
-        user.setHost(true);
-        location.setUser(user);
-        location.getAddress().setCountry("US");
-        location.setActive(false);
-//TODO: geocode address get lat/lon
-        location = locationService.saveLocation(location);
-        userService.saveUser(user);
-        log.warning("/create SAVE 2 " + location);
-        return "redirect:/hostinglist";
-    }
-
-//TODO: User warning - "Address final"
-    @RequestMapping(value="/create", method=RequestMethod.POST,params = "action=publish")
-    public String publishLocation(@ModelAttribute Location location, @AuthenticationPrincipal AppUserPrincipal principal){
-        User user = userService.getUserById(principal.getId());
-        user.setHost(true);
-        location.setUser(user);
-        location.getAddress().setCountry("US");
-        location.setActive(true);
-//TODO: geocode address get lat/lon
-        location = locationService.saveLocation(location);
-        userService.saveUser(user);
-        log.warning("/create PUBLISH 2 " + location);
+    @PostMapping("/create")
+    public String createLocation(@ModelAttribute Location location,
+                                 @AuthenticationPrincipal AppUserPrincipal principal,
+                                 @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
+        LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
+        User host = userService.getUserById(principal.getId());
+        host.setHost(true);
+        locationService.saveNewLocation(location,host,latLng,action.equals("publish"));
+        userService.saveUser(host);
         return "redirect:/hostinglist";
     }
 }

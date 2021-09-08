@@ -81,7 +81,6 @@ public class SearchController {
 
         List<Address> addresses = resultLocations.stream().map(Location::getAddress).collect(Collectors.toList());
         model.addAttribute("locations", resultLocations);
-        model.addAttribute("addresses", addresses);
         model.addAttribute("city", city);
         log.warning("addresses "+ addresses.size() + " " + addresses);
         return "searchlist";

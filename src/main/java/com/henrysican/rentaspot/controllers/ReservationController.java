@@ -1,12 +1,10 @@
 package com.henrysican.rentaspot.controllers;
 
-import com.henrysican.rentaspot.models.Booking;
-import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.User;
+import com.henrysican.rentaspot.models.*;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
+import com.henrysican.rentaspot.services.CsvExportService;
 import com.henrysican.rentaspot.services.UserService;
-import com.henrysican.rentaspot.models.BookingStatus;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Log
@@ -23,11 +23,13 @@ import java.util.List;
 public class ReservationController {
     private final BookingService bookingService;
     private final UserService userService;
+    private final CsvExportService csvExportService;
 
     @Autowired
-    public ReservationController(BookingService bookingService, UserService userService){
+    public ReservationController(BookingService bookingService, UserService userService, CsvExportService csvExportService){
         this.bookingService = bookingService;
         this.userService = userService;
+        this.csvExportService = csvExportService;
     }
 
 //TODO: Add expiration time? Ex: Expires in (1 hour) (47 minutes)
@@ -45,6 +47,43 @@ public class ReservationController {
         return "reservations";
     }
 
+    @GetMapping("/history/{locationId}")
+    public String getBookingHistoryPage( @PathVariable("locationId") Location location,
+                                         @AuthenticationPrincipal AppUserPrincipal principal,
+                                         Model model){
+        if(location.getUser().getId() != principal.getId()){
+            return "redirect:/403";
+        }
+        model.addAttribute("location", location);
+        model.addAttribute("bookingList", location.getBookings());
+        return "locationreservations";
+    }
+
+    @GetMapping("/export/{locationId}")
+    public void exportBookings(@PathVariable("locationId") Location location,
+                               @AuthenticationPrincipal AppUserPrincipal principal,
+                               HttpServletResponse response) throws IOException {
+        if(location.getUser().getId() != principal.getId()){
+            response.sendRedirect("/403");
+        }
+        String filename = "bookingdata_"+location.getId()+".csv";
+        response.setContentType("text/csv");
+        response.addHeader("Content-Disposition","attachment; filename=\""+filename+"\"");
+        csvExportService.writeBookingsToCsv(response.getWriter(),location.getId());
+    }
+
+    @GetMapping("/cancel/{bookingId}")
+    public String cancelReservation(@PathVariable("bookingId") Booking booking,
+                                    @AuthenticationPrincipal AppUserPrincipal principal){
+        if(booking.getCustomer().getId() != principal.getId()){
+            return "redirect:/403";
+        }
+        if (booking.ableToCancel()) {
+            bookingService.updateBookingStatus(booking.getId(), BookingStatus.CUSTOMER_CANCELED);
+        }
+        return "redirect:/reservations";
+    }
+
     @GetMapping("/{action}/{locationId}/{bookingId}")
     public String updateBooking(@PathVariable("action") String action,
                                 @PathVariable("locationId") int locationId,
@@ -53,15 +92,12 @@ public class ReservationController {
         if(booking == null || booking.getHost().getId() != principal.getId()){
             return "redirect:/hostinglist";
         }
-        log.warning("updateBooking " + booking);
-        log.warning("updateBooking " + action + " " + locationId + " " + booking.getId());
         if (booking.calculateTimeFromCreate() >= 0 && booking.getLocation().getId() == locationId){
             if(action.equals("confirm")){
-                booking.setBookingStatus(BookingStatus.CONFIRMED);
+                bookingService.updateBookingStatus(booking.getId(), BookingStatus.CONFIRMED);
             } else{
-                booking.setBookingStatus(BookingStatus.HOST_CANCELED);
+                bookingService.updateBookingStatus(booking.getId(), BookingStatus.HOST_CANCELED);
             }
-            bookingService.saveBooking(booking);
         }
         return "redirect:/hostinglist";
     }
@@ -73,7 +109,7 @@ public class ReservationController {
         return "reservelocation";
     }
 
-    @RequestMapping(value="/reserve/{locationId}", method=RequestMethod.POST)
+    @PostMapping("/reserve/{locationId}")
     public String checkAvailability(@PathVariable("locationId") Location location,
                                     @ModelAttribute Booking booking,
                                     RedirectAttributes redirectAttributes,
@@ -126,7 +162,7 @@ public class ReservationController {
         int hostId = booking.getHost().getId();
         if(customerId == principal.getId() || hostId == principal.getId()){
             model.addAttribute("booking", booking);
-            model.addAttribute("message", new Object());
+            model.addAttribute("message", new Message());
             return "reservationdetails";
         }
         return "redirect:/403";

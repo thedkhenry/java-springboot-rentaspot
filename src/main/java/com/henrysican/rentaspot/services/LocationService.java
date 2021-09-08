@@ -1,15 +1,14 @@
 package com.henrysican.rentaspot.services;
 
+import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.dao.LocationRepo;
 import com.henrysican.rentaspot.models.BookingStatus;
 import com.henrysican.rentaspot.models.Location;
+import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +28,15 @@ public class LocationService {
         return locationRepo.save(location);
     }
 
+    public Location saveNewLocation(Location location, User host, LatLng latLng, boolean publish){
+        location.setUser(host);
+        location.getAddress().setCountry("US");
+        location.getAddress().setLatitude(latLng.lat);
+        location.getAddress().setLongitude(latLng.lng);
+        location.setActive(publish);
+        return locationRepo.save(location);
+    }
+
     public void deleteLocation(Location location){
         locationRepo.delete(location);
     }
@@ -37,11 +45,20 @@ public class LocationService {
         return locationRepo.findById(id).orElse(new Location());
     }
 
+    public List<Location> getAllLocations(){
+        return locationRepo.findAll();
+    }
+
+    public void updateLocationActive(int locationId, boolean active){
+        Location location = locationRepo.getById(locationId);
+        location.setActive(active);
+    }
+
     public List<Location> get10HighlyRatedLocations(){
         final long LIMIT = 10;
         List<Location> locations = locationRepo.findAllByIsActiveIsTrue();
         return locations.stream()
-                .sorted(Comparator.comparingDouble(Location::calculateWeightedAverage).reversed())
+                .sorted(Comparator.comparingDouble(Location::getWeightedAverage).reversed())
                 .limit(LIMIT)
                 .collect(Collectors.toList());
     }

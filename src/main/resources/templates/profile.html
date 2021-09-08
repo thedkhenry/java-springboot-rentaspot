@@ -22,7 +22,8 @@
         <div class="card">
             <div class="row card-body">
                 <div class="col-lg-3 text-center border-end">
-                    <img th:src="@{/images/profileplaceholder1.png}" class="rounded-circle mt-3 p-2" width="150px">
+                    <img th:if="${user.profileImage == null}" th:src="@{/images/profileplaceholder1.png}" class="rounded-circle mt-3 p-2" height="150px" width="150px">
+                    <img th:unless="${user.profileImage == null}" th:src="@{~/user-images/__${user.profileImage.name}__}" class="rounded-circle mt-3 p-2" height="150px" width="150px">
                     <div th:text="${user.firstName}" class="fw-bold mt-3"></div>
                     <div th:text="${user.email}" class="text-black-50"></div>
                 </div>
@@ -56,7 +57,7 @@
                                     </div>
                                     <div class="mt-auto">
                                         <div class="row px-2 my-2">
-                                            <div th:text="'⭐ ' + ${loc.calculateWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
+                                            <div th:text="'⭐ ' + ${loc.getWeightedAverage()} + ' (' + ${loc.reviews.size()} + ' Reviews)'" class="col-8 text-muted"></div>
                                             <div th:text="'$' + ${loc.price} + '/day'" class="col-4 text-end fw-bold"></div>
                                         </div>
                                         <div class="card-footer align-self-end">

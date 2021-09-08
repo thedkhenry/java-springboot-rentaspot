@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,6 +47,7 @@ public class Booking {
     @NonNull
     @ManyToOne
     User customer;
+    @JsonBackReference
     @NonNull
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -103,5 +105,12 @@ public class Booking {
         boolean isEndDate = calculateDaysFromEndDate() >= 0;
         boolean isConfirmed = this.bookingStatus == BookingStatus.CONFIRMED;
         return isConfirmed && isEndDate && !this.hasReview;
+    }
+
+    public boolean ableToCancel(){
+        Date today = new Date();
+        boolean isNotAfterEndDate = !today.after(this.endDate);
+        boolean isConfirmedOrPending = this.bookingStatus == BookingStatus.CONFIRMED || this.bookingStatus == BookingStatus.PENDING;
+        return isConfirmedOrPending && isNotAfterEndDate;
     }
 }

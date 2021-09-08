@@ -12,9 +12,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{/css/main.css}" rel="stylesheet" />
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
+    <link th:rel="stylesheet" th:href="@{/css/main.css}" />
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <title th:text="${title}"></title>
 </head>
 
@@ -38,6 +37,13 @@
                         <th:block sec:authorize="isAnonymous()">
                             <li><a th:href="@{/signup}" class="dropdown-item">Sign up</a></li>
                             <li><a th:href="@{/login}" class="dropdown-item">Log in</a></li>
+                        </th:block>
+                        <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+                            <li><a th:href="@{/admin/addresses}" class="dropdown-item">ADMIN: Addresses</a></li>
+                            <li><a th:href="@{/admin/locations}" class="dropdown-item">ADMIN: Locations</a></li>
+                            <li><a th:href="@{/admin/users}" class="dropdown-item">ADMIN: Users</a></li>
+                            <li><a th:href="@{/admin/bookings}" class="dropdown-item">ADMIN: Bookings</a></li>
+                            <li><a th:href="@{/admin/images}" class="dropdown-item">ADMIN: Images</a></li>
                         </th:block>
                         <th:block sec:authorize="isAuthenticated()">
                             <li><a th:href="@{/user}" class="dropdown-item">Profile</a></li>

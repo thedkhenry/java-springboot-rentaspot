@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'All Bookings')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Bookings</h2>
+        <div class="d-flex align-items-end justify-content-end">
+            <h5>Export Data</h5>
+            <a th:href="@{/admin/export/bookings}" class="btn btn-outline-secondary mx-3">Export CSV</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Price</th>
+                    <th>Cars</th>
+                    <th>Status</th>
+                    <th>Host</th>
+                    <th>Customer</th>
+                    <th>Location Address</th>
+                    <th>Reviewed</th>
+                    <th>Created</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="b,iter : ${bookings}">
+                    <th th:text="${iter.count}"></th>
+                    <th th:text="${b.id}"></th>
+                    <th th:text="${b.startDate}"></th>
+                    <th th:text="${b.endDate}"></th>
+                    <th th:text="'$' + ${b.price}"></th>
+                    <th th:text="${b.cars}"></th>
+                    <th th:text="${b.bookingStatus}"></th>
+                    <th th:text="${b.host.email}"></th>
+                    <th th:text="${b.customer.email}"></th>
+                    <th th:text="${b.location.address.fullAddress}"></th>
+                    <th th:text="${b.hasReview}"></th>
+                    <th th:text="${b.createdAt}"></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

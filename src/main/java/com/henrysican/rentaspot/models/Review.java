@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,9 +31,10 @@ public class Review {
     @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
     User user;
+    @JsonBackReference
     @NonNull
     @ManyToOne(cascade = CascadeType.MERGE)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Location location;
     @OneToOne(cascade = CascadeType.MERGE)
     Booking booking;

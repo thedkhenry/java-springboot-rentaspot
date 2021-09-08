@@ -32,6 +32,13 @@
                                             <span th:case="'Confirmed'" class="badge bg-success">Confirmed</span>
                                             <a th:if="${booking.needsReview()}" th:href="@{/review/create/{bookingId}(bookingId = ${booking.id})}" class="badge bg-warning link-dark d-block">Review</a>
                                         </th:block>
+                                        <button th:if="${booking.ableToCancel()}"
+                                                th:attr="data-id=${booking.id},data-title=${booking.location.title}"
+                                                th:onclick="cancelMyReservation(this)"
+                                                class="btn btn-sm btn-outline-danger w-100"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal"
+                                                type="button">Cancel</button>
                                     </div>
                                 </div>
                             </li>
@@ -40,6 +47,24 @@
                 </div>
             </div>
         </th:block>
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Please Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 id="modalTitle"></h5>
+                    <div id="modalMessage"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a id="actionLink" class="btn"></a>
+                </div>
+            </div>
+        </div>
     </div>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

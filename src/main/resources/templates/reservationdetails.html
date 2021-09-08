@@ -5,6 +5,9 @@
 <body>
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
+        <th:block th:if="${alert != null}">
+            <div th:text="${alert}" class="alert alert-success"></div>
+        </th:block>
         <h2>Reservation Details</h2>
         <div class="card">
             <div class="row card-body">
@@ -45,10 +48,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:action="@{/sendMessage}" th:object="${message}" method="POST" id="messageHostForm">
+                    <form th:action="@{/messageHost/{hostId}(hostId = ${booking.host.id})}" th:object="${message}" method="POST" id="messageHostForm">
                         <div class="mb-3">
                             <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text" placeholder="Got a question or concern?"></textarea>
+                            <textarea th:field="*{messageContent}" class="form-control" id="message-text" placeholder="Got a question or concern?"></textarea>
                         </div>
                     </form>            
                 </div>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'My Messages')"></head>
+<body>
+<div th:replace="fragments/general.html :: navbar"></div>
+    <div class="container mt-4">
+        <h2>Messages</h2>
+        <div class="row overflow-hidden shadow mt-3">
+            <div class="col-md-5 order-md-0 order-last p-0">
+                <div style="height: 500px; overflow-y: scroll;">
+                    <div th:if="${#lists.isEmpty(users)}" class="d-flex h-100">
+                        <h6 class="col align-self-center text-center text-muted">You don't have any contacts.</h6>
+                    </div>
+                    <th:block th:unless="${#lists.isEmpty(users)}">
+                        <ul class="list-group">
+                            <th:block th:each="user : ${users}">
+                                <!--                            <li th:onclick="selectChatUser(27)"-->
+                                <li th:attr="onclick=|selectChatUser(${user.id})|"
+                                    th:id="'chatUser' + ${user.id}"
+                                    class="list-group-item list-group-item-action py-3">
+                                    <div class="d-flex align-items-center">
+                                        <img th:if="${user.profileImage == null}"
+                                             th:src="@{/images/profileplaceholder1.png}" class="rounded-circle"
+                                             height="50" width="50" alt="user">
+                                        <img th:unless="${user.profileImage == null}"
+                                             th:src="@{~/user-images/__${user.profileImage.name}__}"
+                                             class="rounded-circle" height="50" width="50" alt="user">
+                                        <div class="text-truncate ms-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h6 th:text="${user.firstName} + ' ' + ${user.lastName}"
+                                                    class="mb-0"></h6>
+                                                <small class="small font-weight-bold">25 Dec</small>
+                                            </div>
+                                            <p class="text-truncate mb-0">Lorem ipsum dolor sit amet, consectetur
+                                                adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </th:block>
+                </div>
+            </div>
+            <div class="col-md-7 order-md-0 align-self-end">
+                <div style="height: 430px; overflow-y: scroll;">
+                    <ul id="messageList" class="list-group">
+                    </ul>
+                </div>
+                <div class="input-group border-top py-3">
+                    <input id="message" class="form-control bg-light" type="text" placeholder="Type a message">
+                    <button id="send" class="input-group-text btn-link" type="submit">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+    <script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
+    <script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/websocket.js}"></script>
+</body>
+</html>
