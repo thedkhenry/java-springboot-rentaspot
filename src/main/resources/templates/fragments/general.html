@@ -57,6 +57,27 @@
             </ul>
         </div>
     </nav>
+    <footer th:fragment="footer" class="py-5" style="background-color: #ff4141;">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <h5 class="text-white mb-3">QUICK LINKS</h5>
+                    <ul class="list-inline text-decoration-none">
+                        <li class="list-inline-item"><a th:href="@{/#}" class="link-light text-decoration-none">Home</a></li>
+                        <li class="list-inline-item"><a th:href="@{/about}" class="link-light text-decoration-none">About</a></li>
+                        <li class="list-inline-item"><a th:href="@{/faq}" class="link-light text-decoration-none">FAQ</a></li>
+                        <li class="list-inline-item"><a th:href="@{/contact}" class="link-light text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col text-center pt-3">
+                    <a href="#" class="link-light text-decoration-none">© 2021 Rent-A-Spot. All rights reserved</a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <th:block th:fragment="scripts">
         <script type="text/javascript" th:src="@{/js/main.js}"></script>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -64,5 +85,4 @@
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     </th:block>
 </body>
-
 </html>

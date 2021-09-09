@@ -74,6 +74,7 @@ public class ReservationController {
     public String cancelReservation(@PathVariable("bookingId") Booking booking,
                                     @AuthenticationPrincipal AppUserPrincipal principal){
         if(booking.getCustomer().getId() != principal.getId()){
+            log.warning("customerId doesn't match principalId");
             return "redirect:/403";
         }
         if (booking.ableToCancel()) {
@@ -88,6 +89,7 @@ public class ReservationController {
                                 @PathVariable("bookingId") Booking booking,
                                 @AuthenticationPrincipal AppUserPrincipal principal){
         if(booking == null || booking.getHost().getId() != principal.getId()){
+            log.warning("booking null or hostId doesn't match principalId "+ booking);
             return "redirect:/hostinglist";
         }
         if (booking.calculateTimeFromCreate() >= 0 && booking.getLocation().getId() == locationId){
@@ -113,8 +115,6 @@ public class ReservationController {
                                     RedirectAttributes redirectAttributes,
                                     @RequestParam(value = "action") String action,
                                     @AuthenticationPrincipal AppUserPrincipal principal){
-        log.warning("Check Button PARAM!!!! " + action);
-        log.warning("Check Button booking-> " + booking);
         String message;
         if(!booking.isRangeValid()){
             message = "Invalid date range.";

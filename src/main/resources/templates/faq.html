@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'About')"></head>
+<body>
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <section class="container mt-4">
+        <h2 th:text="'About'"></h2>
+    </section>
+    <div th:replace="fragments/general.html :: footer"></div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

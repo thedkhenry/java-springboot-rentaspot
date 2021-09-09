@@ -35,6 +35,21 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping({"/about"})
+    public String getAboutPage(){
+        return "home";
+    }
+
+    @GetMapping({"/faq"})
+    public String getFaqPage(){
+        return "faq";
+    }
+
+    @GetMapping({"/contact"})
+    public String getContactPage(){
+        return "contact";
+    }
+
 //TODO: Message 'You missed X reservations.'
     @GetMapping("/hostinglist")
     public String getHostingListPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){

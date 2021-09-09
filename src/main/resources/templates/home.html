@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="en" style="height: 100%"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
@@ -8,35 +8,73 @@
   http://www.ultraq.net.nz/thymeleaf/layout http://www.ultraq.net.nz/thymeleaf/layout
   http://www.thymeleaf.org/thymeleaf-extras-springsecurity4 http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:replace="fragments/general.html :: headerfiles (title = 'Rent-A-Spot')"></head>
-<body>
+<body style="height: 100%">
     <div th:replace="fragments/general.html :: navbar"></div>
-    <div class="container">
-        <h1 class="text-center mt-4">Let's find you a parking spot...</h1>
-        <form th:action="@{/search}" method="GET" id="searchForm">
-            <div class="row justify-content-center my-3">
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input name="city" type="text" class="form-control">
-                    <label>City</label>
-                </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" name="startDate" type="date" class="form-control">
-                    <label>Check in</label>
-                </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" name="endDate" type="date" class="form-control">
-                    <label>Check out</label>
-                </div>
-                <div class="col-7 col-sm-3 form-floating px-0">
-                    <input name="cars" type="number" class="form-control" min="0" value="0">
-                    <label>Cars</label>
-                </div>
-                <div class="col-12 text-center pt-3">
-                    <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
-                </div>
+    <section class="border-bottom border-danger border-5"
+            style="
+            background-image: url('https://images.unsplash.com/photo-1533207518163-8866262ad732?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1400&amp;q=80');
+            background-repeat: no-repeat;
+            height: 50%;
+            background-size: cover;
+            z-index: -1;">
+        <div class="d-flex h-100" style="backdrop-filter: blur(2px);">
+            <div class="container my-auto">
+                <h1 class="text-center display-5 fw-bold text-white my-5 pb-5">Let's find you a parking spot...</h1>
+                <form th:action="@{/search}" method="GET" id="searchForm">
+                    <div class="row justify-content-center my-3">
+                        <div class="col-7 col-sm-3 form-floating px-0">
+                            <input name="city" type="text" class="form-control">
+                            <label>City</label>
+                        </div>
+                        <div class="col-7 col-sm-3 form-floating px-0">
+                            <input th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" name="startDate" type="date" class="form-control">
+                            <label>Check in</label>
+                        </div>
+                        <div class="col-7 col-sm-3 form-floating px-0">
+                            <input th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" name="endDate" type="date" class="form-control">
+                            <label>Check out</label>
+                        </div>
+                        <div class="col-7 col-sm-3 form-floating px-0">
+                            <input name="cars" type="number" class="form-control" min="0" value="0">
+                            <label>Cars</label>
+                        </div>
+                        <div class="col-12 text-center pt-3">
+                            <button type="submit" form="searchForm" class="btn btn-danger">Search</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-        <h2>Top spots</h2>
-        <div class="container overflow-auto mb-4">
+        </div>
+    </section>
+    <section class="container text-center py-5">
+        <div class="row">
+            <div class="col">
+                <h2 class="display-5">How it works</h2>
+                <div class="fs-5 mt-4">We’ve done all the hard work and made it simple for you. Here’s how it works.</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <img th:src="@{images/map_marker.png}" class="my-5" alt="map marker" height="130px" width="130px">
+                <h4>Search For Spots</h4>
+                <p>Use the search feature to find an available spot in your area.</p>
+
+            </div>
+            <div class="col-md-4">
+                <img th:src="@{images/calendar.png}" class="my-5" alt="calendar" height="130px" width="130px">
+                <h4>Book a Spot</h4>
+                <p>Reserve your spot at your preferred date. The host will then confirm your booking.</p>
+            </div>
+            <div class="col-md-4">
+                <img th:src="@{images/car_icon.png}" class="my-5" alt="car" height="130px" width="130px">
+                <h4>Park Your Car</h4>
+                <p>Drop off your vehicle at the secure location and enjoy some peace of mind!</p>
+            </div>
+        </div>
+    </section>
+    <section class="container py-5">
+        <h2 class="display-5 text-center">Top spots</h2>
+        <div class="container overflow-auto my-4">
             <ul class="row flex-nowrap mt-3">
                 <th:block th:each="loc : ${topLocations}">
                     <li class="list-group-item list-group-item-action h-100 p-0 mx-2 shadow rounded"
@@ -71,8 +109,10 @@
                 </th:block>
             </ul>
         </div>
-        <h2>Recently added spots</h2>
-        <div class="container overflow-auto mb-4">
+    </section>
+    <section class="container py-5">
+        <h2 class="display-5 text-center">Recently added spots</h2>
+        <div class="container overflow-auto my-4">
             <ul class="row flex-nowrap mt-3">
                 <th:block th:each="loc : ${newLocations}">
                     <li class="list-group-item list-group-item-action h-100 p-0 mx-2 shadow rounded"
@@ -107,8 +147,8 @@
                 </th:block>
             </ul>
         </div>
-    </div>
-    <p></p>
+    </section>
+    <div th:replace="fragments/general.html :: footer"></div>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>
 
