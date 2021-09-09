@@ -1,6 +1,7 @@
 package com.henrysican.rentaspot.services;
 
 import com.henrysican.rentaspot.dao.UserRepo;
+import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.Message;
 import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,20 @@ public class UserService {
 
     public User saveUser(User user){
         return userRepo.save(user);
+    }
+
+    public boolean addToWishlist(int userId, Location location){
+        User user = userRepo.getById(userId);
+        boolean wishlisted = user.getWishlist().stream().anyMatch(location1 -> location1.getId() == location.getId());
+        if(!location.isActive() || wishlisted){
+            return false;
+        }
+        return user.getWishlist().add(location);
+    }
+
+    public boolean removeFromWishlist(int userId, Location location){
+        User user = userRepo.getById(userId);
+        return user.getWishlist().removeIf(loc -> loc.getId() == location.getId());
     }
 
     public boolean checkUserEmailExists(String email){

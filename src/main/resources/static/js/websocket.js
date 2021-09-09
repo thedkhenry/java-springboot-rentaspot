@@ -8,6 +8,12 @@ $(document).ready(function() {
     $("#send").click(function() {
         sendMessage();
     });
+    $('#message').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            sendMessage();
+        }
+    });
 });
 
 function connect() {
@@ -38,18 +44,26 @@ function selectChatUser(userId){
 }
 
 function sendMessage() {
-    console.log("Sending message...");
+    if(selectedUser === undefined){
+        return;
+    }
     const message = {
         messageContent: $("#message").val(),
     };
-    stompClient.send("/app/message/"+selectedUser, {}, JSON.stringify(message));
-    $("#message").val('');
-    renderMessage(message);
+    if (message.messageContent.trim() !== "") {
+        console.log("Sending message...");
+        stompClient.send("/app/message/" + selectedUser, {}, JSON.stringify(message));
+        $("#message").val('');
+        renderMessage(message);
+    }
 }
 
 function renderMessage(message) {
     console.log("Rendering message... " + message.messageContent);
     let msgContent = message.messageContent;
+    if(selectedUser === undefined){
+        return;
+    }
     if (message.senderId === selectedUser) {
         $("#messageList").append(
             "<li class=\"list-group-item mw-100 text-break border-0 d-flex\">" +

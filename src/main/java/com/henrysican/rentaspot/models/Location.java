@@ -57,6 +57,8 @@ public class Location {
     @JsonManagedReference
     @OneToMany(mappedBy = "location")
     List<Booking> bookings;
+    @ManyToMany(mappedBy = "wishlist")
+    List<User> wishlistUsers;
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     Date updatedAt;

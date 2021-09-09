@@ -2,11 +2,13 @@ package com.henrysican.rentaspot.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -15,7 +17,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"wishlist"})
 public class User {
 //TODO Add validation for fields
 
@@ -39,12 +41,19 @@ public class User {
     String summary;
     @OneToOne(cascade = CascadeType.ALL)
     Image profileImage;
+    @ManyToMany
+    @JoinTable(
+            name = "user_location_wishlist",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "location_id"))
+    List<Location> wishlist;
     @NonNull
     boolean isHost;
     @NonNull
     String status;
     @NonNull
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     Date createdAt;
 }

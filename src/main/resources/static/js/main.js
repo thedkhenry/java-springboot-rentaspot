@@ -1,3 +1,5 @@
+const URL = 'http://localhost:8080';
+
 //CreateListing
 function showModal(){
     document.querySelector('#modalLocationTitle').innerHTML = document.querySelector('#title').value;
@@ -26,3 +28,26 @@ function cancelMyReservation(btn){
     link.setAttribute("href","/reservations/cancel/" + id);
 }
 
+//LocationDetails save to wishlist button
+function wishListLocation(btn){
+    let id = btn.getAttribute("data-id");
+    let action;
+    if (isSaved) {
+        isSaved = false;
+        action = "remove";
+        $('#saveTextSpan').text("Save");
+        $('#heartImg').attr("src", "/images/heart_outline.png");
+    }else {
+        isSaved = true;
+        action = "add";
+        $('#saveTextSpan').text("Saved");
+        $('#heartImg').attr("src", "/images/heart_fill.png");
+    }
+    $.ajax({
+        type: "POST",
+        url: URL + "/wishlist/" + id,
+        data: {
+            action: action
+        }
+    });
+}
