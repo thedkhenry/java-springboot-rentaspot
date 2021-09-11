@@ -41,11 +41,19 @@ public class User {
     String summary;
     @OneToOne(cascade = CascadeType.ALL)
     Image profileImage;
-    @ManyToMany
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH},
+            targetEntity = Location.class)
     @JoinTable(
             name = "user_location_wishlist",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "location_id"))
+            joinColumns = @JoinColumn(name = "user_id",
+                    nullable = false,
+                    updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "location_id",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     List<Location> wishlist;
     @NonNull
     boolean isHost;

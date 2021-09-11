@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100">
 
-<head th:replace="fragments/general.html :: headerfiles (title = 'About')"></head>
-<body>
+<head th:replace="fragments/general.html :: headerfiles (title = 'Contact')"></head>
+<body class="h-100">
     <div th:replace="fragments/general.html :: navbar"></div>
-    <section class="container mt-4">
-        <h2 th:text="'About'"></h2>
+    <section class="container mt-4 min-vh-100">
+        <h2 th:text="'Contact'"></h2>
     </section>
     <div th:replace="fragments/general.html :: footer"></div>
     <div th:replace="fragments/general.html :: scripts"></div>

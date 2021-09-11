@@ -16,7 +16,7 @@
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex w-100 text-truncate align-items-center" style="transform: rotate(0);">
-                                        <img th:src="@{/images/city_buildings.png}" class="rounded-circle" height="50" alt="location">
+                                        <img th:src="@{/images/city_buildings.png}" height="50" alt="location">
                                         <div class="text-truncate mx-3">
                                             <a th:text="${booking.location.title}" th:href="@{/reservations/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
                                             <p th:text="${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}" class="mb-0"><small></small></p>

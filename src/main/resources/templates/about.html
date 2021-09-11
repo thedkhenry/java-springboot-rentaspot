@@ -1,12 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100">
 
 <head th:replace="fragments/general.html :: headerfiles (title = 'About')"></head>
-<body>
+<body class="h-100">
     <div th:replace="fragments/general.html :: navbar"></div>
-    <section class="container mt-4">
-        <h2 th:text="'About'"></h2>
+    <section>
+        <h1 class="display-6">Case Study</h1>
     </section>
+    <section class="border-bottom border-danger border-5 py-5" style="background-color: #ffc2bd;">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-6 my-auto">
+                    <h1 class="display-5 fw-bold">The Goal</h1>
+                    <p>To allow you to locate, reserve, and rent out parking spaces.</p>
+                </div>
+                <div class="col-md-6">
+                    <img th:src="@{/images/city_buildings.png}" class="img-fluid px-2" alt="city image" width="360" height="360"
+                         style="border-radius: 1.3rem;">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="container py-5">
+        <h1 class="display-5 fw-bold text-center">Technologies</h1>
+        <div class="row text-center">
+            <div class="col">
+                <h3>Frontend</h3>
+                <ul class="list-unstyled">
+                    <li>HTML/CSS</li>
+                    <li>Javascript</li>
+                    <li>Google Maps API</li>
+                    <li>Bootstrap</li>
+                    <li>Thymeleaf</li>
+                </ul>
+            </div>
+            <div class="col">
+                <h3>Backend</h3>
+                <ul class="list-unstyled">
+                    <li>Lombok</li>
+                    <li>Spring Boot</li>
+                    <li>Spring Security</li>
+                    <li>Spring Data JPA</li>
+                    <li>Java</li>
+                    <li>MariaDB</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!--                <p>-->
+    <!--                    To allow you to locate, reserve, and rent out parking spaces.-->
+    <!--                    The app will connect hosts who want to rent out their unused space with guests seeking to-->
+    <!--                    station vehicles safely at affordable prices. Guests will be able to find the right listing using-->
+    <!--                    a variety of filters and a booking system that allows them to reserve a parking space through-->
+    <!--                    any available dates.</p>-->
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <div th:replace="fragments/general.html :: footer"></div>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>

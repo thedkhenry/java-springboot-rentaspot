@@ -1,9 +1,11 @@
 package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Location;
+import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
+import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,12 +20,15 @@ import java.util.List;
 public class HomeController {
     private final LocationService locationService;
     private final BookingService bookingService;
+    private final UserService userService;
 
     @Autowired
     public HomeController(LocationService locationService,
-                          BookingService bookingService){
+                          BookingService bookingService,
+                          UserService userService){
         this.locationService = locationService;
         this.bookingService = bookingService;
+        this.userService = userService;
     }
 
     @GetMapping({"/","/home"})
@@ -37,7 +42,7 @@ public class HomeController {
 
     @GetMapping({"/about"})
     public String getAboutPage(){
-        return "home";
+        return "about";
     }
 
     @GetMapping({"/faq"})
@@ -58,5 +63,12 @@ public class HomeController {
         model.addAttribute("locations",locations);
         log.warning("/hostinglist UPDATED "+updatedCount);
         return "hostinglist";
+    }
+
+    @GetMapping("/wishlist")
+    public String getWishlistPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+        User user = userService.getUserById(principal.getId());
+        model.addAttribute("locations",user.getWishlist());
+        return "wishlist";
     }
 }

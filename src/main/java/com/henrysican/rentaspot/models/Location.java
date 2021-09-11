@@ -57,7 +57,19 @@ public class Location {
     @JsonManagedReference
     @OneToMany(mappedBy = "location")
     List<Booking> bookings;
-    @ManyToMany(mappedBy = "wishlist")
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH},
+            targetEntity = User.class)
+    @JoinTable(
+            name = "user_location_wishlist",
+            joinColumns = @JoinColumn(name = "location_id",
+                    nullable = false,
+                    updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "user_id",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     List<User> wishlistUsers;
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp

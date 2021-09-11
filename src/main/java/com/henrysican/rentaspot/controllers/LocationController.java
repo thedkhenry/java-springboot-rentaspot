@@ -53,6 +53,7 @@ public class LocationController {
         }
         List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         if(principal != null){
+            location.getWishlistUsers().forEach(user -> log.warning(user.toString()));
             boolean isSaved = location.getWishlistUsers().stream().anyMatch(user -> user.getId() == principal.getId());
             model.addAttribute("isSaved",isSaved);
         }

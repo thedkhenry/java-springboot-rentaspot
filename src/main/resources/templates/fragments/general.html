@@ -49,6 +49,7 @@
                             <li><a th:href="@{/user}" class="dropdown-item">Profile</a></li>
                             <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>
                             <li><a th:href="@{/reservations}" class="dropdown-item">Reservations</a></li>
+                            <li><a th:href="@{/wishlist}" class="dropdown-item">Wishlist</a></li>
                             <li><a th:href="@{/hostinglist}" class="dropdown-item">Listings</a></li>
                             <li><a th:href="@{/logout}" class="dropdown-item">Sign out</a></li>
                         </th:block>
@@ -63,7 +64,7 @@
                 <div class="col text-center">
                     <h5 class="text-white mb-3">QUICK LINKS</h5>
                     <ul class="list-inline text-decoration-none">
-                        <li class="list-inline-item"><a th:href="@{/#}" class="link-light text-decoration-none">Home</a></li>
+                        <li class="list-inline-item"><a th:href="@{/home}" class="link-light text-decoration-none">Home</a></li>
                         <li class="list-inline-item"><a th:href="@{/about}" class="link-light text-decoration-none">About</a></li>
                         <li class="list-inline-item"><a th:href="@{/faq}" class="link-light text-decoration-none">FAQ</a></li>
                         <li class="list-inline-item"><a th:href="@{/contact}" class="link-light text-decoration-none">Contact</a></li>
@@ -73,7 +74,7 @@
             <hr>
             <div class="row">
                 <div class="col text-center pt-3">
-                    <a href="#" class="link-light text-decoration-none">© 2021 Rent-A-Spot. All rights reserved</a>
+                    <a th:href="@{/home}" class="link-light text-decoration-none">© 2021 Rent-A-Spot. All rights reserved</a>
                 </div>
             </div>
         </div>

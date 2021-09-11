@@ -64,6 +64,13 @@ public class AppRunner implements CommandLineRunner {
         authRepo.save(new AuthGroup(16, "jbalaizotf@sun.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(17, "jbalaizotf@sun.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(18, "dtavernorh@chronoengine.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(19, "ekondratowiczi@ftc.gov", "ROLE_USER"));
+        authRepo.save(new AuthGroup(20, "adibbj@weebly.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(21, "eallmank@1688.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(22, "krupell@usnews.com", "ROLE_USER"));
+        authRepo.save(new AuthGroup(23, "rleggattm@wikimedia.org", "ROLE_USER"));
+        authRepo.save(new AuthGroup(24, "sbradnickn@dailymail.co.uk", "ROLE_USER"));
+        authRepo.save(new AuthGroup(25, "mhubbleo@sciencedirect.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(26, "hsican@ymail.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(27, "cjaulme9@bing.com", "ROLE_USER"));
         authRepo.save(new AuthGroup(28, "admin@rentaspot.com", "ROLE_USER"));

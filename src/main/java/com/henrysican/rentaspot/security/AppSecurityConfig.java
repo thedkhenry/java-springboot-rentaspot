@@ -53,7 +53,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                                         "/reservations", "/reservations/reservation/{\\d+}", "/reservations/{action:[a-z]+}/{\\d+}/{\\d+}", "/reservations/export/{\\d+}", "/reservations/history/**",
                                         "/hostinglist", "/create", "/update", "/edit/{\\d+}",
                                         "/review/**",
-                                        "/messages").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                                        "/messages",
+                                        "/wishlist/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers("/reservations/**", "/user/**", "/search", "/location/{\\d+}").permitAll()
                 .antMatchers("/","/home").permitAll()
                 .and()

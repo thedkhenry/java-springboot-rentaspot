@@ -1,4 +1,4 @@
-const URL = 'http://localhost:8080';
+const SERVER_URL = 'http://localhost:8080';
 var stompClient = null;
 let selectedUser;
 
@@ -87,7 +87,7 @@ function getMessages(receiverId) {
     $('#messageList').empty();
     $.ajax({
         type: "GET",
-        url: URL + "/fetch-messages/"+receiverId,
+        url: SERVER_URL + "/fetch-messages/"+receiverId,
         success: function (data) {
             console.log("SUCCESS : ", data);
             for(let i = 0; i < data.length; i++){
