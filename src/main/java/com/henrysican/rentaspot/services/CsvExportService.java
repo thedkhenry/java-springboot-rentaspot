@@ -29,6 +29,12 @@ public class CsvExportService {
         this.userService = userService;
     }
 
+    /**
+     * Writes a location's booking records to a csv file. The fields printed are:
+     * "Price","Start Date","End Date","Status","Cars","Firstname","Email","Address","City","Zip","Date Created"
+     * @param writer        the writer used to create the CSVPrinter
+     * @param locationId    the ID of the location
+     */
     public void writeBookingsToCsv(Writer writer, int locationId){
         List<Booking> bookings = bookingService.getAllBookingsForLocation(locationId);
         try {
@@ -45,6 +51,11 @@ public class CsvExportService {
         }
     }
 
+    /**
+     * Writes all booking records to a csv file. The fields printed are:
+     * "ID","Start Date","End Date","Price","Cars","Status","Host Email","Customer Email","Location Address","Reviewed","Date Created"
+     * @param writer        the writer used to create the CSVPrinter
+     */
     public void writeBookingsToCsv(Writer writer){
         List<Booking> bookings = bookingService.getAllBookings();
         try {
@@ -61,6 +72,11 @@ public class CsvExportService {
         }
     }
 
+    /**
+     * Writes all location records to a csv file. The fields printed are:
+     * "ID","Title","Cars","Price","Active","Reviews","Bookings","User","Date Created"
+     * @param writer        the writer used to create the CSVPrinter
+     */
     public void writeLocationsToCsv(Writer writer){
         List<Location> locations = locationService.getAllLocations();
         try {
@@ -76,6 +92,11 @@ public class CsvExportService {
         }
     }
 
+    /**
+     * Writes all address records to a csv file. The fields printed are:
+     * "ID","Address","City","State","Country","Zip","Latitude","Longitude"
+     * @param writer        the writer used to create the CSVPrinter
+     */
     public void writeAddressesToCsv(Writer writer) {
         List<Address> addresses = addressService.getAddresses();
         try {
@@ -91,6 +112,11 @@ public class CsvExportService {
         }
     }
 
+    /**
+     * Writes all user records to a csv file. The fields printed are:
+     * "ID","First","Last","Email","Phone","Image","Host","Date Created"
+     * @param writer        the writer used to create the CSVPrinter
+     */
     public void writeUsersToCsv(Writer writer) {
         List<User> users = userService.getAllUsers();
         try {
@@ -106,6 +132,11 @@ public class CsvExportService {
         }
     }
 
+    /**
+     * Writes all user profile image records to a csv file. The fields printed are:
+     * "ID","Name","Type","User"
+     * @param writer        the writer used to create the CSVPrinter
+     */
     public void writeUsersImagesToCsv(Writer writer) {
         List<User> users = userService.getAllUsersWithImages();
         try {

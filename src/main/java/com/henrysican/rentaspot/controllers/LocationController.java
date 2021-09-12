@@ -51,14 +51,13 @@ public class LocationController {
         if(!location.isActive()){
             return "redirect:/403";
         }
-        List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
         if(principal != null){
             location.getWishlistUsers().forEach(user -> log.warning(user.toString()));
             boolean isSaved = location.getWishlistUsers().stream().anyMatch(user -> user.getId() == principal.getId());
             model.addAttribute("isSaved",isSaved);
         }
         model.addAttribute("location",location);
-        model.addAttribute("reviews",reviews);
+        model.addAttribute("reviews",location.getReviews());
         return "locationdetails";
     }
 
@@ -132,7 +131,12 @@ public class LocationController {
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
         User host = userService.getUserById(principal.getId());
         host.setHost(true);
-        locationService.saveNewLocation(location,host,latLng,action.equals("publish"));
+        location.setUser(host);
+        location.setActive(action.equals("publish"));
+        location.getAddress().setCountry("US");
+        location.getAddress().setLatitude(latLng.lat);
+        location.getAddress().setLongitude(latLng.lng);
+        locationService.saveLocation(location);
         userService.saveUser(host);
         return "redirect:/hostinglist";
     }

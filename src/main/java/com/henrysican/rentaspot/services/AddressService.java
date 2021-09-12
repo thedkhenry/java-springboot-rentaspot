@@ -18,6 +18,10 @@ public class AddressService {
         this.addressRepo = locationRepo;
     }
 
+    /**
+     * Returns a List of all Addresses in the database.
+     * @return  the list of addresses
+     */
     public List<Address> getAddresses(){
         return addressRepo.findAll();
     }

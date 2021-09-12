@@ -18,11 +18,12 @@ public class ReviewService {
         this.reviewRepo = reviewRepo;
     }
 
+    /**
+     * Creates a new entry in the database table with the Review provided and returns it.
+     * @param review    the review to be saved
+     * @return          the saved review
+     */
     public Review saveReview(Review review){
         return reviewRepo.save(review);
-    }
-
-    public List<Review> getReviewsForLocation(int id){
-        return reviewRepo.findAllByLocation_Id(id);
     }
 }

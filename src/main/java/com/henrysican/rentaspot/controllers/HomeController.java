@@ -58,8 +58,8 @@ public class HomeController {
 //TODO: Message 'You missed X reservations.'
     @GetMapping("/hostinglist")
     public String getHostingListPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
-        long updatedCount = bookingService.updateExpiredBookingsForLocations(locationService.getAllLocationsForUser(principal.getId()));
-        List<Location> locations = locationService.getAllLocationsForUser(principal.getId());
+        long updatedCount = bookingService.updateExpiredBookingsForLocations(locationService.getAllLocationsForHost(principal.getId()));
+        List<Location> locations = locationService.getAllLocationsForHost(principal.getId());
         model.addAttribute("locations",locations);
         log.warning("/hostinglist UPDATED "+updatedCount);
         return "hostinglist";
