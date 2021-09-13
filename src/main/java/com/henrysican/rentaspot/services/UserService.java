@@ -47,7 +47,9 @@ public class UserService {
         if(!location.isActive() || wishlisted){
             return false;
         }
-        return user.getWishlist().add(location);
+        boolean added = user.getWishlist().add(location);
+        userRepo.save(user);
+        return added;
     }
 
     /**
@@ -58,7 +60,9 @@ public class UserService {
      */
     public boolean removeFromWishlist(int userId, Location location){
         User user = userRepo.getById(userId);
-        return user.getWishlist().removeIf(loc -> loc.getId() == location.getId());
+        boolean removed = user.getWishlist().removeIf(loc -> loc.getId() == location.getId());
+        userRepo.save(user);
+        return removed;
     }
 
     /**
