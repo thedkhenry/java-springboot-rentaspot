@@ -18,9 +18,11 @@
 </head>
 
 <body>
-    <nav th:fragment="navbar" class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow-sm px-2">
+    <nav th:fragment="navbar" class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom border-danger border-2 shadow-sm px-2">
         <div class="container-fluid">
-            <a th:href="@{/home}" class="navbar-brand">Rent-A-Spot</a>
+            <a th:href="@{/home}" class="navbar-brand">
+                Rent-<span class="text-danger">A</span>-Spot
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

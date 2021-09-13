@@ -5,17 +5,8 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="htp://www.thymeleaf.org http://www.thymeleaf.org
       http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <title>Sign Up</title>
-</head>
-
+<head th:replace="fragments/general.html :: headerfiles (title = 'Sign Up')"></head>
 <body>
-<!--    <div th:replace="fragments/general.html :: navbar"></div>-->
     <div class="text-center vh-100 d-flex flex-column justify-content-center">
         <form th:action="@{/signup}" th:object="${user}" method="POST" class="min-vw-25 mx-auto d-grid">
             <a th:href="@{/home}"><img th:src="@{/images/city_buildings.png}" class="mb-4" alt="Logo" width="150" height="150"></a>
@@ -26,6 +17,7 @@
             <th:block th:if="${message != null}">
                 <div th:text="${message}" class="text-danger"></div>
             </th:block>
+            <a th:href="@{/login}">Already have an account? Log in.</a>
             <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Register</button>
             <p class="mt-5 mb-3 text-muted">© 2021</p>
         </form>
