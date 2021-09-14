@@ -16,6 +16,7 @@ import java.io.IOException;
 public class GMapService {
     private final GeoApiContext context;
 
+//TODO: Separate and protect API key
     public GMapService(){
         this.context = new GeoApiContext.Builder().apiKey("AIzaSyAyCd8To3zMx7ydSQc8vsZe2cAr7V3fnFo").build();
     }

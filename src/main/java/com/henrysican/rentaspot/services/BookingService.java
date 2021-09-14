@@ -24,11 +24,22 @@ public class BookingService {
         this.bookingRepo = bookingRepo;
     }
 
+    /**
+     * Updates the booking record with the provided booking status.
+     * @param bookingId     the ID of the booking record to be updated
+     * @param bookingStatus the booking status to be applied to the booking
+     */
     public void updateBookingStatus(int bookingId, BookingStatus bookingStatus){
         Booking booking = bookingRepo.getById(bookingId);
         booking.setBookingStatus(bookingStatus);
     }
 
+    /**
+     * Updates a location's booking records, with a pending booking status and time since
+     * creation over 1 hour, to a booking status of expired.
+     * @param locationId    the ID of the location
+     * @return              the number of booking records updated
+     */
     public long updateExpiredBookingsForLocation(int locationId){
         List<Booking> pendingBookings = bookingRepo.findAllByLocation_IdAndBookingStatusIsLike(locationId,BookingStatus.PENDING);
         List<Booking> expired = pendingBookings.stream()
@@ -37,7 +48,13 @@ public class BookingService {
                 .collect(Collectors.toList());
         return expired.size();
     }
-    
+
+    /**
+     * Updates a customer's booking records, with a pending booking status and time since
+     * creation over 1 hour, to a booking status of expired.
+     * @param customerId    the ID of the customer
+     * @return              the number of booking records updated
+     */
     public long updateExpiredBookingsForCustomer(int customerId){
         List<Booking> allBookingsForCustomer = getAllBookingsForCustomer(customerId);
         List<Booking> expired = allBookingsForCustomer.stream()
@@ -47,6 +64,12 @@ public class BookingService {
         return expired.size();
     }
 
+    /**
+     * Updates the booking records of the locations, with a pending booking status and time since
+     * creation over 1 hour, to a booking status of expired.
+     * @param locations    the list of locations
+     * @return             the number of booking records updated
+     */
     public long updateExpiredBookingsForLocations(List<Location> locations){
         return locations.stream().mapToLong(location -> {
             List<Booking> expired = location.getBookings().stream()
@@ -57,10 +80,27 @@ public class BookingService {
         }).sum();
     }
 
+    /**
+     * Creates a new entry in the database table with the Booking provided and returns it.
+     * @param booking   the booking to be saved
+     * @return          the saved booking
+     */
     public Booking saveBooking(Booking booking){
         return bookingRepo.save(booking);
     }
 
+    /**
+     * Returns a location's booking records that:
+     * <p><ul>
+     * <li>are confirmed
+     * <li>are pending
+     * <li>are within the pending period (1hr)
+     * <li>have conflicting dates between existing bookings
+     * </ul><p>
+     * @param locationId    the ID of the location
+     * @param booking       the booking used to find conflicting bookings
+     * @return              the list of unavailable bookings
+     */
     public List<Booking> getAllUnavailableBookingsForLocation(int locationId, Booking booking){
         updateExpiredBookingsForLocation(locationId);
         List<Booking> bookings = getAllBookingsForLocation(locationId);
@@ -74,35 +114,29 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns a List of all Bookings in the database.
+     * @return  the list of bookings
+     */
     public List<Booking> getAllBookings(){
         return bookingRepo.findAll();
     }
 
+    /**
+     * Returns all booking records for the given location.
+     * @param locationId    the ID of the location
+     * @return              the list of bookings
+     */
     public List<Booking> getAllBookingsForLocation(int locationId){
         updateExpiredBookingsForLocation(locationId);
         return bookingRepo.findAllByLocation_Id(locationId);
     }
 
-    public boolean isAvailableForLocation(int locationId, Booking booking){
-        updateExpiredBookingsForLocation(locationId);
-        List<Booking> bookings = getAllUnavailableBookingsForLocation(locationId, booking);
-        long conflicts = bookings.size();
-        log.warning("conflicts# ? " + conflicts);
-        return conflicts == 0;
-    }
-
-    public boolean getAvailabilityForBookingAtLocation(Booking booking, int locationId){
-        updateExpiredBookingsForLocation(locationId);
-        List<Booking> allBookings = bookingRepo.findAllByLocation_IdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(locationId, booking.getStartDate(), booking.getEndDate());
-        boolean noneMatchExpired = true;
-        if(allBookings.size() > 0){
-            noneMatchExpired = allBookings.stream().noneMatch(booking1 ->
-                    !booking.getStartDate().after(booking1.getEndDate())  ||  booking.getEndDate().before(booking1.getStartDate()));
-        }
-        log.warning("getAvailabilityForBookingAtLocation   " + noneMatchExpired);
-        return noneMatchExpired;
-    }
-
+    /**
+     * Returns all booking records for the given customer.
+     * @param customer_id   the ID of the customer
+     * @return              the list of bookings
+     */
     public List<Booking> getAllBookingsForCustomer(int customer_id){
         return bookingRepo.findAllByCustomerId(customer_id);
     }

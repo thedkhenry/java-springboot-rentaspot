@@ -6,8 +6,24 @@
     <div th:replace="fragments/general.html :: navbar"></div>
     <div class="container mt-4">
         <h2 th:text="${location.title}"></h2>
-        <h6 th:text="'⭐ ' + ${location.getWeightedAverage()} + ' (' + ${reviews.size()} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}"></h6>
-        <p></p>
+        <div class="row h6">
+            <div th:text="'⭐ ' + ${location.getWeightedAverage()} + ' (' + ${reviews.size()} + ' Reviews) ' + ${location.address.city} + ', ' + ${location.address.state} + ', ' + ${location.address.country}" class="col"></div>
+            <th:block sec:authorize="isAuthenticated()">
+                <button th:attr="data-id=${location.id}"
+                        th:onclick="wishListLocation(this)"
+                        id="wishlistBtn"
+                        class="btn btn-outline-light text-dark w-auto" style="border-color: white;">
+                    <th:block th:if="${isSaved}">
+                        <img id="heartImg" th:src="@{/images/heart_fill.png}" class="me-1" style="width: 1.3rem;">
+                        <span id="saveTextSpan">Saved</span>
+                    </th:block>
+                    <th:block th:unless="${isSaved}">
+                        <img id="heartImg" th:src="@{/images/heart_outline.png}" class="me-1" style="width: 1.3rem;">
+                        <span id="saveTextSpan">Save</span>
+                    </th:block>
+                </button>
+            </th:block>
+        </div>
         <div class="card mb-4">
             <div class="card-body">
                 <div class="text-center text-danger">
@@ -112,7 +128,9 @@
             <a th:href="@{/reservations/checkavailability/{locationId}(locationId = ${location.id})}" class="btn btn-outline-danger btn-lg">Check availability</a>
         </div>
     </footer>
+    <script th:inline="javascript">
+        var isSaved = [[${isSaved}]];
+    </script>
     <div th:replace="fragments/general.html :: scripts"></div>
 </body>
-
 </html>

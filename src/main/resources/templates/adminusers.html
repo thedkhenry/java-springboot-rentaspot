@@ -33,7 +33,7 @@
                     <th th:text="${user.lastName}"></th>
                     <th th:text="${user.email}"></th>
                     <th th:text="${user.phoneNumber}"></th>
-                    <th th:text="${user.profileImage.name}"></th>
+                    <th th:text="${user.profileImage?.name}">none</th>
                     <th th:text="${user.host}"></th>
                     <th th:text="${user.createdAt}"></th>
                 </tr>

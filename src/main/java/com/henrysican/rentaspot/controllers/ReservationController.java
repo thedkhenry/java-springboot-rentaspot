@@ -15,7 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log
 @Controller
@@ -33,16 +35,12 @@ public class ReservationController {
     }
 
 //TODO: Add expiration time? Ex: Expires in (1 hour) (47 minutes)
-//TODO: Order by soonest/upcoming
     @GetMapping("")
     public String getReservationsPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
         bookingService.updateExpiredBookingsForCustomer(principal.getId());
-        List<Booking> bookingList = bookingService.getAllBookingsForCustomer(principal.getId());
-        bookingList.forEach(booking -> {
-            log.warning("" + booking.getId() + "  " + booking.getLocation().getId());
-            log.warning("DaysFrom: " + booking.calculateDaysFromEndDate() + " - " + booking.getBookingStatus() + " -  " + booking.getPrice() + "  (" + booking.calculateNumberOfDays() + " $" + booking.getLocation().getPrice() + ") = $" + (booking.calculateNumberOfDays() * booking.getLocation().getPrice()));
-            log.warning("" + booking.needsReview());
-        });
+        List<Booking> bookingList = bookingService.getAllBookingsForCustomer(principal.getId()).stream()
+                .sorted(Comparator.comparing(Booking::getStartDate).reversed())
+                .collect(Collectors.toList());
         model.addAttribute("bookingList", bookingList);
         return "reservations";
     }
@@ -76,6 +74,7 @@ public class ReservationController {
     public String cancelReservation(@PathVariable("bookingId") Booking booking,
                                     @AuthenticationPrincipal AppUserPrincipal principal){
         if(booking.getCustomer().getId() != principal.getId()){
+            log.warning("customerId doesn't match principalId");
             return "redirect:/403";
         }
         if (booking.ableToCancel()) {
@@ -90,6 +89,7 @@ public class ReservationController {
                                 @PathVariable("bookingId") Booking booking,
                                 @AuthenticationPrincipal AppUserPrincipal principal){
         if(booking == null || booking.getHost().getId() != principal.getId()){
+            log.warning("booking null or hostId doesn't match principalId "+ booking);
             return "redirect:/hostinglist";
         }
         if (booking.calculateTimeFromCreate() >= 0 && booking.getLocation().getId() == locationId){
@@ -115,8 +115,6 @@ public class ReservationController {
                                     RedirectAttributes redirectAttributes,
                                     @RequestParam(value = "action") String action,
                                     @AuthenticationPrincipal AppUserPrincipal principal){
-        log.warning("Check Button PARAM!!!! " + action);
-        log.warning("Check Button booking-> " + booking);
         String message;
         if(!booking.isRangeValid()){
             message = "Invalid date range.";

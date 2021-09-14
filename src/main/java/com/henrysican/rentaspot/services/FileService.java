@@ -1,8 +1,5 @@
 package com.henrysican.rentaspot.services;
 
-import com.henrysican.rentaspot.dao.ImageRepo;
-import com.henrysican.rentaspot.models.Image;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +20,11 @@ public class FileService {
     @Value("${app.upload.dir}")
     private String uploadDir;
 
+    /**
+     * Saves the given file in the provided directory to the base directory.
+     * @param dir   the directory to save the file in
+     * @param file  the file to be saved
+     */
     public void uploadFile(String dir, MultipartFile file){
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Path newDirPath = Paths.get(uploadDir + File.separator + dir);
@@ -41,6 +43,11 @@ public class FileService {
         }
     }
 
+    /**
+     * Deletes the file with the given name and directory location.
+     * @param dir       the directory of the file
+     * @param fileName  the file to be deleted
+     */
     public void deleteFile(String dir, String fileName){
         Path filePath = Paths.get(uploadDir + File.separator + dir + File.separator + fileName);
         try {

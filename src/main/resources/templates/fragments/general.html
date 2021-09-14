@@ -18,9 +18,11 @@
 </head>
 
 <body>
-    <nav th:fragment="navbar" class="navbar sticky-top navbar-expand-lg navbar-light bg-light shadow-sm px-2">
+    <nav th:fragment="navbar" class="navbar sticky-top navbar-expand-lg navbar-light bg-white border-bottom border-danger border-2 shadow-sm px-2">
         <div class="container-fluid">
-            <a th:href="@{/home}" class="navbar-brand">Rent-A-Spot</a>
+            <a th:href="@{/home}" class="navbar-brand">
+                Rent-<span class="text-danger">A</span>-Spot
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -49,6 +51,7 @@
                             <li><a th:href="@{/user}" class="dropdown-item">Profile</a></li>
                             <li><a th:href="@{/messages}" class="dropdown-item">Messages</a></li>
                             <li><a th:href="@{/reservations}" class="dropdown-item">Reservations</a></li>
+                            <li><a th:href="@{/wishlist}" class="dropdown-item">Wishlist</a></li>
                             <li><a th:href="@{/hostinglist}" class="dropdown-item">Listings</a></li>
                             <li><a th:href="@{/logout}" class="dropdown-item">Sign out</a></li>
                         </th:block>
@@ -57,6 +60,27 @@
             </ul>
         </div>
     </nav>
+    <footer th:fragment="footer" class="py-5" style="background-color: #ff4141;">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <h5 class="text-white mb-3">QUICK LINKS</h5>
+                    <ul class="list-inline text-decoration-none">
+                        <li class="list-inline-item"><a th:href="@{/home}" class="link-light text-decoration-none">Home</a></li>
+                        <li class="list-inline-item"><a th:href="@{/about}" class="link-light text-decoration-none">About</a></li>
+                        <li class="list-inline-item"><a th:href="@{/faq}" class="link-light text-decoration-none">FAQ</a></li>
+                        <li class="list-inline-item"><a th:href="@{/contact}" class="link-light text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col text-center pt-3">
+                    <a th:href="@{/home}" class="link-light text-decoration-none">© 2021 Rent-A-Spot. All rights reserved</a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <th:block th:fragment="scripts">
         <script type="text/javascript" th:src="@{/js/main.js}"></script>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
@@ -64,5 +88,4 @@
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     </th:block>
 </body>
-
 </html>

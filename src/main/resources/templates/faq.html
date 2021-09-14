@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'FAQ')"></head>
+<body class="h-100">
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="min-vh-100">
+        <section class="py-5" style=" background: linear-gradient(360deg, rgba(255,255,255,0) 0%, rgba(255,183,176,1) 110%);">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col">
+                        <img class="img-fluid" th:src="@{/images/question_bubble.png}" height="130px" width="130px">
+                    </div>
+                    <div class="col my-auto">
+                        <h1 class="display-5" th:text="'FAQ'"></h1>
+                    </div>
+                    <div class="col">
+                        <img class="img-fluid" th:src="@{/images/exclamation_bubble.png}" height="130px" width="130px">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="container py-5">
+            <ul class="list-unstyled">
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How do I contact my host?
+                    </a>
+                    <div class="collapse" id="faq1">
+                        <div class="card card-body">
+                            <p>
+                                If you've messaged them before, then simply go to your "Messages" page and your host should
+                                appear in your contacts list.
+                                <br><br>
+                                If it's your first time contacting them, then head over to your reservations page, click on
+                                your reservation, click on the "Message Host" button, type your message in the pop-up, and send!
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How long does it take for a reservation to get approved?
+                    </a>
+                    <div class="collapse" id="faq2">
+                        <div class="card card-body">
+                            <p>
+                                Hosts have one hour to approve or deny reservations. If hosts don't respond within the hour,
+                                then the reservation expires and the dates become available to reserve again.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How do I review a parking spot?
+                    </a>
+                    <div class="collapse" id="faq3">
+                        <div class="card card-body">
+                            <p>
+                                In your reservations page, click on the yellow "Review" button on the reservation you'd like
+                                to review, then just choose the rating and write a few words about the parking spot. However,
+                                you can only review a parking spot on or after the last day of your reservation.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq4" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How do I change my listing's address?
+                    </a>
+                    <div class="collapse" id="faq4">
+                        <div class="card card-body">
+                            <p>
+                                Parking spot addresses cannot be changed. You will need to create a new listing if you want
+                                to change an address.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq5" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How can I add a parking spot to my wishlist?
+                    </a>
+                    <div class="collapse" id="faq5">
+                        <div class="card card-body">
+                            <p>
+                                Simply go to a parking spot's details page and click on the heart icon on top right. All
+                                wishlist spots can be viewed in your "Wishlist" page.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq6" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Do I have to apply to become a host?
+                    </a>
+                    <div class="collapse" id="faq6">
+                        <div class="card card-body">
+                            <p>
+                                Nope. If you want to list your own parking spot, then just sign up, head over to your
+                                "Listings" page, and click on the "Create" button. Fill out the form and publish!
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq7" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Isn't this site/practice like... <i>illegal</i>?
+                    </a>
+                    <div class="collapse" id="faq7">
+                        <div class="card card-body">
+                            <p>
+                                Ummm... most likely, yes. No legal research was performed. Although, this is just a
+                                personal project and not an official site :)
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                <li class="py-3">
+                    <a class="d-block link-dark h5 text-center" data-bs-toggle="collapse" href="#faq10" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Where's the source code?
+                    </a>
+                    <div class="collapse" id="faq10">
+                        <div class="card card-body">
+                            <p>The source code for this project can be found <a
+                                href="https://github.com/thedkhenry/java-springboot-rentaspot" target="_blank">here</a>.
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <div th:replace="fragments/general.html :: footer"></div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>

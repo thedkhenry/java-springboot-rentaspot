@@ -14,11 +14,14 @@ import com.henrysican.rentaspot.services.ReviewService;
 import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -42,13 +45,19 @@ public class LocationController {
     }
 
     @GetMapping("/location/{locationId}")
-    public String getLocationDetails(@PathVariable("locationId") Location location, Model model){
+    public String getLocationDetails(@PathVariable("locationId") Location location,
+                                     @AuthenticationPrincipal AppUserPrincipal principal,
+                                     Model model){
         if(!location.isActive()){
             return "redirect:/403";
         }
-        List<Review> reviews = reviewService.getReviewsForLocation(location.getId());
+        if(principal != null){
+            location.getWishlistUsers().forEach(user -> log.warning(user.toString()));
+            boolean isSaved = location.getWishlistUsers().stream().anyMatch(user -> user.getId() == principal.getId());
+            model.addAttribute("isSaved",isSaved);
+        }
         model.addAttribute("location",location);
-        model.addAttribute("reviews",reviews);
+        model.addAttribute("reviews",location.getReviews());
         return "locationdetails";
     }
 
@@ -122,8 +131,26 @@ public class LocationController {
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
         User host = userService.getUserById(principal.getId());
         host.setHost(true);
-        locationService.saveNewLocation(location,host,latLng,action.equals("publish"));
+        location.setUser(host);
+        location.setActive(action.equals("publish"));
+        location.getAddress().setCountry("US");
+        location.getAddress().setLatitude(latLng.lat);
+        location.getAddress().setLongitude(latLng.lng);
+        locationService.saveLocation(location);
         userService.saveUser(host);
         return "redirect:/hostinglist";
+    }
+
+    @PostMapping("/wishlist/{locationId}")
+    public ResponseEntity wishlistLocation(@PathVariable("locationId") Location location,
+                                 @AuthenticationPrincipal AppUserPrincipal principal,
+                                 HttpServletRequest request){
+        String action = request.getParameter("action");
+        if(action.equals("add")){
+            userService.addToWishlist(principal.getId(), location);
+        }else if(action.equals("remove")){
+            userService.removeFromWishlist(principal.getId(), location);
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

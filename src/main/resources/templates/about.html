@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head th:replace="fragments/general.html :: headerfiles (title = 'About')"></head>
+<body class="h-100">
+    <div th:replace="fragments/general.html :: navbar"></div>
+    <div class="min-vh-100">
+        <section class="border-bottom border-danger border-2 py-5"
+                 style="background: linear-gradient(155deg, rgba(255,255,255,0) 35%, rgba(255,183,176,1) 100%);">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-6 my-auto">
+                        <h1 class="display-5">The <span class="text-danger text-decoration-underline">Goal</span></h1>
+                        <p class="fs-5">"To allow users to locate, reserve, and rent out parking spaces."</p>
+                    </div>
+                    <div class="col-md-6">
+                        <img th:src="@{/images/city_buildings.png}" class="img-fluid px-2" alt="city image" width="360"
+                             height="360"
+                             style="border-radius: 1.3rem;">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="py-5">
+            <div class="container">
+                <h2 class="display-5 text-center">Overview</h2>
+                <p class="fs-5 text-center">
+                    This site connects hosts who want to rent out their unused space with guests seeking to
+                    station vehicles safely at affordable "prices". Guests are able to find the right listing using
+                    a variety of filters and a booking system allows them to reserve a parking space through
+                    any available dates.
+                </p>
+            </div>
+        </section>
+        <section class="py-5">
+            <div class="container">
+                <h2 class="display-5 text-center">Technologies</h2>
+                <div class="row text-center">
+                    <div class="col">
+                        <div class="fs-2">Frontend</div>
+                        <ul class="list-unstyled">
+                            <li>HTML/CSS</li>
+                            <li>Javascript</li>
+                            <li>Google Maps API</li>
+                            <li>Bootstrap</li>
+                            <li>Thymeleaf</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <div class="fs-2">Backend</div>
+                        <ul class="list-unstyled">
+                            <li>Lombok</li>
+                            <li>Spring Boot</li>
+                            <li>Spring Security</li>
+                            <li>Spring Data JPA</li>
+                            <li>Java</li>
+                            <li>MariaDB</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div th:replace="fragments/general.html :: footer"></div>
+    <div th:replace="fragments/general.html :: scripts"></div>
+</body>
+</html>
