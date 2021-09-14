@@ -23,4 +23,7 @@
     .search-header {
         position: static !important;
     }
+    #home-search-img{
+        height: 100% !important;
+    }
 }

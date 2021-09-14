@@ -23,19 +23,7 @@ Back end:
 - Java
 - MariaDB
 
-### Missed Details 08/26/21 - TODO:
-- customer cancellation button
-- unlist/publish button
-- display detailed information in map marker popup
-- generate/geocode lat/lon from address 
-- validate address
-- view all previous bookings/reservations
-- messaging between guests and hosts
-- admin user
-
 ### Reach Goals:
-- Wishlists
-- Location view count
 - User notifications
 - Search autocomplete
 - Filter search on location features
