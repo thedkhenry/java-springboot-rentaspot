@@ -36,8 +36,18 @@ public class FileService {
             }
         }
         Path newFilePath = newDirPath.resolve(fileName);
+        System.out.println("*****");
+        System.out.println("*****");
+        System.out.println("srvc FILE PATH: "+newFilePath);
+        System.out.println("*****");
+        System.out.println("*****");
         try {
-            Files.copy(file.getInputStream(), newFilePath, StandardCopyOption.REPLACE_EXISTING);
+            long bytesWritten = Files.copy(file.getInputStream(), newFilePath, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("*****");
+            System.out.println("*****");
+            System.out.println("srvc BYTES WRITTEN: "+bytesWritten);
+            System.out.println("*****");
+            System.out.println("*****");
         } catch (IOException e) {
             e.printStackTrace();
         }

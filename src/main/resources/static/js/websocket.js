@@ -87,7 +87,7 @@ function getMessages(receiverId) {
     $('#messageList').empty();
     $.ajax({
         type: "GET",
-        url: SERVER_URL + "/fetch-messages/"+receiverId,
+        url: "/fetch-messages/"+receiverId,
         success: function (data) {
             console.log("SUCCESS : ", data);
             for(let i = 0; i < data.length; i++){

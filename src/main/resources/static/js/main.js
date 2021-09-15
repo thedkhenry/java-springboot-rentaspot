@@ -45,7 +45,7 @@ function wishListLocation(btn){
     }
     $.ajax({
         type: "POST",
-        url: URL + "/wishlist/" + id,
+        url: "/wishlist/" + id,
         data: {
             action: action
         }
