@@ -79,6 +79,11 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("message","Only image files allowed. (png/jpeg/gif)");
                 return "redirect:/user/editProfile";
             }
+            System.out.println("*****");
+            System.out.println("*****");
+            System.out.println("ctrl UPLOADING FILE...");
+            System.out.println("*****");
+            System.out.println("*****");
             fileService.uploadFile("user-images", multipartFile);
             if (dbUser.getProfileImage() == null) {
                 Image image = imageService.saveImage(new Image(fileName,fileType));
