@@ -10,7 +10,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="m-3">
-                    <form th:action="@{/update/{locationId}(locationId = ${location.id})}" th:object="${location}" method="POST" id="updateForm">
+                    <form th:action="@{/update/{locationId}(locationId = ${location.id})}" th:object="${location}" method="POST" id="updateForm" enctype="multipart/form-data">
                         <div class="text-center">
                             <div class="btn-group" role="group">
                                 <input th:checked="${location.active}" name="active" id="active" type="checkbox" class="btn-check">
@@ -21,7 +21,10 @@
                             <label class="form-label">Location Title</label>
                             <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name.">
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label">Photo (max 5MB)</label>
+                            <input name="imageFile" type="file" accept="image/*" class="form-control">
+                        </div>
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="inputStreetAddress" class="form-label">Address</label>
@@ -92,6 +95,9 @@
                                 </div>
                             </div>
                         </div>
+                        <th:block th:if="${message != null}">
+                            <div th:text="${message}" class="text-danger"></div>
+                        </th:block>
                         <div class="col text-center pt-3">
                             <div class="btn-group" role="group">
                                 <button onclick="showModal()"

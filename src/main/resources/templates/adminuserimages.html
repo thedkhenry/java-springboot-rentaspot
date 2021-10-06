@@ -25,7 +25,8 @@
                 <tbody>
                 <tr th:each="user,iter : ${users}">
                     <th th:text="${iter.count}"></th>
-                    <th><img th:src="@{~/user-images/__${user.profileImage.name}__}" height="60px"></th>
+                    <th><img th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/user-images/__${user.profileImage.name}__}" height="60px"></th>
+<!--                    <th><img th:src="@{~/user-images/__${user.profileImage.name}__}" height="60px"></th>-->
                     <th th:text="${user.profileImage.id}"></th>
                     <th th:text="${user.profileImage.name}"></th>
                     <th th:text="${user.profileImage.type}"></th>

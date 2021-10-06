@@ -11,12 +11,15 @@
             <div class="card-body">
                 <div class="">
                     <div class="m-3">
-                        <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm">
+                        <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label class="form-label">Location Title</label>
                                 <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name." required>
                             </div>
-
+                            <div class="mb-3">
+                                <label class="form-label">Photo (max 5MB)</label>
+                                <input name="imageFile" type="file" accept="image/*" class="form-control">
+                            </div>
                             <div class="row">
 <!--                                <div th:object="${address}" class="row">-->
                                 <div class="col-12 mb-3">
@@ -90,6 +93,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <th:block th:if="${message != null}">
+                                <div th:text="${message}" class="text-danger"></div>
+                            </th:block>
                             <div class="col text-center pt-3">
                                 <div class="btn-group" role="group">
                                     <button id="btnSaveNewLocation"

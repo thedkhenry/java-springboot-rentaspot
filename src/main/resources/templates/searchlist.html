@@ -41,8 +41,10 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <a th:href="@{/location/{locationId}(locationId = ${loc.id})}"
-                                       class="stretched-link"><img
-                                            th:src="@{/images/city_buildings.png}" class="img-fluid" alt="..."></a>
+                                       class="stretched-link">
+                                        <img th:if="${loc.image == null}" th:src="@{/images/city_buildings.png}" class="img-fluid" alt="city buildings">
+                                        <img th:unless="${loc.image == null}" th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/location-images/__${loc.image.name}__}" class="img-fluid" alt="location">
+                                    </a>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col h-75">

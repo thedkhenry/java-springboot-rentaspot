@@ -24,8 +24,9 @@
                                              th:src="@{/images/profileplaceholder1.png}" class="rounded-circle"
                                              height="50" width="50" alt="user">
                                         <img th:unless="${user.profileImage == null}"
-                                             th:src="@{~/user-images/__${user.profileImage.name}__}"
+                                             th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/user-images/__${user.profileImage.name}__}"
                                              class="rounded-circle" height="50" width="50" alt="user">
+                                        <!--                                             th:src="@{~/user-images/__${user.profileImage.name}__}"-->
                                         <div class="text-truncate ms-3">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <h6 th:text="${user.firstName} + ' ' + ${user.lastName}"

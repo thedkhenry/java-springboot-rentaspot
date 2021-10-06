@@ -5,10 +5,7 @@ import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserDetailsService;
 import com.henrysican.rentaspot.security.AppUserPrincipal;
-import com.henrysican.rentaspot.services.FileService;
-import com.henrysican.rentaspot.services.ImageService;
-import com.henrysican.rentaspot.services.LocationService;
-import com.henrysican.rentaspot.services.UserService;
+import com.henrysican.rentaspot.services.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,18 +27,20 @@ public class UserController {
     private final AppUserDetailsService appUserDetailsService;
     private final FileService fileService;
     private final ImageService imageService;
+    private final AmazonS3Service s3Service;
 
     @Autowired
     public UserController(LocationService locationService,
                           UserService userService,
                           AppUserDetailsService appUserDetailsService,
                           FileService fileService,
-                          ImageService imageService){
+                          ImageService imageService, AmazonS3Service s3Service){
         this.locationService = locationService;
         this.userService = userService;
         this.appUserDetailsService = appUserDetailsService;
         this.fileService = fileService;
         this.imageService = imageService;
+        this.s3Service = s3Service;
     }
 
     @GetMapping("")
@@ -75,21 +74,19 @@ public class UserController {
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             String fileType = multipartFile.getContentType();
-            if(!(fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))){
-                redirectAttributes.addFlashAttribute("message","Only image files allowed. (png/jpeg/gif)");
+            if(!((fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))
+                    && (multipartFile.getSize() < 5000000))){
+                redirectAttributes.addFlashAttribute("message","Max 5MB image files allowed. (png/jpeg/gif)");
                 return "redirect:/user/editProfile";
             }
-            System.out.println("*****");
-            System.out.println("*****");
-            System.out.println("ctrl UPLOADING FILE...");
-            System.out.println("*****");
-            System.out.println("*****");
-            fileService.uploadFile("user-images", multipartFile);
+            s3Service.uploadFile("user-images", multipartFile);
+            //fileService.uploadFile("user-images", multipartFile);
             if (dbUser.getProfileImage() == null) {
                 Image image = imageService.saveImage(new Image(fileName,fileType));
                 dbUser.setProfileImage(image);
             } else {
-                fileService.deleteFile("user-images", dbUser.getProfileImage().getName());
+                s3Service.deleteFile("user-images", dbUser.getProfileImage().getName());
+                //fileService.deleteFile("user-images", dbUser.getProfileImage().getName());
                 dbUser.getProfileImage().setName(fileName);
                 dbUser.getProfileImage().setType(fileType);
             }

@@ -46,6 +46,8 @@ public class Location {
     boolean hasRvParking;
     @NonNull
     boolean hasEvCharging;
+    @OneToOne
+    Image image;
     @ManyToOne(cascade = CascadeType.MERGE)
     @NonNull
     User user;

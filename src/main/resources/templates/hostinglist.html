@@ -18,7 +18,7 @@
                         <th:block th:each="location : ${locations}">
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <img th:src="@{/images/city_buildings.png}" class="" height="50" width="50" alt="location">
+                                    <img th:src="@{/images/city_buildings.png}" class="" height="50" width="50" alt="city buildings">
                                     <div class="w-100 text-truncate mx-3">
                                         <a th:text="${location.title}" th:href="@{/location/{locationId}(locationId = ${location.id})}" class="fw-bold text-decoration-none link-dark"></a>
                                         <p th:text="${location.description}" class="text-truncate mb-0"></p>
