@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"reviews","bookings"})
+@ToString(exclude = {"reviews","bookings","wishlistUsers"})
 public class Location {
 //TODO Add validation for fields
 
@@ -70,6 +71,7 @@ public class Location {
                     updatable = false),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
             inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @JsonIgnore
     List<User> wishlistUsers;
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp

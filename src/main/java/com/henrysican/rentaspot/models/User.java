@@ -1,8 +1,11 @@
 package com.henrysican.rentaspot.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -32,14 +35,16 @@ public class User {
     @NonNull
     @Email
     @Column(unique = true)
+    @JsonIgnore
     String email;
     @NonNull @NotBlank
+    @JsonIgnore
     String password;
     @NonNull
     String phoneNumber;
     @NonNull
     String summary;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     Image profileImage;
     @ManyToMany(
             cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH},
@@ -54,6 +59,7 @@ public class User {
                     updatable = false),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
             inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    @JsonIgnore
     List<Location> wishlist;
     @NonNull
     boolean isHost;
