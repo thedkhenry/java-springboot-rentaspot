@@ -59,7 +59,7 @@ public class AuthenticationController {
         String password = user.getPassword();
         user.setPassword(new BCryptPasswordEncoder(4).encode(password));
         User savedUser = userService.saveUser(user);
-        appUserDetailsService.saveUserRole(savedUser.getId(),savedUser.getEmail(), "ROLE_USER");
+        appUserDetailsService.saveUserRole(savedUser, "ROLE_USER");
         try {
             request.login(email, password);
         }

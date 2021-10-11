@@ -1,10 +1,8 @@
 package com.henrysican.rentaspot.services;
 
-import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.dao.LocationRepo;
 import com.henrysican.rentaspot.models.BookingStatus;
 import com.henrysican.rentaspot.models.Location;
-import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
