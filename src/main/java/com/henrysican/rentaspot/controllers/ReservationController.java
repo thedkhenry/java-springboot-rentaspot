@@ -1,10 +1,8 @@
 package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.*;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.CsvExportService;
-import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,19 +22,18 @@ import java.util.stream.Collectors;
 @RequestMapping("/reservations")
 public class ReservationController {
     private final BookingService bookingService;
-    private final UserService userService;
     private final CsvExportService csvExportService;
 
     @Autowired
-    public ReservationController(BookingService bookingService, UserService userService, CsvExportService csvExportService){
+    public ReservationController(BookingService bookingService,
+                                 CsvExportService csvExportService){
         this.bookingService = bookingService;
-        this.userService = userService;
         this.csvExportService = csvExportService;
     }
 
 //TODO: Add expiration time? Ex: Expires in (1 hour) (47 minutes)
     @GetMapping("")
-    public String getReservationsPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+    public String getReservationsPage(@AuthenticationPrincipal User principal, Model model){
         bookingService.updateExpiredBookingsForCustomer(principal.getId());
         List<Booking> bookingList = bookingService.getAllBookingsForCustomer(principal.getId()).stream()
                 .sorted(Comparator.comparing(Booking::getStartDate).reversed())
@@ -47,7 +44,7 @@ public class ReservationController {
 
     @GetMapping("/history/{locationId}")
     public String getBookingHistoryPage( @PathVariable("locationId") Location location,
-                                         @AuthenticationPrincipal AppUserPrincipal principal,
+                                         @AuthenticationPrincipal User principal,
                                          Model model){
         if(location.getUser().getId() != principal.getId()){
             return "redirect:/403";
@@ -59,7 +56,7 @@ public class ReservationController {
 
     @GetMapping("/export/{locationId}")
     public void exportBookings(@PathVariable("locationId") Location location,
-                               @AuthenticationPrincipal AppUserPrincipal principal,
+                               @AuthenticationPrincipal User principal,
                                HttpServletResponse response) throws IOException {
         if(location.getUser().getId() != principal.getId()){
             response.sendRedirect("/403");
@@ -72,7 +69,7 @@ public class ReservationController {
 
     @GetMapping("/cancel/{bookingId}")
     public String cancelReservation(@PathVariable("bookingId") Booking booking,
-                                    @AuthenticationPrincipal AppUserPrincipal principal){
+                                    @AuthenticationPrincipal User principal){
         if(booking.getCustomer().getId() != principal.getId()){
             log.warning("customerId doesn't match principalId");
             return "redirect:/403";
@@ -87,7 +84,7 @@ public class ReservationController {
     public String updateBooking(@PathVariable("action") String action,
                                 @PathVariable("locationId") int locationId,
                                 @PathVariable("bookingId") Booking booking,
-                                @AuthenticationPrincipal AppUserPrincipal principal){
+                                @AuthenticationPrincipal User principal){
         if(booking == null || booking.getHost().getId() != principal.getId()){
             log.warning("booking null or hostId doesn't match principalId "+ booking);
             return "redirect:/hostinglist";
@@ -114,7 +111,7 @@ public class ReservationController {
                                     @ModelAttribute Booking booking,
                                     RedirectAttributes redirectAttributes,
                                     @RequestParam(value = "action") String action,
-                                    @AuthenticationPrincipal AppUserPrincipal principal){
+                                    @AuthenticationPrincipal User principal){
         String message;
         if(!booking.isRangeValid()){
             message = "Invalid date range.";
@@ -138,8 +135,7 @@ public class ReservationController {
                 redirectAttributes.addFlashAttribute("isAvailable",isAvailable);
                 return "redirect:/reservations/checkavailability/"+location.getId();
             }
-            User user = userService.getUserById(principal.getId());
-            booking.setCustomer(user);
+            booking.setCustomer(principal);
             booking.setLocation(location);
             booking.setHost(location.getUser());
             booking.calculateNumberOfDays();
@@ -154,7 +150,7 @@ public class ReservationController {
 
     @GetMapping("/reservation/{bookingId}")
     public String getReservationDetails(@PathVariable("bookingId") Booking booking,
-                                        @AuthenticationPrincipal AppUserPrincipal principal,
+                                        @AuthenticationPrincipal User principal,
                                         Model model){
         int customerId = booking.getCustomer().getId();
         int hostId = booking.getHost().getId();

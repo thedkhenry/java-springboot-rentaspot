@@ -3,11 +3,13 @@ package com.henrysican.rentaspot.controllers;
 import com.henrysican.rentaspot.models.Image;
 import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.User;
-import com.henrysican.rentaspot.security.AppUserDetailsService;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
-import com.henrysican.rentaspot.services.*;
+import com.henrysican.rentaspot.services.FileService;
+import com.henrysican.rentaspot.services.ImageService;
+import com.henrysican.rentaspot.services.LocationService;
+import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 import java.util.List;
 
 @Log
@@ -24,79 +25,72 @@ import java.util.List;
 public class UserController {
     private final LocationService locationService;
     private final UserService userService;
-    private final AppUserDetailsService appUserDetailsService;
     private final FileService fileService;
     private final ImageService imageService;
-    private final AmazonS3Service s3Service;
 
     @Autowired
     public UserController(LocationService locationService,
                           UserService userService,
-                          AppUserDetailsService appUserDetailsService,
                           FileService fileService,
-                          ImageService imageService, AmazonS3Service s3Service){
+                          ImageService imageService){
         this.locationService = locationService;
         this.userService = userService;
-        this.appUserDetailsService = appUserDetailsService;
         this.fileService = fileService;
         this.imageService = imageService;
-        this.s3Service = s3Service;
     }
 
     @GetMapping("")
-    public String getMyProfilePage(Principal principal){
-        AppUserPrincipal userDetails = (AppUserPrincipal) appUserDetailsService.loadUserByUsername(principal.getName());
-        return "redirect:/user/"+userDetails.getId();
+    public String getMyProfilePage(@AuthenticationPrincipal User principal){
+        return "redirect:/user/"+principal.getId();
     }
 
     @GetMapping("/editProfile")
-    public String getEditProfileForm(Model model, Principal principal){
-        User user = userService.getUserByEmail(principal.getName());
-        model.addAttribute("user", user);
+    public String getEditProfileForm(Model model, @AuthenticationPrincipal User principal){
+        model.addAttribute("user", principal);
         return "editprofile";
     }
 
     @PostMapping("/saveProfile")
-    public String saveProfile(@ModelAttribute("user") User user,
+    public String saveProfile(@ModelAttribute("user") com.henrysican.rentaspot.models.User user,
                               @RequestParam("image") MultipartFile multipartFile,
-                              Principal principal,
+                              @AuthenticationPrincipal User principal,
                               RedirectAttributes redirectAttributes){
-        User dbUser = userService.getUserByEmail(principal.getName());
-        if(userService.checkUserEmailExists(user.getEmail()) && dbUser.getId() != userService.getUserIdFromEmail(user.getEmail())){
+        if(userService.checkUserEmailExists(user.getEmail()) && principal.getId() != userService.getUserIdFromEmail(user.getEmail())){
             log.warning("/saveProfile if- That email is already in use");
             redirectAttributes.addFlashAttribute("message","That email is already in use.");
             return "redirect:/user/editProfile";
         }
-        if (!dbUser.getEmail().equals(user.getEmail())) {
-            dbUser.setEmail(user.getEmail());
-            appUserDetailsService.updateUserEmail(dbUser.getId(),dbUser.getEmail());
+        if (!principal.getEmail().equals(user.getEmail())) {
+            principal.setEmail(user.getEmail());
         }
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             String fileType = multipartFile.getContentType();
-            if(!((fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))
-                    && (multipartFile.getSize() < 5000000))){
-                redirectAttributes.addFlashAttribute("message","Max 5MB image files allowed. (png/jpeg/gif)");
+            if(!(fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))){
+                redirectAttributes.addFlashAttribute("message","Only image files allowed. (png/jpeg/gif)");
                 return "redirect:/user/editProfile";
             }
-            s3Service.uploadFile("user-images", multipartFile);
-            //fileService.uploadFile("user-images", multipartFile);
-            if (dbUser.getProfileImage() == null) {
+            System.out.println("*****");
+            System.out.println("*****");
+            System.out.println("ctrl UPLOADING FILE...");
+            System.out.println("*****");
+            System.out.println("*****");
+            fileService.uploadFile("user-images", multipartFile);
+            if (principal.getProfileImage() == null) {
                 Image image = imageService.saveImage(new Image(fileName,fileType));
-                dbUser.setProfileImage(image);
+                principal.setProfileImage(image);
             } else {
-                s3Service.deleteFile("user-images", dbUser.getProfileImage().getName());
-                //fileService.deleteFile("user-images", dbUser.getProfileImage().getName());
-                dbUser.getProfileImage().setName(fileName);
-                dbUser.getProfileImage().setType(fileType);
+                fileService.deleteFile("user-images", principal.getProfileImage().getName());
+                principal.getProfileImage().setName(fileName);
+                principal.getProfileImage().setType(fileType);
             }
         }
-        dbUser.setFirstName(user.getFirstName());
-        dbUser.setLastName(user.getLastName());
-        dbUser.setPhoneNumber(user.getPhoneNumber());
-        dbUser.setSummary(user.getSummary());
-        dbUser = userService.saveUser(dbUser);
-        return "redirect:/user/"+dbUser.getId();
+        principal.setFirstName(user.getFirstName());
+        principal.setLastName(user.getLastName());
+        principal.setPhoneNumber(user.getPhoneNumber());
+        principal.setSummary(user.getSummary());
+        principal = userService.saveUser(principal);
+        return "redirect:/user/"+principal.getId();
     }
 
     @GetMapping("/{userId}")

@@ -13,12 +13,11 @@ import java.text.SimpleDateFormat;
 
 
 @Slf4j
-@Component
-@Transactional
+//@Component
+//@Transactional
 public class AppRunner implements CommandLineRunner {
 
     private LocationRepo locationRepo;
-    private AddressRepo addressRepo;
     private UserRepo userRepo;
     private ReviewRepo reviewRepo;
     private BookingRepo bookingRepo;
@@ -27,14 +26,12 @@ public class AppRunner implements CommandLineRunner {
 
     @Autowired
     public AppRunner(LocationRepo locationRepo,
-                     AddressRepo addressRepo,
                      UserRepo userRepo,
                      ReviewRepo reviewRepo,
                      BookingRepo bookingRepo,
                      AuthRepo authRepo,
                      ImageRepo imageRepo) {
         this.locationRepo = locationRepo;
-        this.addressRepo = addressRepo;
         this.userRepo = userRepo;
         this.reviewRepo = reviewRepo;
         this.bookingRepo = bookingRepo;
@@ -45,37 +42,7 @@ public class AppRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("**** Start adding AuthGroup sql statements ***********************************");
-        authRepo.save(new AuthGroup(1, "lsweetzer0@yelp.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(2, "ryurikov1@yandex.ru", "ROLE_USER"));
-        authRepo.save(new AuthGroup(3,"ddecastelain2@arstechnica.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(4, "bdelgua3@google.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(5, "medward4@flavors.me", "ROLE_USER"));
-        authRepo.save(new AuthGroup(6, "dstephens5@loc.gov", "ROLE_USER"));
-        authRepo.save(new AuthGroup(7, "vucchino6@mashable.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(8, "avondra7@mashable.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(9, "sslayford8@gnu.org", "ROLE_USER"));
-        authRepo.save(new AuthGroup(10, "atregenna9@wunderground.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(11, "apawlicka@fema.gov", "ROLE_USER"));
-        authRepo.save(new AuthGroup(12, "rdeeleyb@mozilla.org", "ROLE_USER"));
-        authRepo.save(new AuthGroup(13, "arutterc@gizmodo.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(14, "bperhamd@dyndns.org", "ROLE_USER"));
-        authRepo.save(new AuthGroup(15, "swaddye@bloglines.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(16, "jbalaizotf@sun.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(17, "jbalaizotf@sun.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(18, "dtavernorh@chronoengine.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(19, "ekondratowiczi@ftc.gov", "ROLE_USER"));
-        authRepo.save(new AuthGroup(20, "adibbj@weebly.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(21, "eallmank@1688.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(22, "krupell@usnews.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(23, "rleggattm@wikimedia.org", "ROLE_USER"));
-        authRepo.save(new AuthGroup(24, "sbradnickn@dailymail.co.uk", "ROLE_USER"));
-        authRepo.save(new AuthGroup(25, "mhubbleo@sciencedirect.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(26, "hsican@ymail.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(27, "cjaulme9@bing.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(28, "admin@rentaspot.com", "ROLE_USER"));
-        authRepo.save(new AuthGroup(28, "admin@rentaspot.com", "ROLE_ADMIN"));
-        log.info("**** End of sql statements ***************************************************");
+        log.info("**** Start adding SQL statements ***********************************");
 
         User user1 = userRepo.save(new User("Linell","Sweetzer","lsweetzer0@yelp.com","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","573-607-8105","Of live paintings in I have love Maui. memories. meet and a around decided area. will working guy look reminds leave others. by and extensive Thank like We am married visited 22 son with your is here. that the in a guest yours. enjoyed with spent",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2020-01-08 09:05:53")));
         User user2 = userRepo.save(new User("Ryun","Yurikov","ryurikov1@yandex.ru","$2a$04$fqMJqn9v665u79BeLfN42ux07OLDCqP0l1lSJ3yI3Jgi4OI/9ZunG","741-931-9685","You. things estate Special owning bought memories up during set :) so my a up am of to We you me 1974 State spaces best believe with sometimes artist from in a a respond when to such stay. very views states throughout recreation. Vegas try check",true,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2019-02-07 18:16:32")));
@@ -109,6 +76,38 @@ public class AppRunner implements CommandLineRunner {
 //        imageRepo.save(image);
         User user28 = userRepo.save(new User("Admin","Admin","admin@rentaspot.com","$2a$04$N9q/fBliwObi3oZLCzbzt.VjMfsxKcXT7paQIgjjmgkl32oNctDY2","000-000-0000","To allow users to locate, reserve, and rent out parking spaces.",false,"",new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse("2021-09-02 21:30:00")));
 //        user28.setProfileImage(image);
+
+        authRepo.save(new AuthGroup(user1, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user2, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user3, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user4, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user5, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user6, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user7, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user8, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user9, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user10, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user11, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user12, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user13, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user14, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user15, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user16, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user17, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user18, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user19, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user20, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user21, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user22, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user23, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user24, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user25, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user26, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user27, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user28, "ROLE_USER"));
+        authRepo.save(new AuthGroup(user28, "ROLE_ADMIN"));
+        log.info("**** End of SQL statements ***************************************************");
+
 
         Address address1 = new Address("418 East Main Street", "", "Springerville", "Arizona", "US", 85938,34.1326759998992,-109.281052000352);
         Address address2 = new Address("2422 N. Firehouse Lane", "", "Huachuca City", "Arizona", "US", 85616,31.7055870001416,-110.349355999682);

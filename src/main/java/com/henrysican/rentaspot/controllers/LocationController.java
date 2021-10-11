@@ -3,8 +3,10 @@ package com.henrysican.rentaspot.controllers;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.models.*;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
-import com.henrysican.rentaspot.services.*;
+import com.henrysican.rentaspot.services.GMapService;
+import com.henrysican.rentaspot.services.LocationService;
+import com.henrysican.rentaspot.services.ReviewService;
+import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -24,28 +23,21 @@ import java.io.IOException;
 @Controller
 public class LocationController {
     private final LocationService locationService;
-    private final ReviewService reviewService;
     private final UserService userService;
     private final GMapService gMapService;
-    private final ImageService imageService;
-    private final AmazonS3Service s3Service;
 
     @Autowired
     public LocationController(LocationService locationService,
-                              ReviewService reviewService,
-                              UserService userService, GMapService gMapService,
-                              ImageService imageService, AmazonS3Service s3Service) {
+                              UserService userService,
+                              GMapService gMapService) {
         this.locationService = locationService;
-        this.reviewService = reviewService;
         this.userService = userService;
         this.gMapService = gMapService;
-        this.imageService = imageService;
-        this.s3Service = s3Service;
     }
 
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") Location location,
-                                     @AuthenticationPrincipal AppUserPrincipal principal,
+                                     @AuthenticationPrincipal User principal,
                                      Model model){
         if(!location.isActive()){
             return "redirect:/403";
@@ -63,7 +55,7 @@ public class LocationController {
     @GetMapping("/location/{action}/{locationId}")
     public String updateLocationActive(@PathVariable("action") String action,
                                        @PathVariable("locationId") Location location,
-                                       @AuthenticationPrincipal AppUserPrincipal principal){
+                                       @AuthenticationPrincipal User principal){
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
         }
@@ -78,7 +70,7 @@ public class LocationController {
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
     public String getEditForm(@PathVariable("locationId") Location location,
-                              @AuthenticationPrincipal AppUserPrincipal principal,
+                              @AuthenticationPrincipal User principal,
                               Model model){
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
@@ -90,10 +82,8 @@ public class LocationController {
     @PostMapping("/update/{locationId}")
     public String updateLocation(@PathVariable("locationId") int locationId,
                                  @ModelAttribute Location location,
-                                 @RequestParam("imageFile") MultipartFile multipartFile,
                                  @RequestParam(value = "action") String action,
-                                 @AuthenticationPrincipal AppUserPrincipal principal,
-                                 RedirectAttributes redirectAttributes){
+                                 @AuthenticationPrincipal User principal){
         Location dbLocation = locationService.getLocationById(locationId);
         if(principal.getId() != dbLocation.getUser().getId()){
             return "redirect:/403";
@@ -101,24 +91,6 @@ public class LocationController {
         if(action.equals("delete")){ //else "update"
             locationService.deleteLocation(dbLocation);
             return "redirect:/hostinglist";
-        }
-        if(!multipartFile.isEmpty()){
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            String fileType = multipartFile.getContentType();
-            if(!((fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))
-                    && (multipartFile.getSize() < 5000000))){
-                redirectAttributes.addFlashAttribute("message","Max 5MB image files allowed. (png/jpeg/gif)");
-                return "redirect:/edit/"+locationId;
-            }
-            s3Service.uploadFile("location-images", multipartFile);
-            if (dbLocation.getImage() == null) {
-                Image image = imageService.saveImage(new Image(fileName,fileType));
-                dbLocation.setImage(image);
-            } else {
-                s3Service.deleteFile("location-images", dbLocation.getImage().getName());
-                dbLocation.getImage().setName(fileName);
-                dbLocation.getImage().setType(fileType);
-            }
         }
         dbLocation.setActive(location.isActive());
         dbLocation.setTitle(location.getTitle());
@@ -145,38 +117,23 @@ public class LocationController {
 
     @PostMapping("/create")
     public String createLocation(@ModelAttribute Location location,
-                                 @AuthenticationPrincipal AppUserPrincipal principal,
-                                 @RequestParam("imageFile") MultipartFile multipartFile,
-                                 @RequestParam(value = "action") String action,
-                                 RedirectAttributes redirectAttributes) throws IOException, InterruptedException, ApiException {
-        if(!multipartFile.isEmpty()){
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            String fileType = multipartFile.getContentType();
-            if(!((fileType.equals("image/png") || fileType.equals("image/jpeg") || fileType.equals("image/gif"))
-                    && (multipartFile.getSize() < 5000000))){
-                redirectAttributes.addFlashAttribute("message","Max 5MB image files allowed. (png/jpeg/gif)");
-                return "redirect:/create";
-            }
-            s3Service.uploadFile("location-images", multipartFile);
-            Image image = imageService.saveImage(new Image(fileName,fileType));
-            location.setImage(image);
-        }
+                                 @AuthenticationPrincipal User principal,
+                                 @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
-        User host = userService.getUserById(principal.getId());
-        host.setHost(true);
-        location.setUser(host);
+        principal.setHost(true);
+        location.setUser(principal);
         location.setActive(action.equals("publish"));
         location.getAddress().setCountry("US");
         location.getAddress().setLatitude(latLng.lat);
         location.getAddress().setLongitude(latLng.lng);
         locationService.saveLocation(location);
-        userService.saveUser(host);
+        userService.saveUser(principal);
         return "redirect:/hostinglist";
     }
 
     @PostMapping("/wishlist/{locationId}")
-    public ResponseEntity wishlistLocation(@PathVariable("locationId") Location location,
-                                 @AuthenticationPrincipal AppUserPrincipal principal,
+    public ResponseEntity<?> wishlistLocation(@PathVariable("locationId") Location location,
+                                 @AuthenticationPrincipal User principal,
                                  HttpServletRequest request){
         String action = request.getParameter("action");
         if(action.equals("add")){

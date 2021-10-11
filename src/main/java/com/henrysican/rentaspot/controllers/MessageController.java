@@ -2,7 +2,6 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Message;
 import com.henrysican.rentaspot.models.User;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.MessageService;
 import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.util.HtmlUtils;
 
-import java.security.Principal;
 import java.util.List;
 
 @Log
@@ -39,7 +37,7 @@ public class MessageController {
     }
 
     @GetMapping("/messages")
-    public String getMessagesPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
+    public String getMessagesPage(@AuthenticationPrincipal User principal, Model model){
         model.addAttribute("users",userService.getAllContactsForUser(principal.getId()));
         return "messages";
     }
@@ -47,16 +45,15 @@ public class MessageController {
 //TODO: Prevent messaging non-contacts
     @MessageMapping("/message/{userId}")
     public void processMessage(@DestinationVariable int userId,
-                               Principal principal,
+                               @AuthenticationPrincipal User principal,
                                Message message){
         log.warning("process: "+ userId + " " + message);
-        User userSender = userService.getUserByEmail(principal.getName());
         User userReceiver = userService.getUserById(userId);
-        if (userReceiver == null || userSender == null || userSender.getId() == userReceiver.getId()){
+        if (userReceiver == null || principal == null || principal.getId() == userReceiver.getId()){
             return;
         }
         message.setReceiverId(userReceiver.getId());
-        message.setSenderId(userSender.getId());
+        message.setSenderId(principal.getId());
         message.setMessageContent(HtmlUtils.htmlEscape(message.getMessageContent()));
         message = messageService.saveMessage(message);
         simpMessagingTemplate.convertAndSendToUser(userReceiver.getEmail(),"/chat/messages",message);
@@ -64,7 +61,7 @@ public class MessageController {
     }
 
     @GetMapping("/fetch-messages/{recipientId}")
-    public ResponseEntity<?> getChatMessages(@AuthenticationPrincipal AppUserPrincipal principal,
+    public ResponseEntity<?> getChatMessages(@AuthenticationPrincipal User principal,
                                              @PathVariable int recipientId) {
         List<Message> messages = messageService.getAllMessagesBetweenUsers(recipientId, principal.getId());
         log.warning("getChatMessages r-s: "+ recipientId + " " + principal.getId());
@@ -74,7 +71,7 @@ public class MessageController {
 
     @PostMapping("/messageHost/{hostId}")
     public String sendHostMessage(@PathVariable("hostId") User host,
-                                @AuthenticationPrincipal AppUserPrincipal principal,
+                                @AuthenticationPrincipal User principal,
                                 Message message){
         message.setReceiverId(host.getId());
         message.setSenderId(principal.getId());

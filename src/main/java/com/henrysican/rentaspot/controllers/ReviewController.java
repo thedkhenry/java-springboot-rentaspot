@@ -2,7 +2,7 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Booking;
 import com.henrysican.rentaspot.models.Review;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
+import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.ReviewService;
 import lombok.extern.java.Log;
@@ -26,7 +26,7 @@ public class ReviewController {
     }
 
     @GetMapping("/create/{bookingId}")
-    public String getReviewForm(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal AppUserPrincipal principal){
+    public String getReviewForm(@PathVariable("bookingId") Booking booking, Model model, @AuthenticationPrincipal User principal){
         if (booking.getCustomer().getId() != principal.getId()){
             return "redirect:/403";
         }
