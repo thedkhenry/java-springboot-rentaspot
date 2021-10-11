@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -63,6 +64,14 @@ public class UserService {
         boolean removed = user.getWishlist().removeIf(loc -> loc.getId() == location.getId());
         userRepo.save(user);
         return removed;
+    }
+
+    /**
+     * Returns a List of all Locations wishlisted by the specified User.
+     * @return  the list of locations
+     */
+    public List<Location> getUserWishlist(int userId){
+        return userRepo.findById(userId).get().getWishlist().stream().filter(Location::isActive).collect(Collectors.toList());
     }
 
     /**

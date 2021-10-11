@@ -2,11 +2,10 @@ package com.henrysican.rentaspot.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -22,10 +21,10 @@ import java.io.Serializable;
 public class AuthGroup implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    @NonNull @NotNull
-    long userId;
+    @NonNull
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    User user;
     @NonNull @NotBlank
-    String userEmail;
-    @NonNull @NotBlank
-    String authGroup;
+    String groupName;
 }

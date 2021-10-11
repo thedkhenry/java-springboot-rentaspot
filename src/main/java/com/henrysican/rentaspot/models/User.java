@@ -6,12 +6,14 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -20,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"wishlist"})
-public class User {
+@ToString(exclude = {"wishlist","authGroups"})
+public class User implements UserDetails {
 //TODO Add validation for fields
 
     @Id
@@ -61,6 +63,9 @@ public class User {
             inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     @JsonIgnore
     List<Location> wishlist;
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @JsonIgnore
+    List<AuthGroup> authGroups;
     @NonNull
     boolean isHost;
     @NonNull
@@ -70,4 +75,41 @@ public class User {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     Date createdAt;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(null == authGroups){
+            return Collections.emptySet();
+        }
+        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
+        authGroups.forEach(authGroup -> {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authGroup.getGroupName()));
+        });
+        return grantedAuthorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

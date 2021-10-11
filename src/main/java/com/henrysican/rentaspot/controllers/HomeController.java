@@ -2,7 +2,6 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.User;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.BookingService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.UserService;
@@ -57,18 +56,17 @@ public class HomeController {
 
 //TODO: Message 'You missed X reservations.'
     @GetMapping("/hostinglist")
-    public String getHostingListPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
-        long updatedCount = bookingService.updateExpiredBookingsForLocations(locationService.getAllLocationsForHost(principal.getId()));
-        List<Location> locations = locationService.getAllLocationsForHost(principal.getId());
+    public String getHostingListPage(@AuthenticationPrincipal User user, Model model){
+        long updatedCount = bookingService.updateExpiredBookingsForLocations(locationService.getAllLocationsForHost(user.getId()));
+        List<Location> locations = locationService.getAllLocationsForHost(user.getId());
         model.addAttribute("locations",locations);
         log.warning("/hostinglist UPDATED "+updatedCount);
         return "hostinglist";
     }
 
     @GetMapping("/wishlist")
-    public String getWishlistPage(@AuthenticationPrincipal AppUserPrincipal principal, Model model){
-        User user = userService.getUserById(principal.getId());
-        model.addAttribute("locations",user.getWishlist());
+    public String getWishlistPage(@AuthenticationPrincipal User principal, Model model){
+        model.addAttribute("locations",userService.getUserWishlist(principal.getId()));
         return "wishlist";
     }
 }

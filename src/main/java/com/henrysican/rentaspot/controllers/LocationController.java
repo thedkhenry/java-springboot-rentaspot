@@ -1,13 +1,8 @@
 package com.henrysican.rentaspot.controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.henrysican.rentaspot.models.*;
-import com.henrysican.rentaspot.security.AppUserPrincipal;
 import com.henrysican.rentaspot.services.GMapService;
 import com.henrysican.rentaspot.services.LocationService;
 import com.henrysican.rentaspot.services.ReviewService;
@@ -23,30 +18,26 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @Log
 @Controller
 public class LocationController {
     private final LocationService locationService;
-    private final ReviewService reviewService;
     private final UserService userService;
     private final GMapService gMapService;
 
     @Autowired
     public LocationController(LocationService locationService,
-                              ReviewService reviewService,
-                              UserService userService, GMapService gMapService) {
+                              UserService userService,
+                              GMapService gMapService) {
         this.locationService = locationService;
-        this.reviewService = reviewService;
         this.userService = userService;
         this.gMapService = gMapService;
     }
 
     @GetMapping("/location/{locationId}")
     public String getLocationDetails(@PathVariable("locationId") Location location,
-                                     @AuthenticationPrincipal AppUserPrincipal principal,
+                                     @AuthenticationPrincipal User principal,
                                      Model model){
         if(!location.isActive()){
             return "redirect:/403";
@@ -64,7 +55,7 @@ public class LocationController {
     @GetMapping("/location/{action}/{locationId}")
     public String updateLocationActive(@PathVariable("action") String action,
                                        @PathVariable("locationId") Location location,
-                                       @AuthenticationPrincipal AppUserPrincipal principal){
+                                       @AuthenticationPrincipal User principal){
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
         }
@@ -79,7 +70,7 @@ public class LocationController {
 //TODO: Add location edit form validation
     @GetMapping("/edit/{locationId}")
     public String getEditForm(@PathVariable("locationId") Location location,
-                              @AuthenticationPrincipal AppUserPrincipal principal,
+                              @AuthenticationPrincipal User principal,
                               Model model){
         if(principal.getId() != location.getUser().getId()){
             return "redirect:/403";
@@ -92,7 +83,7 @@ public class LocationController {
     public String updateLocation(@PathVariable("locationId") int locationId,
                                  @ModelAttribute Location location,
                                  @RequestParam(value = "action") String action,
-                                 @AuthenticationPrincipal AppUserPrincipal principal){
+                                 @AuthenticationPrincipal User principal){
         Location dbLocation = locationService.getLocationById(locationId);
         if(principal.getId() != dbLocation.getUser().getId()){
             return "redirect:/403";
@@ -126,24 +117,23 @@ public class LocationController {
 
     @PostMapping("/create")
     public String createLocation(@ModelAttribute Location location,
-                                 @AuthenticationPrincipal AppUserPrincipal principal,
+                                 @AuthenticationPrincipal User principal,
                                  @RequestParam(value = "action") String action) throws IOException, InterruptedException, ApiException {
         LatLng latLng = gMapService.getLatLng(location.getAddress().getFullAddress());
-        User host = userService.getUserById(principal.getId());
-        host.setHost(true);
-        location.setUser(host);
+        principal.setHost(true);
+        location.setUser(principal);
         location.setActive(action.equals("publish"));
         location.getAddress().setCountry("US");
         location.getAddress().setLatitude(latLng.lat);
         location.getAddress().setLongitude(latLng.lng);
         locationService.saveLocation(location);
-        userService.saveUser(host);
+        userService.saveUser(principal);
         return "redirect:/hostinglist";
     }
 
     @PostMapping("/wishlist/{locationId}")
-    public ResponseEntity wishlistLocation(@PathVariable("locationId") Location location,
-                                 @AuthenticationPrincipal AppUserPrincipal principal,
+    public ResponseEntity<?> wishlistLocation(@PathVariable("locationId") Location location,
+                                 @AuthenticationPrincipal User principal,
                                  HttpServletRequest request){
         String action = request.getParameter("action");
         if(action.equals("add")){

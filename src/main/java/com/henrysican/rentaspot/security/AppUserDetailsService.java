@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Log
 @Service
@@ -34,16 +32,10 @@ public class AppUserDetailsService implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException("User not found. " + email);
         }
-        List<AuthGroup> authGroups = authRepo.findAllByUserId(user.getId());
-        return new AppUserPrincipal(user,authGroups);
+        return user;
     }
 
-    public void saveUserRole(long userId, String userEmail, String role){
-        authRepo.save(new AuthGroup(userId, userEmail, role));
-    }
-    public void updateUserEmail(long userId, String userEmail) {
-        Optional<AuthGroup> authGroup = authRepo.findByUserId(userId);
-        authGroup.get().setUserEmail(userEmail);
-        authRepo.save(authGroup.get());
+    public void saveUserRole(User user, String role){
+        authRepo.save(new AuthGroup(user, role));
     }
 }
