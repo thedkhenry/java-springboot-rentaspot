@@ -19,7 +19,12 @@
                     <h4 th:case="'Confirmed'" class="text-center text-success">Status: [Confirmed]</h4>
                 </th:block>
                 <div class="col-lg-3 col-md-4 align-self-center text-center border-end">
-                    <a th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark"><img th:src="@{/images/city_buildings.png}" class="w-100"></a>
+                    <a th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark">
+                        <img th:if="${booking.location.image == null}"
+                             th:src="@{/images/city_buildings.png}" class="w-100">
+                        <img th:unless="${booking.location.image == null}"
+                             th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/location-images/__${booking.location.image.name}__}" class="w-100">
+                    </a>
                     <h4>Location</h4>
                     <p><a th:text="${booking.location.title}" th:href="@{/location/{locationId}(locationId = ${booking.location.id})}" class="text-decoration-none link-dark"></a></p>
                     <button type="button" class="btn btn-danger btn-lg w-75" data-bs-toggle="modal" data-bs-target="#messageModal">Message Host</button>

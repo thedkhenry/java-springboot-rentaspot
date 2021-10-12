@@ -27,14 +27,13 @@
                                              th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/user-images/__${user.profileImage.name}__}"
                                              class="rounded-circle" height="50" width="50" alt="user">
                                         <!--                                             th:src="@{~/user-images/__${user.profileImage.name}__}"-->
-                                        <div class="text-truncate ms-3">
+                                        <div class="text-truncate ms-3 w-100">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <h6 th:text="${user.firstName} + ' ' + ${user.lastName}"
                                                     class="mb-0"></h6>
-                                                <small class="small font-weight-bold">25 Dec</small>
+                                                <small th:text="${#dates.format(messageMap.get(user.id).createdAt, 'd MMM YY')}" class="small fw-bold"></small>
                                             </div>
-                                            <p class="text-truncate mb-0">Lorem ipsum dolor sit amet, consectetur
-                                                adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                                            <p th:text="${messageMap.get(user.id).messageContent}" class="text-truncate fw-lighter mb-0"></p>
                                         </div>
                                     </div>
                                 </li>

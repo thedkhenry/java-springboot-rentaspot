@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Log
@@ -38,7 +39,11 @@ public class MessageController {
 
     @GetMapping("/messages")
     public String getMessagesPage(@AuthenticationPrincipal User principal, Model model){
-        model.addAttribute("users",userService.getAllContactsForUser(principal.getId()));
+        List<User> contacts = userService.getAllContactsForUser(principal.getId());
+        HashMap<Integer,Message> messageMap = new HashMap<>();
+        contacts.forEach(user -> messageMap.put(user.getId(), messageService.getLastMessageBetweenUsers(principal.getId(), user.getId())));
+        model.addAttribute("users", contacts);
+        model.addAttribute("messageMap", messageMap);
         return "messages";
     }
 

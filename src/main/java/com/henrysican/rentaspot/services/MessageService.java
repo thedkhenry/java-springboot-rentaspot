@@ -26,6 +26,16 @@ public class MessageService {
     }
 
     /**
+     * Returns the most recent Message between 2 users.
+     * @param receiverId    the ID of the receiver
+     * @param senderId      the ID of the sender
+     * @return              the message
+     */
+    public Message getLastMessageBetweenUsers(int receiverId, int senderId){
+        return messageRepo.findFirstByReceiverIdAndSenderIdOrSenderIdAndReceiverIdOrderByCreatedAt(receiverId, senderId,receiverId,senderId);
+    }
+
+    /**
      * Returns a List of Messages between 2 users.
      * @param receiverId    the ID of the receiver
      * @param senderId      the ID of the sender
