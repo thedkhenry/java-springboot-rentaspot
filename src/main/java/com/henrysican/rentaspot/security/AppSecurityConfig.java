@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.security;
 
+import com.henrysican.rentaspot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,17 +18,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AppUserDetailsService appUserDetailsService;
+    private final UserService userService;
 
     @Autowired
-    public AppSecurityConfig(AppUserDetailsService appUserDetailsService){
-        this.appUserDetailsService = appUserDetailsService;
+    public AppSecurityConfig(UserService userService){
+        this.userService = userService;
     }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(appUserDetailsService);
+        provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder(4));
         return provider;
     }

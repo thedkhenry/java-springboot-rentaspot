@@ -16,7 +16,8 @@
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex w-100 text-truncate align-items-center" style="transform: rotate(0);">
-                                        <img th:src="@{/images/city_buildings.png}" height="50" alt="location">
+                                        <img th:if="${booking.location.image == null}" th:src="@{/images/city_buildings.png}" class="list-img" height="50" width="50" alt="city buildings">
+                                        <img th:unless="${booking.location.image == null}" th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/location-images/__${booking.location.image}__}" class="list-img" height="50" width="50" alt="location">
                                         <div class="text-truncate mx-3">
                                             <a th:text="${booking.location.title}" th:href="@{/reservations/reservation/{bookingId}(bookingId = ${booking.id})}" class="fw-bold text-decoration-none link-dark stretched-link"></a>
                                             <p th:text="${#dates.format(booking.startDate, 'MMM d')} + ' - ' + ${#dates.format(booking.endDate, 'MMM d, yyyy')}" class="mb-0"><small></small></p>

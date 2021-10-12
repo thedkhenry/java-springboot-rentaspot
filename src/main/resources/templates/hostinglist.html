@@ -18,7 +18,8 @@
                         <th:block th:each="location : ${locations}">
                             <li class="list-group-item list-group-item-action py-3">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <img th:src="@{/images/city_buildings.png}" class="" height="50" width="50" alt="city buildings">
+                                    <img th:if="${location.image == null}" th:src="@{/images/city_buildings.png}" class="list-img" height="50" width="50" alt="city buildings">
+                                    <img th:unless="${location.image == null}" th:src="@{https://elasticbeanstalk-us-east-2-968373146146.s3.us-east-2.amazonaws.com/location-images/__${location.image}__}" class="list-img" height="50" width="50" alt="location">
                                     <div class="w-100 text-truncate mx-3">
                                         <a th:text="${location.title}" th:href="@{/location/{locationId}(locationId = ${location.id})}" class="fw-bold text-decoration-none link-dark"></a>
                                         <p th:text="${location.description}" class="text-truncate mb-0"></p>

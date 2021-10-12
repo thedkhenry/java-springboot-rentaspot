@@ -1,10 +1,14 @@
 package com.henrysican.rentaspot.services;
 
+import com.henrysican.rentaspot.dao.AuthRepo;
 import com.henrysican.rentaspot.dao.UserRepo;
 import com.henrysican.rentaspot.models.Location;
 import com.henrysican.rentaspot.models.Message;
 import com.henrysican.rentaspot.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserDetailsService {
+    private final AuthRepo authRepo;
     private final UserRepo userRepo;
     private final MessageService messageService;
 
     @Autowired
-    public UserService(UserRepo userRepo,
+    public UserService(AuthRepo authRepo,
+                       UserRepo userRepo,
                        MessageService messageService){
+        this.authRepo = authRepo;
         this.userRepo = userRepo;
         this.messageService = messageService;
     }
@@ -143,5 +150,14 @@ public class UserService {
             }
         });
         return userRepo.findAllById(userIdSet);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepo.findUserByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found. " + email);
+        }
+        return user;
     }
 }

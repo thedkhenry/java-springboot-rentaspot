@@ -2,7 +2,6 @@ package com.henrysican.rentaspot.controllers;
 
 import com.henrysican.rentaspot.models.AuthGroup;
 import com.henrysican.rentaspot.models.User;
-import com.henrysican.rentaspot.security.AppUserDetailsService;
 import com.henrysican.rentaspot.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,10 @@ import java.util.List;
 @Controller
 public class AuthenticationController {
     private final UserService userService;
-    private final AppUserDetailsService appUserDetailsService;
 
     @Autowired
-    public AuthenticationController(UserService userService, AppUserDetailsService appUserDetailsService) {
+    public AuthenticationController(UserService userService) {
         this.userService = userService;
-        this.appUserDetailsService = appUserDetailsService;
     }
 
     @GetMapping("/403")
