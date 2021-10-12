@@ -1,7 +1,7 @@
 .card-img-top {
     max-height: 150px;
     min-height: 50px;
-    object-fit: none;
+    object-fit: cover !important;
 }
 
 /* Always set the map height explicitly to define the size of the div

@@ -1,5 +1,6 @@
 package com.henrysican.rentaspot.controllers;
 
+import com.henrysican.rentaspot.models.AuthGroup;
 import com.henrysican.rentaspot.models.User;
 import com.henrysican.rentaspot.security.AppUserDetailsService;
 import com.henrysican.rentaspot.services.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Log
 @Controller
@@ -58,8 +60,7 @@ public class AuthenticationController {
         String email = user.getEmail();
         String password = user.getPassword();
         user.setPassword(new BCryptPasswordEncoder(4).encode(password));
-        User savedUser = userService.saveUser(user);
-        appUserDetailsService.saveUserRole(savedUser, "ROLE_USER");
+        user.setAuthGroups(List.of(new AuthGroup(user,"ROLE_USER")));
         try {
             request.login(email, password);
         }

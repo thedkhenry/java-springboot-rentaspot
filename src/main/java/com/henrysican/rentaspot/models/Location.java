@@ -52,6 +52,8 @@ public class Location {
     @OneToOne(cascade = CascadeType.ALL)
     @NonNull
     Address address;
+    @OneToOne
+    Image image;
     @JsonManagedReference
     @OneToMany(mappedBy = "location")
     List<Review> reviews;
