@@ -9,106 +9,104 @@
         <p></p>
         <div class="card mb-4">
             <div class="card-body">
-                <div class="">
-                    <div class="m-3">
-                        <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label class="form-label">Location Title</label>
-                                <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name." required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Photo (max 5MB)</label>
-                                <input name="imageFile" type="file" accept="image/*" class="form-control">
-                            </div>
-                            <div class="row">
+                <div class="m-3">
+                    <form th:action="@{/create}" th:object="${location}" method="POST" id="createForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Location Title</label>
+                            <input th:field="*{title}" type="text" class="form-control" placeholder="Give it a nice name." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Photo (max 5MB)</label>
+                            <input name="imageFile" type="file" accept="image/*" class="form-control">
+                        </div>
+                        <div class="row">
 <!--                                <div th:object="${address}" class="row">-->
-                                <div class="col-12 mb-3">
-                                    <label for="inputStreetAddress" class="form-label">Address</label>
-                                    <input th:field="*{address.address1}" type="text" class="form-control" id="inputStreetAddress" placeholder="29 Neibolt Street" required>
-                                </div>
-                                <div class="col-12 col-sm-4 mb-3">
-                                    <label for="inputCity" class="form-label">City</label>
-                                    <input th:field="*{address.city}" type="text" class="form-control" id="inputCity" placeholder="Derry" required>
-                                </div>
-                                <div class="col-sm-4 col">
-                                    <label class="form-label">State</label>
-                                    <select id="address.state" name="address.state" class="form-select" required>
-                                        <option th:each="state : ${states}"
-                                                th:value="${state.name}"
-                                                th:text="${state.name}"
-                                                th:selected="${state.name.equals('Maine')}"></option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-4 col mb-3">
-                                    <label class="form-label">Zip</label>
-                                    <input th:field="*{address.zipCode}" type="text" class="form-control" id="inputZipCode" required>
-                                </div>
+                            <div class="col-12 mb-3">
+                                <label for="inputStreetAddress" class="form-label">Address</label>
+                                <input th:field="*{address.address1}" type="text" class="form-control" id="inputStreetAddress" placeholder="29 Neibolt Street" required>
                             </div>
+                            <div class="col-12 col-sm-4 mb-3">
+                                <label for="inputCity" class="form-label">City</label>
+                                <input th:field="*{address.city}" type="text" class="form-control" id="inputCity" placeholder="Derry" required>
+                            </div>
+                            <div class="col-sm-4 col">
+                                <label class="form-label">State</label>
+                                <select id="address.state" name="address.state" class="form-select" required>
+                                    <option th:each="state : ${states}"
+                                            th:value="${state.name}"
+                                            th:text="${state.name}"
+                                            th:selected="${state.name.equals('Maine')}"></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 col mb-3">
+                                <label class="form-label">Zip</label>
+                                <input th:field="*{address.zipCode}" type="text" class="form-control" id="inputZipCode" required>
+                            </div>
+                        </div>
 
 
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea th:field="*{description}" class="form-control" rows="3"
-                                          placeholder="Describe the location well to attract renters."></textarea>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <div class="col col-sm-7 mb-3">
-                                        <label class="form-label">Cars</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">#</span>
-                                            <input th:field="*{totalOccupancy}" type="number" class="form-control" min="0">
-                                        </div>
-                                    </div>
-                                    <div class="col col-sm-7">
-                                        <label class="form-label">Price per day</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input th:field="*{price}" type="number" class="form-control" min="0">
-                                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea th:field="*{description}" class="form-control" rows="3"
+                                      placeholder="Describe the location well to attract renters."></textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="col col-sm-7 mb-3">
+                                    <label class="form-label">Cars</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">#</span>
+                                        <input th:field="*{totalOccupancy}" type="number" class="form-control" min="0">
                                     </div>
                                 </div>
-                                <!-- <div class="w-100 d-sm-none d-block"></div> -->
-                                <div class="col">
-                                    Features
-                                    <div class="form-check">
-                                        <input th:field="*{hasVideoMonitoring}"  class="form-check-input" type="checkbox">
-                                        <label class="form-check-label">Video monitoring</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input th:field="*{enclosed}" class="form-check-input" type="checkbox">
-                                        <label class="form-check-label">Enclosed</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input th:field="*{streetParking}" class="form-check-input" type="checkbox">
-                                        <label class="form-check-label">Street parking</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input th:field="*{hasRvParking}" class="form-check-input" type="checkbox">
-                                        <label class="form-check-label">RV space</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input th:field="*{hasEvCharging}" class="form-check-input" type="checkbox">
-                                        <label class="form-check-label">EV charging</label>
+                                <div class="col col-sm-7">
+                                    <label class="form-label">Price per day</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input th:field="*{price}" type="number" class="form-control" min="0">
                                     </div>
                                 </div>
                             </div>
-                            <th:block th:if="${message != null}">
-                                <div th:text="${message}" class="text-danger"></div>
-                            </th:block>
-                            <div class="col text-center pt-3">
-                                <div class="btn-group" role="group">
-                                    <button id="btnSaveNewLocation"
-                                            name="action" value="save" type="submit"
-                                            form="createForm" class="btn btn-warning">Save</button>
-                                    <button id="btnPublishNewLocation"
-                                            onclick="showModal()"
-                                            type="button" form="createForm" class="btn btn-success"
-                                            data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
+                            <!-- <div class="w-100 d-sm-none d-block"></div> -->
+                            <div class="col">
+                                Features
+                                <div class="form-check">
+                                    <input th:field="*{hasVideoMonitoring}"  class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">Video monitoring</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{enclosed}" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">Enclosed</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{streetParking}" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">Street parking</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{hasRvParking}" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">RV space</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{hasEvCharging}" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">EV charging</label>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <th:block th:if="${message != null}">
+                            <div th:text="${message}" class="text-danger"></div>
+                        </th:block>
+                        <div class="col text-center pt-3">
+                            <div class="btn-group" role="group">
+                                <button id="btnSaveNewLocation"
+                                        name="action" value="save" type="submit"
+                                        form="createForm" class="btn btn-warning">Save</button>
+                                <button id="btnPublishNewLocation"
+                                        onclick="showModal()"
+                                        type="button" form="createForm" class="btn btn-success"
+                                        data-bs-toggle="modal" data-bs-target="#publishModal">Publish</button> <!-- Change/Remove form -->
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

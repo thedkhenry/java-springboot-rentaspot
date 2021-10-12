@@ -48,11 +48,11 @@ public class AuthenticationController {
         String str = request.getParameter("confirmpassword");
         if(!user.getPassword().equals(str)){
             model.addAttribute("message","Passwords don't match.");
-            return "/signup";
+            return "redirect:/signup";
         }
         if(userService.checkUserEmailExists(user.getEmail())){
             model.addAttribute("message","That email is already in use.");
-            return "/signup";
+            return "redirect:/signup";
         }
         String email = user.getEmail();
         String password = user.getPassword();
