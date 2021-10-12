@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.util.HtmlUtils;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,19 +51,20 @@ public class MessageController {
 //TODO: Prevent messaging non-contacts
     @MessageMapping("/message/{userId}")
     public void processMessage(@DestinationVariable int userId,
-                               @AuthenticationPrincipal User principal,
+                               Principal principal,
                                Message message){
-        log.warning("process: "+ userId + " " + message);
+        log.warning("1st process: "+ userId + " " + message);
         User userReceiver = userService.getUserById(userId);
-        if (userReceiver == null || principal == null || principal.getId() == userReceiver.getId()){
+        User userSender = userService.getUserByEmail(principal.getName());
+        if (userReceiver == null || userSender == null || userSender.getId() == userReceiver.getId()){
             return;
         }
         message.setReceiverId(userReceiver.getId());
-        message.setSenderId(principal.getId());
+        message.setSenderId(userSender.getId());
         message.setMessageContent(HtmlUtils.htmlEscape(message.getMessageContent()));
         message = messageService.saveMessage(message);
         simpMessagingTemplate.convertAndSendToUser(userReceiver.getEmail(),"/chat/messages",message);
-        log.warning("process: "+ userId + " " + message);
+        log.warning("2nd process: "+ userId + " " + message);
     }
 
     @GetMapping("/fetch-messages/{recipientId}")

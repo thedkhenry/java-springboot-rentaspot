@@ -32,7 +32,7 @@ public class MessageService {
      * @return              the message
      */
     public Message getLastMessageBetweenUsers(int receiverId, int senderId){
-        return messageRepo.findFirstByReceiverIdAndSenderIdOrSenderIdAndReceiverIdOrderByCreatedAt(receiverId, senderId,receiverId,senderId);
+        return messageRepo.findFirstByReceiverIdAndSenderIdOrSenderIdAndReceiverIdOrderByCreatedAtDesc(receiverId, senderId,receiverId,senderId);
     }
 
     /**
