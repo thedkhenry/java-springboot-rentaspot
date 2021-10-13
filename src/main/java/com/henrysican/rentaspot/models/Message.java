@@ -19,6 +19,7 @@ import java.util.Date;
 public class Message {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT")
     private String messageContent;
     private int senderId;
     private int receiverId;

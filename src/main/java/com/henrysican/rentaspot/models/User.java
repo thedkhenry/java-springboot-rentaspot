@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @NonNull
     String phoneNumber;
     @NonNull
+    @Column(columnDefinition = "TEXT")
     String summary;
     @OneToOne
     Image profileImage;
@@ -63,7 +64,7 @@ public class User implements UserDetails {
             inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     @JsonIgnore
     List<Location> wishlist;
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JsonIgnore
     List<AuthGroup> authGroups;
     @NonNull

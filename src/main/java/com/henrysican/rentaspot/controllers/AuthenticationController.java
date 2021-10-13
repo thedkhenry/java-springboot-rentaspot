@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,20 +45,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public String registerNewUser(@ModelAttribute("user") User user, HttpServletRequest request, Model model){
+    public String registerNewUser(@ModelAttribute("user") User user,
+                                  HttpServletRequest request,
+                                  RedirectAttributes redirectAttributes){
         String str = request.getParameter("confirmpassword");
         if(!user.getPassword().equals(str)){
-            model.addAttribute("message","Passwords don't match.");
+            redirectAttributes.addFlashAttribute("message","Passwords don't match.");
             return "redirect:/signup";
         }
         if(userService.checkUserEmailExists(user.getEmail())){
-            model.addAttribute("message","That email is already in use.");
+            redirectAttributes.addFlashAttribute("message","That email is already in use.");
             return "redirect:/signup";
         }
         String email = user.getEmail();
         String password = user.getPassword();
         user.setPassword(new BCryptPasswordEncoder(4).encode(password));
         user.setAuthGroups(List.of(new AuthGroup(user,"ROLE_USER")));
+        userService.saveUser(user);
         try {
             request.login(email, password);
         }

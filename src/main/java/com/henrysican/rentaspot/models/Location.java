@@ -33,6 +33,7 @@ public class Location {
     @NonNull
     String title;
     @NonNull
+    @Column(columnDefinition = "TEXT")
     String description;
     @NonNull
     boolean isActive;

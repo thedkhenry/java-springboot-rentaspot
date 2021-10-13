@@ -17,7 +17,7 @@ function addMapMarkers(locations){
     console.log("id: " + locations[i].address.id + " lat: " + locations[i].address.latitude + " lng: " + locations[i].address.longitude);
     var spotDetails =
         '<div class="infoWindow text-center">'+
-        '      <h6><b><a href="/' + locations[i].id + '" class="text-black">'+ locations[i].title + '</a></b></h6>'+
+        '      <h6><b><a href="/location/' + locations[i].id + '" class="text-black">'+ locations[i].title + '</a></b></h6>'+
         '      <div class="my-2">'+ locations[i].address.fullAddress + '</div>'+
         '      <div class="row justify-content-between h6">'+
         '            <div class="col">$'+ locations[i].price + '/day </b> • '+ locations[i].totalOccupancy +' Cars</div>'+
